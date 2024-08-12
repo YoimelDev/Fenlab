@@ -1,0 +1,25 @@
+deployment:
+
+  tasks:
+
+    - export DEPLOYPATH=/home/fenlabhostienda/public_html/web
+
+    - ea-php82 /opt/cpanel/composer/bin/composer install
+
+    - ea-php82 artisan migrate
+
+    - ea-php82 artisan optimize:clear
+
+    - /bin/cp -R .vscode $DEPLOYPATH
+
+    - /bin/cp -R assets $DEPLOYPATH
+
+    - /bin/cp -R css $DEPLOYPATH
+
+    - /bin/cp -R fonts $DEPLOYPATH
+
+    - /bin/cp -R img $DEPLOYPATH
+
+    - /bin/cp -R js $DEPLOYPATH
+
+    - /bin/cp index.html $DEPLOYPATH
