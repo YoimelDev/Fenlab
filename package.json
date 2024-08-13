@@ -4,20 +4,25 @@
     "scripts": {
         "dev": "vite",
         "build": "vue-tsc && vite build",
-        "lint": "eslint . --fix .gitignore"
+        "lint": "eslint . --fix .gitignore",
+        "format": "prettier --write ."
     },
     "devDependencies": {
         "@eslint/js": "^9.9.0",
         "@inertiajs/vue3": "^1.2.0",
+        "@rushstack/eslint-patch": "^1.10.4",
         "@tailwindcss/forms": "^0.5.7",
         "@vitejs/plugin-vue": "^5.1.2",
+        "@vue/eslint-config-prettier": "^9.0.0",
         "autoprefixer": "^10.4.20",
         "axios": "^1.7.3",
         "eslint": "^9.9.0",
+        "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-vue": "^9.27.0",
         "globals": "^15.9.0",
         "laravel-vite-plugin": "^1.0.5",
         "postcss": "^8.4.41",
+        "prettier": "3.3.3",
         "tailwindcss": "^3.4.9",
         "typescript": "^5.5.4",
         "typescript-eslint": "^8.1.0",
