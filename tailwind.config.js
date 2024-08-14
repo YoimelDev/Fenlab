@@ -13,12 +13,15 @@ export const content = [
 export const theme = {
     container: {
         center: true,
-        padding: '2rem',
+        padding: '5rem',
         screens: {
-            '2xl': '1400px',
+            '2xl': '1440px',
         },
     },
     extend: {
+        fontFamily: {
+            sans: ['Roboto', 'sans-serif'],
+        },
         colors: {
             border: 'hsl(var(--border))',
             input: 'hsl(var(--input))',
@@ -28,6 +31,7 @@ export const theme = {
             primary: {
                 DEFAULT: 'hsl(var(--primary))',
                 foreground: 'hsl(var(--primary-foreground))',
+                hover: 'hsl(var(--primary-hover))',
             },
             secondary: {
                 DEFAULT: 'hsl(var(--secondary))',
