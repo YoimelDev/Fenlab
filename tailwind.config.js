@@ -22,6 +22,9 @@ export const theme = {
         fontFamily: {
             sans: ['Roboto', 'sans-serif'],
         },
+        transitionProperty: {
+            border: 'border',
+        },
         colors: {
             border: 'hsl(var(--border))',
             input: 'hsl(var(--input))',

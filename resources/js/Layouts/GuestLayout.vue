@@ -1,19 +1,16 @@
-<script setup lang="ts">
-import ApplicationLogo from '@/Components/ApplicationLogo.vue'
-import { Link } from '@inertiajs/vue3'
-</script>
-
 <template>
-    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
+    <div class="min-h-screen grid grid-cols-2 bg-white">
         <div>
-            <Link href="/">
-                <ApplicationLogo class="fill-current text-gray-500" />
-            </Link>
+            <picture>
+                <img
+                    src="https://via.placeholder.com/1920x945"
+                    alt="Placeholder"
+                    class="w-full h-full object-cover"
+                >
+            </picture>
         </div>
 
-        <div
-            class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg"
-        >
+        <div class="flex flex-col justify-center gap-12 max-w-[720px] w-full mx-auto px-20 ">
             <slot />
         </div>
     </div>
