@@ -74,7 +74,10 @@ const submit = () => {
                         autocomplete="current-password"
                     />
 
-                    <span class="absolute end-0 inset-y-0 flex items-center justify-center px-2">
+                    <button
+                        type="button"
+                        class="absolute end-0 inset-y-0 flex items-center justify-center px-2"
+                    >
                         <EyeOpenIcon
                             v-if="showPassword"
                             class="w-5 h-5 text-[#697077] cursor-pointer"
@@ -86,7 +89,7 @@ const submit = () => {
                             class="w-5 h-5 text-[#697077] cursor-pointer"
                             @click="showPassword = true"
                         />
-                    </span>
+                    </button>
                 </div>
 
                 <span class="text-[#697077] text-xs leading-4">
