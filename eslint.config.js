@@ -18,11 +18,13 @@ export default [
         rules: {
             'vue/multi-word-component-names': 'off',
             'vue/html-indent': ['error', 4],
+            'vue/object-curly-spacing': ['error', 'always'],
             'no-undef': 'off',
             'semi': ['error', 'never'],
             'indent': ['error', 4], 
             'quotes': ['error', 'single'],
             'comma-dangle': ['error', 'always-multiline'],
+            'object-curly-spacing': ['error', 'always'],
         },
     },
     {

@@ -29,11 +29,19 @@
   
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-  
+
     --border:214.3 31.8% 91.4%;
+    --border-primary: 213, 15%, 88%, 1;
+    --border-secondary: 0, 0%, 93%, 1;
     --input:221, 100%, 47%, 1;
     --ring:221, 100%, 47%, 1;
     --radius: 0.5rem;
+    
+    /* New Colors */
+    --electric-green: 120, 26%, 39%, 1;
+    --blue-sky: 225, 80%, 98%, 1;
+    --grey: 0, 0%, 41%, 1;
+    --chalk: 60, 20%, 96%, 1;
   }
    
   .dark {
@@ -65,4 +73,47 @@
     --input:217.2 32.6% 17.5%;
     --ring:224.3 76.3% 48%;
   }
+}
+
+.v-sidebar-menu .vsm--mobile-bg {
+  background-color: hsl(var(--blue-sky)) !important;
+}
+
+.vsm--item {
+  margin-bottom: 8px;
+}
+
+.vsm--item:last-child {
+  margin-bottom: 0;
+}
+
+.vsm--link {
+  padding: 10px 0 10px 8px !important;
+  gap: 8px !important;
+  color: hsl(var(--grey)) !important;
+  font-weight: 500 !important;
+  font-size: 15px !important;
+  line-height: 14px !important;
+  border-radius: 2px;
+}
+
+.vsm--link:hover {
+  background-color: hsl(var(--blue-sky)) !important;
+}
+
+.vsm--link_active {
+  color: hsl(var(--electric-green)) !important;
+  background-color: hsl(var(--blue-sky)) !important;
+  box-shadow: 3px 0 0 0 hsl(var(--electric-green)) inset !important; 
+}
+
+.vsm--icon {
+  height: 24px !important;
+  width: 24px !important;
+  margin: 0px !important;
+  background-color: initial !important;
+}
+
+.vsm--toggle-btn {
+  background-color: hsl(var(--blue-sky)) !important;
 }

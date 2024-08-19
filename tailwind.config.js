@@ -24,9 +24,14 @@ export const theme = {
         },
         transitionProperty: {
             border: 'border',
+            padding: 'padding',
         },
         colors: {
-            border: 'hsl(var(--border))',
+            border: {
+                DEFAULT: 'hsl(var(--border))',
+                primary: 'hsl(var(--border-primary))',
+                secondary: 'hsl(var(--border-secondary))',
+            },
             input: 'hsl(var(--input))',
             ring: 'hsl(var(--ring))',
             background: 'hsl(var(--background))',
@@ -60,6 +65,10 @@ export const theme = {
                 DEFAULT: 'hsl(var(--card))',
                 foreground: 'hsl(var(--card-foreground))',
             },
+            'electric-green': 'hsl(var(--electric-green))',
+            'blue-sky': 'hsl(var(--blue-sky))',
+            'grey': 'hsl(var(--grey))',
+            'chalk': 'hsl(var(--chalk))',
         },
         borderRadius: {
             xl: 'calc(var(--radius) + 4px)',
