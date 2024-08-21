@@ -8,6 +8,9 @@ dependencies:
   '@radix-icons/vue':
     specifier: ^1.0.0
     version: 1.0.0(vue@3.4.38)
+  '@tanstack/vue-table':
+    specifier: ^8.20.4
+    version: 8.20.4(vue@3.4.38)
   '@vueuse/core':
     specifier: ^11.0.0
     version: 11.0.1(vue@3.4.38)
@@ -678,8 +681,23 @@ packages:
       tailwindcss: 3.4.10
     dev: true
 
+  /@tanstack/table-core@8.20.1:
+    resolution: {integrity: sha512-5Ly5TIRHnWH7vSDell9B/OVyV380qqIJVg7H7R7jU4fPEmOD4smqAX7VRflpYI09srWR8aj5OLD2Ccs1pI5mTg==}
+    engines: {node: '>=12'}
+    dev: false
+
   /@tanstack/virtual-core@3.9.0:
     resolution: {integrity: sha512-Saga7/QRGej/IDCVP5BgJ1oDqlDT2d9rQyoflS3fgMS8ntJ8JGw/LBqK2GorHa06+VrNFc0tGz65XQHJQJetFQ==}
+    dev: false
+
+  /@tanstack/vue-table@8.20.4(vue@3.4.38):
+    resolution: {integrity: sha512-84SCWnX8H44beXvtkLt11hYfvzNSwb9wHfSQkp64vsCh3ITPqT55oVD7I35JR++7u1BFzjzrfOGjhPj70CYUcw==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      vue: '>=3.2'
+    dependencies:
+      '@tanstack/table-core': 8.20.1
+      vue: 3.4.38(typescript@5.5.4)
     dev: false
 
   /@tanstack/vue-virtual@3.9.0(vue@3.4.38):
