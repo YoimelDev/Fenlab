@@ -39,7 +39,7 @@ defineProps<{
                         </li>
                     </ul>
 
-                    <nav class="flex gap-4">
+                    <nav class="flex flex-wrap gap-4">
                         <Button as-child>
                             <Link :href="route('login')">
                                 Inicia sesión
@@ -60,7 +60,7 @@ defineProps<{
                     </nav>
                 </div>
 
-                <picture class="relative w-full h-[505px] flex-1">
+                <picture class="relative w-full h-[505px] flex-1 hidden lg:block">
                     <img
                         src="../../images/Desktop.png"
                         alt="Fenlab"

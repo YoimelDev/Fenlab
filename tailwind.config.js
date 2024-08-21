@@ -13,7 +13,12 @@ export const content = [
 export const theme = {
     container: {
         center: true,
-        padding: '5rem',
+        padding: {
+            DEFAULT: '1rem',
+            sm: '2rem',
+            lg: '4rem',
+            xl: '5rem',
+        },
         screens: {
             '2xl': '1440px',
         },
