@@ -87,6 +87,11 @@
   margin-bottom: 0;
 }
 
+.vsm--title {
+  display: grid !important;
+  grid-auto-flow: column;
+}
+
 .vsm--link {
   padding: 10px 0 10px 8px !important;
   gap: 8px !important;
@@ -115,5 +120,7 @@
 }
 
 .vsm--toggle-btn {
+  height: fit-content !important;
+  padding: 0.5rem !important;
   background-color: hsl(var(--blue-sky)) !important;
 }

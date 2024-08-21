@@ -7,7 +7,7 @@ import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
 
 import ApplicationLogo from '@/Components/ApplicationLogo.vue'
 import { PinLeftIcon, PinRightIcon } from '@radix-icons/vue'
-import { HomeIcon, AssessmentIcon } from '@/Components/icons'
+import { HomeIcon, AssessmentIcon, HelpIcon, PersonIcon, PictureIcon, ReceiptIcon } from '@/Components/icons'
 
 type collapse = boolean | string;
 
@@ -33,6 +33,71 @@ const menu = [
     },
     {
         component: separator,
+    },
+    {
+        header: 'Fencia',
+        class: 'mt-8 !px-0 !text-grey',
+    },
+    {
+        title: 'Mis Publicaciones',
+        icon: {
+            element: h('div', [h(PictureIcon)]),
+        },
+    },
+    {
+        title: 'Pendientes Publicar',
+        badge: {
+            text: 7,
+            class: 'grid place-items-center rounded-full text-xs bg-grey text-white h-[18px] w-[18px]',
+        },
+    },
+    {
+        title: 'Publicados',
+    },
+    {
+        title: 'Pendientes Aprobación',
+    },
+    {
+        title: 'Aprobación PBC',
+    },
+    {
+        title: 'Pendientes Firma',
+    },
+    {
+        title: 'Operaciones Cerradas',
+        class: 'mb-8',
+    },
+    {
+        component: separator,
+    },
+    {
+        header: 'Nombre de usuario',
+        class: 'mt-8 !text-grey',        
+        hiddenOnCollapse: true,
+    },
+    {
+        header: 'Empresa',
+        class: '!py-0 !text-grey !font-light',
+        hiddenOnCollapse: true,
+    },
+    {
+        title: 'Cómo funciona',
+        class: 'mt-8',
+        icon: {
+            element: h('div', [h(HelpIcon)]),
+        },
+    },
+    {
+        title: 'Facturación',
+        icon: {
+            element: h('div', [h(ReceiptIcon)]),
+        },
+    },
+    {
+        title: 'Datos Usuario',
+        icon: {
+            element: h('div', [h(PersonIcon)]),
+        },
     },
 ]
 
@@ -61,7 +126,7 @@ onMounted(() => {
             :link-component-name="Link"
             width-collapsed="100px"
             width="256px"
-            class="px-4 py-6 !bg-white border-r border-border-primary"
+            class="px-4 pt-6 !bg-white border-r border-border-primary"
         >
             <template #header>
                 <div class="flex justify-start w-full mb-10">
