@@ -41,6 +41,7 @@ const menu = [
     },
     {
         title: 'Mis Publicaciones',
+        class: '[&_svg]:text-grey',
         icon: {
             element: h('div', [h(PictureIcon)]),
         },
