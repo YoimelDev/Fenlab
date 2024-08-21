@@ -74,6 +74,7 @@ export const theme = {
             'blue-sky': 'hsl(var(--blue-sky))',
             'grey': 'hsl(var(--grey))',
             'chalk': 'hsl(var(--chalk))',
+            'blue': 'hsl(var(--blue))',
         },
         borderRadius: {
             xl: 'calc(var(--radius) + 4px)',
