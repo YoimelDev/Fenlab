@@ -75,6 +75,9 @@ export const theme = {
             'grey': 'hsl(var(--grey))',
             'chalk': 'hsl(var(--chalk))',
             'blue': 'hsl(var(--blue))',
+            'olive': 'hsl(var(--olive))',
+            'brown': 'hsl(var(--brown))',
+            'ivy': 'hsl(var(--ivy))',
         },
         borderRadius: {
             xl: 'calc(var(--radius) + 4px)',
