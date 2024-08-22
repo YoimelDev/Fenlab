@@ -8,12 +8,15 @@ import { EyeClosedIcon, EyeOpenIcon } from '@radix-icons/vue'
 import { Input } from '@/Components/ui/input'
 import { Label } from '@/Components/ui/label'
 import { Button } from '@/Components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
 
 const showPassword = ref(false)
 
 const form = useForm({
     name: '',
+    company: '',
     email: '',
+    telephone: '',
     password: '',
     password_confirmation: '',
 })
@@ -49,6 +52,48 @@ const submit = () => {
                 <InputError
                     class="mt-2 ml-4"
                     :message="form.errors.name"
+                />
+            </div>
+
+            <!-- Company -->
+            <div class="mt-4">
+                <Label for="company">Empresa</Label>
+
+                <Input
+                    id="company"
+                    type="text"
+                    placeholder="Empresa"
+                    class="mt-2"
+                    v-model="form.company"
+                    required
+                    autofocus
+                    autocomplete="company"
+                />
+
+                <InputError
+                    class="mt-2 ml-4"
+                    :message="form.errors.company"
+                />
+            </div>
+
+            <!-- Telephone -->
+            <div class="mt-4">
+                <Label for="telephone">Teléfono</Label>
+
+                <Input
+                    id="telephone"
+                    type="text"
+                    placeholder="Teléfono"
+                    class="mt-2"
+                    v-model="form.telephone"
+                    required
+                    autofocus
+                    autocomplete="telephone"
+                />
+
+                <InputError
+                    class="mt-2 ml-4"
+                    :message="form.errors.telephone"
                 />
             </div>
 
@@ -150,6 +195,19 @@ const submit = () => {
                     class="mt-2 ml-4"
                     :message="form.errors.password_confirmation"
                 />
+            </div>
+
+            <div class="flex items-center space-x-2 mt-4">
+                <Checkbox id="terms" />
+                <Label for="terms">
+                    Acepto los
+                    <Link
+                        href="#"
+                        class="text-[#001D6C] hover:text-gray-900 leading-5 rounded-md hover:underline"
+                    >
+                        términos y condiciones
+                    </Link>
+                </Label>
             </div>
 
             <div class="flex items-center justify-end gap-4 mt-4">
