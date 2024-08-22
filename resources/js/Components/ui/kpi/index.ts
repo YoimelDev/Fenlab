@@ -3,7 +3,7 @@ import { type VariantProps, cva } from 'class-variance-authority'
 export { default as Kpi } from './Kpi.vue'
 
 export const kpiVariants = cva(
-    'flex flex-col gap-4 p-4 rounded-sm max-w-[246px]',
+    'flex flex-col gap-4 p-4 rounded-sm max-w-[246px] w-full',
     {
         variants: {
             variant: {
