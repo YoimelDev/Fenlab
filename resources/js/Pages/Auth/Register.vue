@@ -8,7 +8,7 @@ import { EyeClosedIcon, EyeOpenIcon } from '@radix-icons/vue'
 import { Input } from '@/Components/ui/input'
 import { Label } from '@/Components/ui/label'
 import { Button } from '@/Components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
+import { Checkbox } from '@/Components/ui/checkbox'
 
 const showPassword = ref(false)
 
