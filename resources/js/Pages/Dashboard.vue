@@ -2,6 +2,7 @@
 import { Head } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import { Kpi } from '@/Components/ui/kpi'
+import TableSection from '@/Components/TableSection.vue'
 </script>
 
 <template>
@@ -29,5 +30,7 @@ import { Kpi } from '@/Components/ui/kpi'
                 :is-positive="false"
             />
         </div>
+
+        <TableSection />
     </AuthenticatedLayout>
 </template>
