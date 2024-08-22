@@ -28,7 +28,10 @@ const props = withDefaults(defineProps<Props>(), {
             </p>
     
             <div class="flex items-center gap-1 text-xs font-bold">
-                <ArrowTopRightIcon />
+                <ArrowTopRightIcon
+                    class="!text-[#50CD5E]"
+                    :class="{ '!text-[#FF4D4F]': !props.isPositive }"
+                />
     
                 <p 
                     class="!text-[#50CD5E]"
