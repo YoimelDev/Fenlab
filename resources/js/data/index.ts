@@ -137,3 +137,42 @@ export const projects: Analysis[] = [
         date: '16/07/2024',
     },
 ]
+
+export const invoices = [
+    {
+        mode: 'REO',
+        project: 'Proyecto 1',
+        client_id: '0821449530',
+        status: 'Pendiente',
+        min_price: '348.420 €',
+        image: 'https://s3-alpha-sig.figma.com/img/921c/9d3f/40586d10148f83f5313979e279f5b3fa?Expires=1725840000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=i0PqwafKDVKi752on2QGzgzvADS-UAriTFNy9NsXCbtoxrMwM4xADVwsym6c~VqIxFT3zpU1He8V3d82tmt5MSsriFyIk2JgyDVwCY-6aQF3F7OQ1HbQuLpI5kOyOwkbM4Z0LmQIvtvHnGJ9VKq5QBOqN0pEM3UQ9RgWBQY4EOqf56OrAJA5dk6AAoIneG7LGmYYrQUWBqdJm~6T5cvikefFVh4ByVjXoCx0Ge1X-njJRZcbiBg1zdfKuMy7reI~GGOK7OshN1TmqGHqNJ34tsRIKSSb~RRFYLEbOSWqUBoDaUeUMRGTyGy15t1NAogoWleFS0LEZSNd53QzzD3e8g__',
+        date: '16/07/2024',
+    },
+    {
+        mode: 'NPL',
+        project: 'Proyecto 2',
+        client_id: '0821449530',
+        status: 'En curso',
+        min_price: '348.420 €',
+        image: 'https://s3-alpha-sig.figma.com/img/d265/6d5c/263b1acdd63c7cc05cb25f645cf83649?Expires=1725840000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=kKbjY54MG-2PH1R7QvKTQ2g1KDw~kAdq~b6fXWPxmhfwgiPDvH48Ta5gf84DaJYMfdyCooL1yF6CmzTnNM40V4BPS0ze~TWVXOFnVec5Txf7ae-D1LqtD7pCoef2iOiiBDqcELp4DmNSKtCeqQJeWxLccZM05wIxb7EBfTHXds87DQxcK0XTP9UNvG0u6OzswzeZ-VpyZ5XENRFBHQy4juWF3bUuaex4dPjMY2cTTasqPn0WsBQPDyFgjm6IL~hhYXFrmdkT3H9lhp99AVuMAFunoWhTZf3ldMTG89oPRjRY~~yT3VUqQF4fJhCS0n0djG0gdjw4P5QBh-VCN1YChw__',
+        date: '16/07/2024',
+    },
+    {
+        mode: 'PL/SPL',
+        project: 'Proyecto 3',
+        client_id: '0821449530',
+        status: 'Completado',
+        min_price: '1.420.381 €',
+        image: 'https://s3-alpha-sig.figma.com/img/407b/b679/51a1be9dbc39d72c53c82c747fd1fe86?Expires=1725840000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=W9CDRQ4T5m7CKARor3mjISzWg82omTdWyDEJt1LKX9cAfQsWAttJBW1i7u-FBph1ouMMZdzfvhxxqLVsRt861BBiHPAmPjinIH4LobP6zgi9jg8tX5dujnwk1CaXKQvOHb1bgCLCQ7dc-Xy~f8MiE60DMfJFQJdHv9Kxso8n08p~29Fe1pTUtDUGsXZXnfLXMfnAszXH7e~u7034sBhNwYAWVl6V1JmODK2e0KW~3zM8EejbXxUG81WyJtQ5D7K8QjhxFsS8UWkIYy0fFgT2xljwRAVUJ684Zbm4D1O6U8HS2gwsYt7YZJfjf8jnfhGHtBg0Fs5f00zS7nHquBY5JQ__',
+        date: '16/07/2024',
+    },
+    {
+        mode: 'NPL',
+        project: 'Proyecto 4',
+        client_id: '0821449530',
+        status: 'En curso',
+        min_price: '348.420 €',
+        image: 'https://s3-alpha-sig.figma.com/img/921c/9d3f/40586d10148f83f5313979e279f5b3fa?Expires=1725840000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=i0PqwafKDVKi752on2QGzgzvADS-UAriTFNy9NsXCbtoxrMwM4xADVwsym6c~VqIxFT3zpU1He8V3d82tmt5MSsriFyIk2JgyDVwCY-6aQF3F7OQ1HbQuLpI5kOyOwkbM4Z0LmQIvtvHnGJ9VKq5QBOqN0pEM3UQ9RgWBQY4EOqf56OrAJA5dk6AAoIneG7LGmYYrQUWBqdJm~6T5cvikefFVh4ByVjXoCx0Ge1X-njJRZcbiBg1zdfKuMy7reI~GGOK7OshN1TmqGHqNJ34tsRIKSSb~RRFYLEbOSWqUBoDaUeUMRGTyGy15t1NAogoWleFS0LEZSNd53QzzD3e8g__',
+        date: '16/07/2024',
+    },
+]

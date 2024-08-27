@@ -10,43 +10,8 @@ import {
     TableHeader,
     TableRow,
 } from '@/Components/ui/table'
-import { Badge, type BadgeVariants } from '@/Components/ui/badge'
-import { Avatar, AvatarFallback, AvatarImage } from '@/Components/ui/avatar'
-
-const invoices = [
-    {
-        mode: 'REO',
-        project: 'Proyecto 1',
-        client_id: '0821449530',
-        status: 'Pendiente',
-        min_price: '348.420 €',
-        date: '16/07/2024',
-    },
-    {
-        mode: 'NPL',
-        project: 'Proyecto 2',
-        client_id: '0821449530',
-        status: 'En curso',
-        min_price: '348.420 €',
-        date: '16/07/2024',
-    },
-    {
-        mode: 'PL/SPL',
-        project: 'Proyecto 3',
-        client_id: '0821449530',
-        status: 'Completado',
-        min_price: '1.420.381 €',
-        date: '16/07/2024',
-    },
-    {
-        mode: 'NPL',
-        project: 'Proyecto 4',
-        client_id: '0821449530',
-        status: 'En curso',
-        min_price: '348.420 €',
-        date: '16/07/2024',
-    },
-]
+import { type BadgeVariants, Badge, Avatar, AvatarFallback, AvatarImage } from '@/Components/ui'
+import { invoices } from '@/data'
 
 type BadgeMode = 'REO' | 'NPL' | 'PL/SPL' | 'Pendiente' | 'En curso' | 'Completado';
 
@@ -229,8 +194,8 @@ const badgeMap: Record<BadgeMode, BadgeVariants['variant']> = {
                         <TableCell class="font-medium">
                             <Avatar>
                                 <AvatarImage
-                                    src=""
-                                    alt=""
+                                    :src="invoice.image"
+                                    alt="Client logo"
                                 />
                                 <AvatarFallback>FL</AvatarFallback>
                             </Avatar>
