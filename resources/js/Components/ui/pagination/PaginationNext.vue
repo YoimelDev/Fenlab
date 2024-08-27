@@ -11,7 +11,8 @@ const props = withDefaults(defineProps<PaginationNextProps & { class?: HTMLAttri
     asChild: true,
 })
 
-const delegatedProps = computed(() => {
+const delegatedProps = computed(() => {     
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { class: _, ...delegated } = props
 
     return delegated
