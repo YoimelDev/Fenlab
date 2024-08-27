@@ -27,6 +27,7 @@ const menu = [
         },
     },
     {
+        href: '/my-analysis',
         title: 'Mis Análisis',
         icon: {
             element: h('div', [h(AssessmentIcon)]),
