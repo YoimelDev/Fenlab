@@ -1,16 +1,14 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
-import { Kpi } from '@/Components/ui/kpi'
-import { Button } from '@/Components/ui/button'
+
+import { Kpi, Button, DataTable } from '@/Components/ui'
 
 import { AssessmentIcon } from '@/Components/icons'
 import { PlusIcon } from '@radix-icons/vue'
 
-import { columns } from './Components/dataTable'
-import { DataTable } from '@/Components/ui/dataTable'
-
 import { projects } from '@/data'
+import { columns } from './Components/dataTable'
 </script>
 
 <template>
@@ -61,7 +59,6 @@ import { projects } from '@/data'
                 :is-positive="false"
             />
         </div>
-
      
         <DataTable
             :columns="columns"
