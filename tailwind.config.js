@@ -78,6 +78,7 @@ export const theme = {
             'olive': 'hsl(var(--olive))',
             'brown': 'hsl(var(--brown))',
             'ivy': 'hsl(var(--ivy))',
+            'danger': 'hsl(var(--danger))',
         },
         borderRadius: {
             xl: 'calc(var(--radius) + 4px)',
@@ -108,6 +109,10 @@ export const theme = {
             'accordion-up': 'accordion-up 0.2s ease-out',
             'collapsible-down': 'collapsible-down 0.2s ease-in-out',
             'collapsible-up': 'collapsible-up 0.2s ease-in-out',
+        },
+        backgroundImage	: {
+            'info-gradient': 'linear-gradient(0deg, rgba(0, 77, 242, 0.1), rgba(0, 77, 242, 0.1)), linear-gradient(to right, #FFFFFF, #E8F0FE)',
+            'danger-gradient': 'linear-gradient(45deg, rgba(255, 0, 0, 0.2), rgba(255, 255, 255, 0.8))',
         },
     },
 }

@@ -4,4 +4,4 @@ export { default as HelpIcon } from './HelpIcon.vue'
 export { default as PersonIcon } from './PersonIcon.vue'
 export { default as PictureIcon } from './PictureIcon.vue'
 export { default as ReceiptIcon } from './ReceiptIcon.vue'
-
+export { default as InfoCircledIcon } from './InfoCircledIcon.vue'
