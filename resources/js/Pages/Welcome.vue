@@ -54,7 +54,7 @@ defineProps<{
                                 v-if="canRegister"
                                 :href="route('register')"
                             >
-                                Regístrate
+                                Conctáctanos
                             </Link>
                         </Button>
                     </nav>

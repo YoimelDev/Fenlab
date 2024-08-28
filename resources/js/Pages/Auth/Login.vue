@@ -132,7 +132,7 @@ const submit = () => {
         <span class="h-[1px] w-full bg-[#DDE1E6]" />
 
         <p class="text-[#001D6C] text-sm left-5">
-            No tienes una cuenta? Regístrate ahora:
+            No tienes una cuenta? Contacta con nosotros.
         </p>
 
         <Button 
@@ -142,7 +142,7 @@ const submit = () => {
             <Link
                 :href="route('register')"
             >
-                Regístrate
+                Contacta
             </Link>
         </Button>
     </GuestLayout>
