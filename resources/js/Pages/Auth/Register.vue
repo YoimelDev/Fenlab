@@ -30,6 +30,17 @@ const submit = () => {
     <GuestLayout>
         <Head title="Register" />
 
+        <header>
+            <h1 class="text-[#21272A] text-4xl font-bold lg:text-[42px] leading-[46px]">
+                !Ponte en contacto!
+            </h1>
+
+            <p class="mt-2 text-[#21272A] text-lg lg:text-[20px] leading-[23px]">
+                Conoce como Fenlab puede ayudarte a gestionar tu
+                producto financiero e inmobiliario
+            </p>
+        </header>
+
         <form @submit.prevent="submit">
             <div>
                 <Label for="name">Name</Label>
