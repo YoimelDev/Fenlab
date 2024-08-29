@@ -19,8 +19,6 @@ import {
 import {
     Pagination,
     PaginationEllipsis,
-    PaginationFirst,
-    PaginationLast,
     PaginationList,
     PaginationListItem,
     PaginationNext,
@@ -112,9 +110,8 @@ const table = useVueTable({
     >
         <PaginationList
             v-slot="{ items }"
-            class="flex items-center gap-1"
+            class="flex justify-center items-center gap-1 mt-8"
         >
-            <PaginationFirst @click="table.setPageIndex(0)" />
             <PaginationPrev
                 @click="table.previousPage()"
                 :disabled="!table.getCanPreviousPage()"
@@ -128,8 +125,8 @@ const table = useVueTable({
                     as-child
                 >
                     <Button
-                        class="w-10 h-10 p-0"
-                        :variant="item.value === page ? 'default' : 'outline'"
+                        class="w-10 h-10 p-0 text-blue text-sm rounded-full"
+                        :variant="item.value === page ? 'pagination' : 'ghost'"
                         @click="table.setPageIndex(item.value - 1)"
                     >
                         {{ item.value }}
@@ -146,7 +143,6 @@ const table = useVueTable({
                 @click="table.nextPage()"
                 :disabled="!table.getCanNextPage()"
             />
-            <PaginationLast @click="table.setPageIndex(table.getPageCount() - 1)" />
         </PaginationList>
     </Pagination>
 </template>
