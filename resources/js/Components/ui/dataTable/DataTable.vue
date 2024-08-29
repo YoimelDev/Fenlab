@@ -110,7 +110,7 @@ const table = useVueTable({
     >
         <PaginationList
             v-slot="{ items }"
-            class="flex justify-center items-center gap-1 mt-8"
+            class="max-w-[1104px] w-full flex justify-center items-center gap-1 mt-8"
         >
             <PaginationPrev
                 @click="table.previousPage()"
