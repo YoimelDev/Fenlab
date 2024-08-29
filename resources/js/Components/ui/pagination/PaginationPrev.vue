@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { type HTMLAttributes, computed } from 'vue'
 import { PaginationPrev, type PaginationPrevProps } from 'radix-vue'
-import { ChevronLeftIcon } from '@radix-icons/vue'
+import { ArrowIcon } from '@/Components/icons'
 import {
     Button,
 } from '@/Components/ui/button'
@@ -22,11 +22,18 @@ const delegatedProps = computed(() => {
 <template>
     <PaginationPrev v-bind="delegatedProps">
         <Button
-            :class="cn('w-9 h-9 p-0', props.class)"
-            variant="outline"
+            :class="cn('h-9 p-2 text-blue text-sm', props.class)"
+            variant="ghost"
         >
             <slot>
-                <ChevronLeftIcon />
+                <ArrowIcon
+                    class="sm:mr-2"
+                    variant="left"
+                />
+
+                <span class="hidden sm:inline">
+                    Anterior
+                </span>
             </slot>
         </Button>
     </PaginationPrev>
