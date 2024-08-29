@@ -35,7 +35,9 @@ class ContactController extends Controller
     {
         $contact = Contact::create($request->validated());
 
-        Mail::to(['emir@hostienda.com'])->send(new ContactEmail($contact));    
+        $emails = explode(',', env('CONTACT_EMAILS'));
+
+        Mail::to($emails)->send(new ContactEmail($contact));  
 
         return response()->json(['message' => 'Contact created successfully'], 201);
     }
