@@ -15,8 +15,9 @@ export const buttonVariants = cva(
           'border-2 border-input text-primary bg-background shadow-sm hover:bg-accent',
                 secondary:
           'bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80',
-                ghost: 'hover:bg-accent hover:text-accent-foreground',
+                ghost: 'hover:bg-[#004DF21A]',
                 link: 'text-primary underline-offset-4 hover:underline',
+                pagination: 'bg-[#004DF21A] hover:bg-[#004DF21A]',
             },
             size: {
                 default: 'h-14 px-8 py-2',
