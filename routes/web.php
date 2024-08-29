@@ -1,6 +1,8 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ContactController;
+use App\Mail\ContactEmail;
+use App\Models\Contact;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -24,5 +26,16 @@ Route::middleware('auth')->group(function () {
         return Inertia::render('MyAnalysis/Analysis');
     })->name('analysis');
 });
+
+
+Route::resource('Contact', ContactController::class)->names([
+    'store' => 'contact.store',
+]);
+
+Route::get('/mail', function () {
+    $contact = Contact::find(1);
+
+    return new ContactEmail($contact);
+})->name('mail');
 
 require __DIR__.'/auth.php';

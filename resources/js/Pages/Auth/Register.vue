@@ -1,32 +1,52 @@
 <script setup lang="ts">
+import axios from 'axios'
 import GuestLayout from '@/Layouts/GuestLayout.vue'
 import InputError from '@/Components/InputError.vue'
 import { Head, Link, useForm } from '@inertiajs/vue3'
 
-import { Input } from '@/Components/ui/input'
-import { Label } from '@/Components/ui/label'
-import { Button } from '@/Components/ui/button'
-import { Checkbox } from '@/Components/ui/checkbox'
+import { Input, Label, Button, Checkbox, useToast, Toaster } from '@/Components/ui'
+
+const { toast } = useToast()
 
 const form = useForm({
     name: '',
     company: '',
     email: '',
     telephone: '',
-    password: '',
-    password_confirmation: '',
 })
 
-const submit = () => {
-    form.post(route('register'), {
-        onFinish: () => {
-            form.reset('password', 'password_confirmation')
-        },
-    })
+const submit = async (e: { preventDefault: () => void }) => {   
+
+    e.preventDefault()
+    document.body.style.cursor = 'wait'
+    form.processing = true
+
+    try {
+        await axios.post(route('contact.store'), form.data())
+        
+        toast({
+            variant: 'info',
+            title: '¡Gracias por contactarnos!',
+        })
+    } catch (error) {
+        console.log(error)
+        
+        toast({
+            variant: 'danger',
+            title: '¡Ups! Algo salió mal.',
+            description: 'Por favor, verifica los campos e intenta de nuevo.',
+        })
+    } finally {
+        document.body.style.cursor = 'default'
+        form.processing = false
+        form.reset()
+    }
 }
 </script>
 
 <template>
+    <Toaster />
+  
     <GuestLayout>
         <Head title="Register" />
 
@@ -139,6 +159,7 @@ const submit = () => {
 
             <div class="flex items-center justify-end gap-4 mt-4">
                 <Button
+                    type="submit"
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >
