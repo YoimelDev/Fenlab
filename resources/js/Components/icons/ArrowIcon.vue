@@ -15,7 +15,7 @@ defineProps<{
     >
         <path
             d="M13.3333 6.99999H1.66663M1.66663 6.99999L7.49996 12.8333M1.66663 6.99999L7.49996 1.16666"
-            stroke="#004DF2"
+            stroke="currentColor"
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -32,7 +32,7 @@ defineProps<{
     >
         <path
             d="M1.66675 6.99999H13.3334M13.3334 6.99999L7.50008 1.16666M13.3334 6.99999L7.50008 12.8333"
-            stroke="#004DF2"
+            stroke="currentColor"
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
