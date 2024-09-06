@@ -33,7 +33,7 @@
     "dependencies": {
         "@radix-icons/vue": "^1.0.0",
         "@tanstack/vue-table": "^8.20.4",
-        "@vueuse/core": "^11.0.0",
+        "@vueuse/core": "^11.0.1",
         "class-variance-authority": "^0.7.0",
         "clsx": "^2.1.1",
         "radix-vue": "^1.9.4",
