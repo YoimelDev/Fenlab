@@ -1,4 +1,5 @@
 import { h } from 'vue'
+import { Link } from '@inertiajs/vue3'
 import type { ColumnDef } from '@tanstack/vue-table'
 import { type Analysis } from '@/Pages/MyAnalysis/types'
 import { Badge, type BadgeVariants } from '@/Components/ui/badge'
@@ -33,7 +34,7 @@ export const columns: ColumnDef<Analysis>[] = [
         accessorKey: 'project',
         cell: (row) => {
             const project = row.getValue() as string
-            return h('p', { class: 'font-bold' }, project)
+            return h(Link, { href: '/my-analysis/1', class: 'font-medium' }, project)
         },
         
     },

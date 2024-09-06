@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head } from '@inertiajs/vue3'
+import { Head, Link } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 
 import { 
@@ -42,16 +42,21 @@ const steps = [
         <header class="flex items-center gap-4">
             <Button
                 variant="ghost"
+                as-child
                 size="sm"
             >
-                <ArrowIcon
-                    class="sm:mr-2 text-black"
-                    variant="left"
-                />
+                <Link
+                    :href="route('analysis')"
+                >
+                    <ArrowIcon
+                        class="sm:mr-2 text-black"
+                        variant="left"
+                    />
 
-                <span class="hidden sm:inline">
-                    Proyecto Zeus
-                </span>
+                    <span class="hidden sm:inline">
+                        Proyecto Zeus
+                    </span>
+                </Link>
             </Button>
 
             <Badge

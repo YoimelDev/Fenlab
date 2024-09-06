@@ -3,6 +3,7 @@ import { type Analysis } from '@/Pages/MyAnalysis/types'
 export const projects: Analysis[] = [
     {
         id: 1,
+        link: '/analysis/1',
         mode: 'REO',
         project: 'Proyecto 1',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec purus feugiat, vestibulum mi id, ultricies turpis.',
@@ -12,6 +13,7 @@ export const projects: Analysis[] = [
     },
     {
         id: 2,
+        link: '/analysis/1',
         mode: 'NPL',
         project: 'Proyecto 2',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec purus feugiat, vestibulum mi id, ultricies turpis.',
@@ -21,6 +23,7 @@ export const projects: Analysis[] = [
     },
     {
         id: 3,
+        link: '/analysis/1',
         mode: 'PL/SPL',
         project: 'Proyecto 3',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec purus feugiat, vestibulum mi id, ultricies turpis.',
@@ -30,6 +33,7 @@ export const projects: Analysis[] = [
     },
     {
         id: 4,
+        link: '/analysis/1',
         mode: 'NPL',
         project: 'Proyecto 4',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec purus feugiat, vestibulum mi id, ultricies turpis.',
@@ -39,6 +43,7 @@ export const projects: Analysis[] = [
     },
     {
         id: 5,
+        link: '/analysis/1',
         mode: 'REO',
         project: 'Proyecto 5',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec purus feugiat, vestibulum mi id, ultricies turpis.',
@@ -48,6 +53,7 @@ export const projects: Analysis[] = [
     },
     {
         id: 6,
+        link: '/analysis/1',
         mode: 'PL/SPL',
         project: 'Proyecto 6',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec purus feugiat, vestibulum mi id, ultricies turpis.',
@@ -57,6 +63,7 @@ export const projects: Analysis[] = [
     },
     {
         id: 7,
+        link: '/analysis/1',
         mode: 'REO',
         project: 'Proyecto 7',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec purus feugiat, vestibulum mi id, ultricies turpis.',
@@ -66,6 +73,7 @@ export const projects: Analysis[] = [
     },
     {
         id: 8,
+        link: '/analysis/1',
         mode: 'NPL',
         project: 'Proyecto 8',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec purus feugiat, vestibulum mi id, ultricies turpis.',
@@ -75,6 +83,7 @@ export const projects: Analysis[] = [
     },
     {
         id: 9,
+        link: '/analysis/1',
         mode: 'PL/SPL',
         project: 'Proyecto 9',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec purus feugiat, vestibulum mi id, ultricies turpis.',
@@ -84,6 +93,7 @@ export const projects: Analysis[] = [
     },
     {
         id: 10,
+        link: '/analysis/1',
         mode: 'REO',
         project: 'Proyecto 10',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec purus feugiat, vestibulum mi id, ultricies turpis.',
@@ -93,6 +103,7 @@ export const projects: Analysis[] = [
     },
     {
         id: 11,
+        link: '/analysis/1',
         mode: 'NPL',
         project: 'Proyecto 11',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec purus feugiat, vestibulum mi id, ultricies turpis.',
@@ -102,6 +113,7 @@ export const projects: Analysis[] = [
     },
     {
         id: 12,
+        link: '/analysis/1',
         mode: 'PL/SPL',
         project: 'Proyecto 12',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec purus feugiat, vestibulum mi id, ultricies turpis.',
@@ -111,6 +123,7 @@ export const projects: Analysis[] = [
     },
     {
         id: 13,
+        link: '/analysis/1',
         mode: 'REO',
         project: 'Proyecto 13',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec purus feugiat, vestibulum mi id, ultricies turpis.',
@@ -120,6 +133,7 @@ export const projects: Analysis[] = [
     },
     {
         id: 14,
+        link: '/analysis/1',
         mode: 'NPL',
         project: 'Proyecto 14',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec purus feugiat, vestibulum mi id, ultricies turpis.',
@@ -129,6 +143,7 @@ export const projects: Analysis[] = [
     },
     {
         id: 15,
+        link: '/analysis/1',
         mode: 'PL/SPL',
         project: 'Proyecto 15',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec purus feugiat, vestibulum mi id, ultricies turpis.',
