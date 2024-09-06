@@ -22,9 +22,15 @@ Route::middleware('auth')->group(function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
 
-    Route::get('/my-analysis', function () {
-        return Inertia::render('MyAnalysis/Analysis');
-    })->name('analysis');
+    Route::prefix('my-analysis')->group(function () {
+        Route::get('/', function () {
+            return Inertia::render('MyAnalysis/Analysis');
+        })->name('analysis');
+
+        Route::get('/1', function () {
+            return Inertia::render('MyAnalysis/InternalView');
+        })->name('analysis1');
+    });
 });
 
 
