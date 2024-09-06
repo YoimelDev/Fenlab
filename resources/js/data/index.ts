@@ -176,3 +176,42 @@ export const invoices = [
         date: '16/07/2024',
     },
 ]
+
+export const dataAnalysis = [
+    {
+        id: 1,
+        year: 'Año 1',
+        ipc: '58,23',
+        hpa: '',
+    },
+    {
+        id: 2,
+        year: 'Año 2',
+        ipc: '',
+        hpa: '44,04',
+    },
+    {
+        id: 3,
+        year: 'Año 3',
+        ipc: '',
+        hpa: '',
+    },
+    {
+        id: 4,
+        year: 'Año 4',
+        ipc: '',
+        hpa: '',
+    },
+    {
+        id: 5,
+        year: 'Año 5',
+        ipc: '',
+        hpa: '',
+    },
+    {
+        id: 6,
+        year: 'Año 6',
+        ipc: '',
+        hpa: '',
+    },
+]
