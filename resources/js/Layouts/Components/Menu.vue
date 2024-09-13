@@ -41,6 +41,7 @@ const menu = [
         class: 'mt-8 !px-0 !text-grey',
     },
     {
+        href: '/my-publications',
         title: 'Mis Publicaciones',
         class: '[&_svg]:text-grey',
         icon: {

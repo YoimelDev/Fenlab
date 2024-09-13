@@ -31,6 +31,12 @@ Route::middleware('auth')->group(function () {
             return Inertia::render('MyAnalysis/InternalView');
         })->name('analysis1');
     });
+
+    Route::prefix('my-publications')->group(function () {
+        Route::get('/', function () {
+            return Inertia::render('MyPublications/Publications');
+        })->name('publications');
+    });
 });
 
 
