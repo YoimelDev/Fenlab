@@ -63,7 +63,7 @@ const submit = async (e: { preventDefault: () => void }) => {
 
         <form @submit.prevent="submit">
             <div>
-                <Label for="name">Name</Label>
+                <Label for="name">Nombre y apellidos</Label>
 
                 <Input
                     id="name"
