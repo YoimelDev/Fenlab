@@ -1,5 +1,4 @@
 import { h } from 'vue'
-import { Link } from '@inertiajs/vue3'
 import type { ColumnDef } from '@tanstack/vue-table'
 import { type publication } from '@/Pages/MyPublications/types'
 import { Badge, type BadgeVariants } from '@/Components/ui/badge'
@@ -66,7 +65,7 @@ export const columns: ColumnDef<publication>[] = [
         id: 'actions',
         header: () => '',
         accessorKey: 'id',
-        cell: (row) => {
+        cell: () => {
             return h(
                 'button',
                 { class: 'flex justify-end text-grey text-2xl' },
