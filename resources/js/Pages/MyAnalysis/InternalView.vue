@@ -11,9 +11,13 @@ import {
     StepperSeparator, 
     StepperTitle, 
     StepperTrigger, 
+    Tabs,
+    TabsContent,
+    TabsList,
+    TabsTrigger,
 } from '@/Components/ui'
 
-import { ArrowIcon, InfoIcon } from '@/Components/icons'
+import { ArrowIcon, InfoIcon, XlsIcon, PdfIcon, DownloadIcon, ArrowUpIcon, CircleIcon, UploadIcon } from '@/Components/icons'
 
 const steps = [
     {
@@ -77,7 +81,7 @@ const steps = [
         </header>
 
        
-        <Stepper class="flex w-full items-start gap-2 mt-10">
+        <Stepper class="flex w-full items-start gap-2 my-10">
             <StepperItem
                 v-for="step in steps"
                 :key="step.step"
@@ -115,5 +119,113 @@ const steps = [
                 </div>
             </StepperItem>
         </Stepper>
+
+        <Tabs
+            default-value="analysis"
+        >
+            <TabsList class="grid w-[274px] grid-cols-2">
+                <TabsTrigger value="analysis">
+                    Análisis
+                </TabsTrigger>
+                <TabsTrigger value="assets">
+                    Activos
+                </TabsTrigger>
+            </TabsList>
+            <TabsContent value="analysis">
+                <div class="my-4 p-2 bg-white">
+                    <div class="grid place-items-center p-5 border-2 border-dashed border-[#C1C1C1] rounded-sm">
+                        <p class="flex items-center gap-2 mb-5 text-grey text-sm">
+                            Arrastra aquí tu archivo excel cumplimentado 
+
+                            <CircleIcon variant="help" />
+                        </p>
+
+                        <Button
+                            variant="green"
+                            size="xs"
+                        >
+                            <UploadIcon class="mr-2" />
+                            Cargar excel
+                        </Button>
+                    </div>
+                </div>
+
+                <ArrowUpIcon />
+
+                <div class="my-4">
+                    <div class="flex gap-4 my-2">
+                        <p class="px-2 text-black text-[10px] font-medium bg-white rounded-sm">
+                            Texto paso 2
+                        </p>
+                        <p class="text-black text-[10px] font-medium">
+                            01/17/2024
+                        </p>
+                    </div>
+    
+                    <div class="relative flex items-center gap-4 w-full p-4 mb-4 bg-white ">
+                        <XlsIcon />
+    
+                        <div>
+                            <p class="text-black text-lg font-bold">
+                                NombreArchivo_Nombre.xls
+                            </p>
+                            <p class="text-grey text-sm">
+                                Texto descripción del documento.
+                            </p>
+                        </div>
+
+                        <DownloadIcon class="absolute top-4 right-4" />
+                    </div>
+
+                    <div class="relative flex items-center gap-4 w-full p-4 bg-white ">
+                        <PdfIcon />
+    
+                        <div>
+                            <p class="text-black text-lg font-bold">
+                                Fichas de Activos Analizados
+                            </p>
+                            <p class="text-grey text-sm">
+                                Texto descripción del documento.
+                            </p>
+                        </div>
+
+                        <DownloadIcon class="absolute top-4 right-4" />
+                    </div>
+                </div>
+
+                <ArrowUpIcon />
+
+                <div class="my-4">
+                    <div class="flex gap-4 my-2">
+                        <p class="px-2 text-black text-[10px] font-medium bg-white rounded-sm">
+                            Texto paso 1
+                        </p>
+                        <p class="text-black text-[10px] font-medium">
+                            01/17/2024
+                        </p>
+                    </div>
+    
+                    <div class="relative flex items-center gap-4 w-full p-4 bg-white ">
+                        <XlsIcon />
+    
+                        <div>
+                            <p class="text-black text-lg font-bold">
+                                NombreArchivo.xls
+                            </p>
+                            <p class="text-grey text-sm">
+                                Texto descripción del documento.
+                            </p>
+                        </div>
+
+                        <DownloadIcon class="absolute top-4 right-4" />
+                    </div>
+                </div>
+            </TabsContent>
+            <TabsContent value="assets">
+                <h2>
+                    Activos
+                </h2>
+            </TabsContent>
+        </Tabs>
     </AuthenticatedLayout>
 </template>
