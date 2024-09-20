@@ -64,7 +64,7 @@ import { columns } from './Components/dataTable'
 
                     <div class="content mt-10">
                         <Tabs
-                            default-value=""
+                            default-value="images"
                         >
                             <TabsList class="grid w-[422px] grid-cols-3">
                                 <TabsTrigger value="activeData">
