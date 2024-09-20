@@ -16,11 +16,6 @@ const badgeMap: Record<BadgeMode, BadgeVariants['variant']> = {
 
 export const columns: ColumnDef<publication>[] = [
     {
-        id: 'select',
-        header: () => '',
-        cell: () => h('input', { type: 'checkbox' }),
-    },
-    {
         header: 'NOMBRE PROYECTO',
         accessorKey: 'name',
         cell: (row) => {
