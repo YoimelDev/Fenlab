@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
-import { Head } from '@inertiajs/vue3'
+import { Head, Link } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 
 import { 
@@ -9,41 +8,21 @@ import {
     DataTable,
     Dialog,
     DialogContent,
-    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-    Input,
-    Textarea,
-    Badge, 
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
+    Tabs,
+    TabsContent,
+    TabsList,
+    TabsTrigger,
 } from '@/Components/ui'
 
-import { AssessmentIcon, ArrowIcon, ShoppingBagIcon, SellIcon } from '@/Components/icons'
+import { AssessmentIcon } from '@/Components/icons'
 import { PlusIcon } from '@radix-icons/vue'
 
-import { dataAnalysis, publications } from '@/data'
+import { publications } from '@/data'
 import { columns } from './Components/dataTable'
-
-const step = ref(1)
-
-const newAnalysis = reactive({
-    name: '',
-    description: '',
-    wacc: '',
-    management_fee: '',
-    lawyer: '',
-    prosecutor: '',
-})
-
-const activeSelection = ref('buy')
-const activeSelectionBadge = ref('pl/spl s')
 
 </script>
 
@@ -61,22 +40,10 @@ const activeSelectionBadge = ref('pl/spl s')
                 Mis Publicaciones | Pendientes de Publicar
             </h1>
 
-            <Button 
-                class="gap-1"
-                variant="green"
-                size="sm"
-            >
-                <PlusIcon
-                    class="w-4 h-4"
-                />
-
-                Nueva Publicación
-            </Button>
-
             <Dialog>
                 <DialogTrigger as-child>
                     <Button 
-                        class="gap-1 hidden"
+                        class="gap-1"
                         variant="green"
                         size="sm"
                     >
@@ -91,283 +58,86 @@ const activeSelectionBadge = ref('pl/spl s')
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>
-                            Nuevo análisis
+                            Título
                         </DialogTitle>
-                        <DialogDescription>
-                            Paso {{ step }}
-                        </DialogDescription>
                     </DialogHeader>
 
-                    <div class="content">
-                        <div
-                            v-if="step === 1"
-                            class="flex flex-col gap-10"
+                    <div class="content mt-10">
+                        <Tabs
+                            default-value=""
                         >
-                            <Input
-                                id="name"
-                                type="text"
-                                placeholder="Nombre proyecto"
-                                class="mt-2"
-                                v-model="newAnalysis.name"
-                                required
-                                autofocus
-                                autocomplete="name"
-                            />
-
-                            <Textarea
-                                id="description"
-                                class="resize-none h-[112px]"
-                                placeholder="Descripción"
-                                v-model="newAnalysis.description"
-                            />
-                        </div>
-
-                        <div
-                            v-if="step === 2"
-                            class="flex flex-col gap-6"
-                        >
-                            <div
-                                role="button"
-                                class="flex items-center gap-4 p-3 bg-white rounded-sm"
-                                :class="{ 'text-electric-green [&_div]:text-electric-green bg-blue-sky border border-electric-green': activeSelection === 'buy' }"
-                                @click="activeSelection = 'buy'"
-                            >
-                                <ShoppingBagIcon />
-
-                                <div class="text-grey">
-                                    <h3 class="text-lg font-bold">
-                                        Buy Side
-                                    </h3>
-
-                                    <p class="text-sm">
-                                        Texto descriptivo lorem ipsum
-                                    </p>
+                            <TabsList class="grid w-[422px] grid-cols-3">
+                                <TabsTrigger value="activeData">
+                                    Datos activo
+                                </TabsTrigger>
+                                <TabsTrigger value="documents">
+                                    Documentos
+                                </TabsTrigger>
+                                <TabsTrigger value="images">
+                                    Imágenes
+                                </TabsTrigger>
+                            </TabsList>
+                            <TabsContent value="activeData">
+                                <h2>
+                                    Datos activo
+                                </h2>
+                            </TabsContent>
+                            <TabsContent value="documents">
+                                <h2>
+                                    Documentos
+                                </h2>
+                            </TabsContent>
+                            <TabsContent value="images">
+                                <div class="my-4 p-2 bg-white">
+                                    <div class="grid place-items-center p-5 border-2 border-dashed border-[#C1C1C1] rounded-sm">
+                                        <Button
+                                            variant="green"
+                                            size="xs"
+                                        >
+                                            <UploadIcon class="mr-2" />
+                                            Cargar imágenes
+                                        </Button>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div 
-                                role="button"
-                                class="flex items-center gap-4 p-3 bg-white rounded-sm"
-                                :class="{ 'text-electric-green [&_div]:text-electric-green bg-blue-sky border border-electric-green': activeSelection === 'sell' }"
-                                @click="activeSelection = 'sell'"
-                            >
-                                <SellIcon />
-
-                                <div class="text-grey">
-                                    <h3 class="text-lg font-bold">
-                                        Sale Side
-                                    </h3>
-
-                                    <p class="text-sm">
-                                        Texto descriptivo lorem ipsum
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div
-                            v-if="step === 3"
-                            class="flex flex-col gap-6"
-                        >
-                            <div
-                                role="button"
-                                class="flex items-center gap-4 p-3 bg-white rounded-sm"
-                                :class="{ 'text-electric-green [&>div]:text-electric-green bg-blue-sky border border-electric-green': activeSelectionBadge === 'pl/spl s' }"
-                                @click="activeSelectionBadge = 'pl/spl s'"
-                            >
-                                <Badge variant="secondary">
-                                    PL/SPL S
-                                </Badge>
-
-                                <div class="text-grey">
-                                    <h3 class="text-lg font-bold">
-                                        PL / RPL Secured
-                                    </h3>
-
-                                    <p class="text-sm">
-                                        Texto descriptivo lorem ipsum
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div 
-                                role="button"
-                                class="flex items-center gap-4 p-3 bg-white rounded-sm"
-                                :class="{ 'text-electric-green [&_div]:text-electric-green bg-blue-sky border border-electric-green': activeSelectionBadge === 'pl/spl u' }"
-                                @click="activeSelectionBadge = 'pl/spl u'"
-                            >
-                                <Badge
-                                    class="bg-[#EBE0F1]"
-                                    variant="secondary"
-                                >
-                                    PL/SPL U
-                                </Badge>
-
-                                <div class="text-grey">
-                                    <h3 class="text-lg font-bold">
-                                        PL / RPL Unsecured
-                                    </h3>
-
-                                    <p class="text-sm">
-                                        Texto descriptivo lorem ipsum
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div 
-                                role="button"
-                                class="flex items-center gap-4 p-3 bg-white rounded-sm"
-                                :class="{ 'text-electric-green [&_div]:text-electric-green bg-blue-sky border border-electric-green': activeSelectionBadge === 'npl' }"
-                                @click="activeSelectionBadge = 'npl'"
-                            >
-                                <Badge variant="primary">
-                                    NPL
-                                </Badge>
-
-                                <div class="text-grey">
-                                    <h3 class="text-lg font-bold">
-                                        NPL Secured
-                                    </h3>
-
-                                    <p class="text-sm">
-                                        Texto descriptivo lorem ipsum
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div 
-                                role="button"
-                                class="flex items-center gap-4 p-3 bg-white rounded-sm"
-                                :class="{ 'text-electric-green [&_div]:text-electric-green bg-blue-sky border border-electric-green': activeSelectionBadge === 'reo' }"
-                                @click="activeSelectionBadge = 'reo'"
-                            >
-                                <Badge variant="default">
-                                    REO
-                                </Badge>
-
-
-                                <div class="text-grey">
-                                    <h3 class="text-lg font-bold">
-                                        REO
-                                    </h3>
-
-                                    <p class="text-sm">
-                                        Texto descriptivo lorem ipsum
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div
-                            v-if="step === 4"
-                            class="flex flex-col gap-10"
-                        >
-                            <Table>
-                                <TableHeader>
-                                    <TableRow class="[&_th]:px-3 [&_th]:bg-white">
-                                        <TableHead class="!bg-[#ECECEC] z-50 relative">
-                                            AÑO
-                                        </TableHead>
-                                        <TableHead>IPC (%)</TableHead>
-                                        <TableHead>HPA (%)</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    <TableRow
-                                        class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]"
-                                        v-for="data in dataAnalysis"
-                                        :key="data.id"
+                                <div class="flex flex-wrap justify-center gap-4">
+                                    <img
+                                        src="https://via.placeholder.com/200"
+                                        alt="Placeholder"
                                     >
-                                        <TableCell class="!bg-[#ECECEC] font-bold">
-                                            {{ data.year }}
-                                        </TableCell>
-                                        <TableCell>{{ data.ipc }}</TableCell>
-                                        <TableCell>{{ data.hpa }}</TableCell>
-                                    </TableRow>
-                                </TableBody>
-                            </Table>
 
-                            <Input
-                                id="wacc"
-                                type="text"
-                                placeholder="WACC - Coste de Capital"
-                                class="mt-2"
-                                v-model="newAnalysis.wacc"
-                                required
-                                autofocus
-                                autocomplete="wacc"
-                            />
+                                    <img
+                                        src="https://via.placeholder.com/200"
+                                        alt="Placeholder"
+                                    >
 
-                            <Input
-                                id="management_fee"
-                                type="text"
-                                placeholder="Management fee % s/ Valor inmueble"
-                                class="mt-2"
-                                v-model="newAnalysis.management_fee"
-                                required
-                                autofocus
-                                autocomplete="management_fee"
-                            />
+                                    <img
+                                        src="https://via.placeholder.com/200"
+                                        alt="Placeholder"
+                                    >
 
-                            <div class="flex gap-6">
-                                <Input
-                                    id="lawyer"
-                                    type="text"
-                                    placeholder="Abogado"
-                                    class="mt-2"
-                                    v-model="newAnalysis.lawyer"
-                                    required
-                                    autofocus
-                                    autocomplete="lawyer"
-                                />
-
-                                <Input
-                                    id="prosecutor"
-                                    type="text"
-                                    placeholder="Procurador"
-                                    class="mt-2"
-                                    v-model="newAnalysis.prosecutor"
-                                    required
-                                    autofocus
-                                    autocomplete="prosecutor"
-                                />
-                            </div>
-                        </div>
+                                    <img
+                                        src="https://via.placeholder.com/200"
+                                        alt="Placeholder"
+                                    >
+                                </div>
+                            </TabsContent>
+                        </Tabs>
                     </div>
             
                     <DialogFooter class="flex justify-between mt-10">
-                        <Button
-                            class="w-full"
-                            :class="step === 1 ? 'invisible' : ''"
-                            variant="ghost"
-                            size="sm"
-                            @click="step--"
-                        >
-                            <ArrowIcon
-                                class="sm:mr-2 text-blue"
-                                variant="left"
-                            />
+                        <p>
+                            Haz                            
 
-                            <span class="hidden sm:inline">
-                                Anterior
-                            </span>
-                        </Button>
+                            <Link
+                                href="#"
+                                class="text-blue font-bold"
+                            >
+                                click aquí
+                            </Link>
 
-                        <Button
-                            class="w-full"
-                            size="sm"
-                            @click="step < 4 ? step++ : null"
-                        >
-                            <span class="hidden sm:inline">
-                                {{ step < 4 ? 'Siguiente' : 'Finalizar' }}
-                            </span>
-        
-                            <ArrowIcon
-                                v-if="step < 4"
-                                class="sm:ml-2 text-white"
-                                variant="right"
-                            />
-                        </Button>
+                            si prefieres que subamos la documentación por ti
+                        </p>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
