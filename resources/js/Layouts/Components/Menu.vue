@@ -88,7 +88,7 @@ const menu = [
         title: 'Cómo funciona',
         class: 'mt-8',
         icon: {
-            element: h('div', [h(HelpIcon)]),
+            element: h('div', [h(HelpIcon, { class: 'text-[#686868]' })]),
         },
     },
     {
@@ -98,9 +98,10 @@ const menu = [
         },
     },
     {
+        href: '/user-data',
         title: 'Datos Usuario',
         icon: {
-            element: h('div', [h(PersonIcon)]),
+            element: h('div', [h(PersonIcon, { class: 'text-[#686868]' })]),
         },
     },
 ]
