@@ -231,6 +231,45 @@ export const dataAnalysis = [
     },
 ]
 
+export const dataAnalysis_2 = [
+    {
+        id: 1,
+        year: 'Año 1',
+        ipc: '58,23',
+        hpa: '46',
+    },
+    {
+        id: 2,
+        year: 'Año 2',
+        ipc: '28,09',
+        hpa: '44,04',
+    },
+    {
+        id: 3,
+        year: 'Año 3',
+        ipc: '88,2',
+        hpa: '33,9',
+    },
+    {
+        id: 4,
+        year: 'Año 4',
+        ipc: '44,94',
+        hpa: '55,93',
+    },
+    {
+        id: 5,
+        year: 'Año 5',
+        ipc: '18,39',
+        hpa: '63,1',
+    },
+    {
+        id: 6,
+        year: 'Año 6',
+        ipc: '25,78',
+        hpa: '77,09',
+    },
+]
+
 export const publications = [
     {
         id: 1,

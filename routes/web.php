@@ -37,6 +37,12 @@ Route::middleware('auth')->group(function () {
             return Inertia::render('MyPublications/Publications');
         })->name('publications');
     });
+
+    Route::prefix('user-data')->group(function () {
+        Route::get('/', function () {
+            return Inertia::render('UserData/UserData');
+        })->name('user-data');
+    });
 });
 
 
