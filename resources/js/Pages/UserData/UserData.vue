@@ -58,7 +58,7 @@ import { dataAnalysis_2 } from '@/data'
 
                     <Link
                         href="#"
-                        class="text-blue"
+                        class="text-blue font-medium"
                     >
                         Editar
                     </Link>
