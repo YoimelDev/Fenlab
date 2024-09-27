@@ -85,6 +85,7 @@ const menu = [
         hiddenOnCollapse: true,
     },
     {
+        href: '/how-it-works',
         title: 'Cómo funciona',
         class: 'mt-8',
         icon: {

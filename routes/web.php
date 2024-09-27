@@ -43,6 +43,10 @@ Route::middleware('auth')->group(function () {
             return Inertia::render('UserData/UserData');
         })->name('user-data');
     });
+
+    Route::get('/how-it-works', function () {
+        return Inertia::render('HowItWorks/HowItWorks');
+    })->name('how-it-works');
 });
 
 
