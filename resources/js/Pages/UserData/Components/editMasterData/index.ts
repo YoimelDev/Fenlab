@@ -1,0 +1,1 @@
+export { default as EditMasterData } from './EditMasterData.vue'

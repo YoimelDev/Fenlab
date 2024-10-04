@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head, Link } from '@inertiajs/vue3'
+import { Head } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 
 import {
@@ -14,6 +14,7 @@ import {
 import { InfoIcon, PersonIcon } from '@/Components/icons'
 
 import { dataAnalysis_2 } from '@/data'
+import { EditMasterData } from '@/Pages/UserData/Components/editMasterData'
 </script>
 
 <template>
@@ -56,12 +57,7 @@ import { dataAnalysis_2 } from '@/data'
                         Master Data Financiera
                     </h2>
 
-                    <Link
-                        href="#"
-                        class="text-blue font-medium"
-                    >
-                        Editar
-                    </Link>
+                    <EditMasterData />
                 </div>
 
                 <p class="flex items-center gap-2 mt-4 text-grey">
