@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { Head, Link } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 
@@ -19,6 +20,9 @@ import {
 
 import { ArrowIcon, InfoIcon, XlsIcon, PdfIcon, DownloadIcon, ArrowUpIcon, CircleIcon, UploadIcon } from '@/Components/icons'
 import { Assets } from '@/Pages/MyAnalysis/Components/assets'
+
+
+const activeTab = ref('analysis')
 
 const steps = [
     {
@@ -44,41 +48,54 @@ const steps = [
     <Head title="Mis Análisis" />
 
     <AuthenticatedLayout>
-        <header class="flex items-center gap-4">
-            <Button
-                variant="ghost"
-                as-child
-                size="sm"
-            >
-                <Link
-                    :href="route('analysis')"
+        <header class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-10">
+            <div class="flex items-center gap-4">
+                <Button
+                    variant="ghost"
+                    as-child
+                    size="sm"
                 >
-                    <ArrowIcon
-                        class="sm:mr-2 text-black"
-                        variant="left"
-                    />
+                    <Link
+                        :href="route('analysis')"
+                    >
+                        <ArrowIcon
+                            class="sm:mr-2 text-black"
+                            variant="left"
+                        />
 
-                    <span class="hidden sm:inline">
-                        Proyecto Zeus
-                    </span>
-                </Link>
+                        <span class="hidden sm:inline">
+                            Proyecto Zeus
+                        </span>
+                    </Link>
+                </Button>
+
+                <Badge
+                    variant="default"
+                    size="sm"
+                >
+                    REO
+                </Badge>
+
+                <InfoIcon />
+
+                <Badge
+                    variant="pending"
+                    size="sm"
+                >
+                    ESTADO 1
+                </Badge>
+            </div>
+
+            <!-- download button -->
+            <Button
+                v-if="activeTab === 'assets'"
+                variant="outline"
+                size="sm"
+            >
+                Descargar análisis
+
+                <DownloadIcon class="ml-3 text-electric-green" />
             </Button>
-
-            <Badge
-                variant="default"
-                size="sm"
-            >
-                REO
-            </Badge>
-
-            <InfoIcon />
-
-            <Badge
-                variant="pending"
-                size="sm"
-            >
-                ESTADO 1
-            </Badge>
         </header>
 
        
@@ -123,6 +140,7 @@ const steps = [
 
         <Tabs
             default-value="analysis"
+            v-model:model-value="activeTab"
         >
             <TabsList class="grid w-[274px] grid-cols-2">
                 <TabsTrigger value="analysis">
