@@ -1,20 +1,27 @@
 <script setup lang="ts" generic="TData, TValue">
+import { ref } from 'vue'
 import type { ColumnDef } from '@tanstack/vue-table'
 import {
     FlexRender,
     getCoreRowModel,
     getPaginationRowModel,
+    ColumnFiltersState,
+    getFilteredRowModel,
+    SortingState,
     useVueTable,
 } from '@tanstack/vue-table'
 
+import { valueUpdater } from '@/lib/utils'
+
 import {
+    Input,
     Table,
     TableBody,
     TableCell,
     TableHead,
     TableHeader,
     TableRow,
-} from '@/Components/ui/table'
+} from '@/Components/ui'
 
 import {
     Pagination,
@@ -32,23 +39,46 @@ import {
 const props = defineProps<{
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  columnFilter?: string
 }>()
+
+const sorting = ref<SortingState>([])
+const columnFilters = ref<ColumnFiltersState>([])
 
 const table = useVueTable({
     get data() { return props.data },
     get columns() { return props.columns },
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onColumnFiltersChange: updaterOrValue => valueUpdater(updaterOrValue, columnFilters),
+    getFilteredRowModel: getFilteredRowModel(),
     initialState: {
         pagination: {
             pageSize: 10,
         },
     },
+    state: {
+        get sorting() { return sorting.value },
+        get columnFilters() { return columnFilters.value },
+    },
 })
 </script>
 
 <template>
-    <div class="max-w-[1104px] w-full h-fit mt-10 py-8 px-4 bg-white rounded-sm">
+    <Input
+        v-if="columnFilter"
+        id="name"
+        type="text"
+        placeholder="Buscar por ID"
+        class="mt-4 max-w-52"
+        :model-value="table.getColumn(`${columnFilter}`)?.getFilterValue() as string"
+        @update:model-value="table.getColumn(`${columnFilter}`)?.setFilterValue($event)"
+    />
+
+    <div 
+        class="w-full h-fit mt-10 py-8 px-4 bg-white rounded-sm"
+        :class="{ 'mt-4': columnFilter }"
+    >
         <Table>
             <TableHeader>
                 <TableRow
