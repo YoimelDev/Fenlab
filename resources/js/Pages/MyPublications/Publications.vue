@@ -3,7 +3,8 @@ import { Head, Link } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 
 import { 
-    Kpi, 
+    Kpi,
+    Input, 
     Button, 
     DataTable,
     Dialog,
@@ -18,7 +19,7 @@ import {
     TabsTrigger,
 } from '@/Components/ui'
 
-import { AssessmentIcon } from '@/Components/icons'
+import { AssessmentIcon, XlsIcon } from '@/Components/icons'
 import { PlusIcon } from '@radix-icons/vue'
 
 import { publications } from '@/data'
@@ -78,14 +79,112 @@ import { columns } from './Components/dataTable'
                                 </TabsTrigger>
                             </TabsList>
                             <TabsContent value="activeData">
-                                <h2>
-                                    Datos activo
-                                </h2>
+                                <div
+                                    class="flex flex-col gap-4"
+                                >
+                                    <Input
+                                        id="client_id"
+                                        type="text"
+                                        placeholder="ID cliente"
+                                        class="mt-2"
+                                        required
+                                        autofocus
+                                        autocomplete="client_id"
+                                    />
+                
+                                    <Input
+                                        id="fenlab_id"
+                                        type="text"
+                                        placeholder="ID fenlab"
+                                        class="mt-2"
+                                        required
+                                        autofocus
+                                        autocomplete="fenlab_id"
+                                    />
+                
+                                    <Input
+                                        id="cadastral_reference"
+                                        type="text"
+                                        placeholder="Referencia catastral"
+                                        class="mt-2"
+                                        required
+                                        autofocus
+                                        autocomplete="cadastral_reference"
+                                    />
+                
+                                    <Input
+                                        id="min_price"
+                                        type="text"
+                                        placeholder="Precio mínimo"
+                                        class="mt-2"
+                                        required
+                                        autofocus
+                                        autocomplete="min_price"
+                                    />
+                
+                                    <Input
+                                        id="reference_value"
+                                        type="text"
+                                        placeholder="Valor de referencia"
+                                        class="mt-2"
+                                        required
+                                        autofocus
+                                        autocomplete="reference_value"
+                                    />
+                
+                                    <Input
+                                        id="transaction_modality"
+                                        type="text"
+                                        placeholder="Modalidad de transacción"
+                                        class="mt-2"
+                                        required
+                                        autofocus
+                                        autocomplete="transaction_modality"
+                                    />
+                                </div>
                             </TabsContent>
                             <TabsContent value="documents">
-                                <h2>
-                                    Documentos
-                                </h2>
+                                <div class="my-4 p-2 bg-white">
+                                    <div class="grid place-items-center p-5 border-2 border-dashed border-[#C1C1C1] rounded-sm">
+                                        <Button
+                                            variant="green"
+                                            size="xs"
+                                        >
+                                            <UploadIcon class="mr-2" />
+                                            Cargar documento
+                                        </Button>
+                                    </div>                                  
+                                </div>
+
+                                <div class="relative flex items-center gap-4 w-full p-4 mb-4 bg-white ">
+                                    <XlsIcon />
+                
+                                    <div>
+                                        <p class="text-black text-lg font-bold">
+                                            NombreArchivo_Nombre.xls
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="relative flex items-center gap-4 w-full p-4 mb-4 bg-white ">
+                                    <XlsIcon />
+                
+                                    <div>
+                                        <p class="text-black text-lg font-bold">
+                                            NombreArchivo_Nombre.xls
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="relative flex items-center gap-4 w-full p-4 mb-4 bg-white ">
+                                    <XlsIcon />
+                
+                                    <div>
+                                        <p class="text-black text-lg font-bold">
+                                            NombreArchivo_Nombre.xls
+                                        </p>
+                                    </div>
+                                </div>
                             </TabsContent>
                             <TabsContent value="images">
                                 <div class="my-4 p-2 bg-white">
