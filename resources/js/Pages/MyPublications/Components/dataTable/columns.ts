@@ -2,6 +2,7 @@ import { h } from 'vue'
 import type { ColumnDef } from '@tanstack/vue-table'
 import { type publication } from '@/Pages/MyPublications/types'
 import { Badge, type BadgeVariants } from '@/Components/ui/badge'
+import DropdownAction from './DataTableDropdown.vue'
 
 type BadgeMode = 'REO' | 'NPL' | 'PL/SPL' | 'Pendiente' | 'En curso' | 'Completado';
 
@@ -61,11 +62,7 @@ export const columns: ColumnDef<publication>[] = [
         header: () => '',
         accessorKey: 'id',
         cell: () => {
-            return h(
-                'button',
-                { class: 'flex justify-end text-grey text-2xl' },
-                '...',
-            )
+            return h('div', { class: 'relative' }, h(DropdownAction, {}))
         },
     },
 ]
