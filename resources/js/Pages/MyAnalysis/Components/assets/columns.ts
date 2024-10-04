@@ -1,6 +1,7 @@
 import { h } from 'vue'
 import type { ColumnDef } from '@tanstack/vue-table'
 import { type DataAnalysisAsset } from '@/Pages/MyAnalysis/types'
+import DropdownAction from './DataTableDropdown.vue'
 
 
 export const columns: ColumnDef<DataAnalysisAsset>[] = [
@@ -38,11 +39,7 @@ export const columns: ColumnDef<DataAnalysisAsset>[] = [
         header: () => '',
         accessorKey: 'id',
         cell: () => {
-            return h(
-                'button',
-                { class: 'flex justify-end text-grey text-2xl' },
-                '...',
-            )
+            return h('div', { class: 'relative' }, h(DropdownAction, {}))
         },
     },
 ]

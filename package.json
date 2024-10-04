@@ -37,6 +37,7 @@
         "@vueuse/core": "^11.0.1",
         "class-variance-authority": "^0.7.0",
         "clsx": "^2.1.1",
+        "lucide-vue-next": "^0.447.0",
         "plyr": "^3.7.8",
         "radix-vue": "^1.9.4",
         "tailwind-merge": "^2.5.2",
