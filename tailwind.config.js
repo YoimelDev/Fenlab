@@ -1,4 +1,5 @@
 import animate from 'tailwindcss-animate'
+import textScalePlugin from 'tailwindcss-text-scale'
 
 /** @type {import('tailwindcss').Config} */
 export const darkMode = ['class']
@@ -116,4 +117,4 @@ export const theme = {
         },
     },
 }
-export const plugins = [animate]
+export const plugins = [animate, textScalePlugin]
