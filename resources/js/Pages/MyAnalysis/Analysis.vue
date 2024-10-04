@@ -51,7 +51,7 @@ const activeSelectionBadge = ref('pl/spl s')
     <Head title="Mis Análisis" />
 
     <AuthenticatedLayout>
-        <header class="flex flex-col sm:flex-row justify-between items-center gap-4 max-w-[1104px] mb-10">
+        <header class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-10">
             <h1 class="flex items-center gap-4 text-xl font-bold leading-5">
                 <AssessmentIcon
                     variant="black"

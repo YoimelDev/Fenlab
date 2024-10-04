@@ -18,7 +18,7 @@ const isCollapsed = useLocalStorage<boolean>('collapse', false)
                 'pl-[256px]': !isCollapsed,
             }"
         >
-            <div class="container p-10 overflow-auto">
+            <div class="p-10 overflow-auto">
                 <slot />
             </div>
         </main>

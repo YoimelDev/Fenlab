@@ -26,8 +26,8 @@ const badgeMap: Record<BadgeMode, BadgeVariants['variant']> = {
 </script>
 
 <template>
-    <div class="grid grid-cols-1 xl:grid-cols-[532px,_532px] gap-10 mt-8">
-        <section class="w-[532px] py-8 px-4 bg-white rounded-sm">
+    <div class="grid grid-cols-1 xl:grid-cols-2 gap-10 mt-8">
+        <section class="py-8 px-4 bg-white rounded-sm">
             <header class="flex justify-between items-center mb-6">
                 <h2 class="flex items-center gap-4 text-xl font-bold leading-5">
                     <PictureIcon class="text-black w-8 h-8" />
@@ -71,7 +71,7 @@ const badgeMap: Record<BadgeMode, BadgeVariants['variant']> = {
             </Table>
         </section>
 
-        <section class="w-[532px] py-8 px-4 bg-white rounded-sm">
+        <section class="py-8 px-4 bg-white rounded-sm">
             <header class="flex justify-between items-center mb-6">
                 <h2 class="flex items-center gap-4 text-xl font-bold leading-5">
                     <PictureIcon class="text-black w-8 h-8" />
@@ -115,7 +115,7 @@ const badgeMap: Record<BadgeMode, BadgeVariants['variant']> = {
             </Table>
         </section>
 
-        <section class="w-[532px] h-fit py-8 px-4 bg-white rounded-sm">
+        <section class="h-fit py-8 px-4 bg-white rounded-sm">
             <header class="flex justify-between items-center mb-6">
                 <h2 class="flex items-center gap-4 text-xl font-bold leading-5">
                     <AssessmentIcon
@@ -164,7 +164,7 @@ const badgeMap: Record<BadgeMode, BadgeVariants['variant']> = {
             </Table>
         </section>
 
-        <section class="w-[532px] py-8 px-4 bg-white rounded-sm">
+        <section class="py-8 px-4 bg-white rounded-sm">
             <header class="flex justify-between items-center mb-6">
                 <h2 class="flex items-center gap-4 text-xl font-bold leading-5">
                     <PictureIcon class="text-black w-8 h-8" />
