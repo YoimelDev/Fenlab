@@ -64,7 +64,7 @@ import {
                 <Input
                     id="reference_value"
                     type="text"
-                    placeholder="Valor DE referencia"
+                    placeholder="Valor de referencia"
                     class="mt-2"
                     required
                     autofocus
