@@ -270,6 +270,97 @@ export const dataAnalysis_2 = [
     },
 ]
 
+export const dataAnalysisAssets = [
+    {
+        client_id: '1',
+        fenlab_id: 'Texto',
+        cadastral_reference: 'Texto',
+        min_price: 'Texto',
+        reference_value: 'Texto',
+        transaction_modality: 'Texto',
+    },
+    {
+        client_id: '2',
+        fenlab_id: 'Texto',
+        cadastral_reference: 'Texto',
+        min_price: 'Texto',
+        reference_value: 'Texto',
+        transaction_modality: 'Texto',
+    },
+    {
+        client_id: '3',
+        fenlab_id: 'Texto',
+        cadastral_reference: 'Texto',
+        min_price: 'Texto',
+        reference_value: 'Texto',
+        transaction_modality: 'Texto',
+    },
+    {
+        client_id: '4',
+        fenlab_id: 'Texto',
+        cadastral_reference: 'Texto',
+        min_price: 'Texto',
+        reference_value: 'Texto',
+        transaction_modality: 'Texto',
+    },
+    {
+        client_id: '5',
+        fenlab_id: 'Texto',
+        cadastral_reference: 'Texto',
+        min_price: 'Texto',
+        reference_value: 'Texto',
+        transaction_modality: 'Texto',
+    },
+    {
+        client_id: '6',
+        fenlab_id: 'Texto',
+        cadastral_reference: 'Texto',
+        min_price: 'Texto',
+        reference_value: 'Texto',
+        transaction_modality: 'Texto',
+    },
+    {
+        client_id: '7',
+        fenlab_id: 'Texto',
+        cadastral_reference: 'Texto',
+        min_price: 'Texto',
+        reference_value: 'Texto',
+        transaction_modality: 'Texto',
+    },
+    {
+        client_id: '8',
+        fenlab_id: 'Texto',
+        cadastral_reference: 'Texto',
+        min_price: 'Texto',
+        reference_value: 'Texto',
+        transaction_modality: 'Texto',
+    },
+    {
+        client_id: '9',
+        fenlab_id: 'Texto',
+        cadastral_reference: 'Texto',
+        min_price: 'Texto',
+        reference_value: 'Texto',
+        transaction_modality: 'Texto',
+    },
+    {
+        client_id: '10',
+        fenlab_id: 'Texto',
+        cadastral_reference: 'Texto',
+        min_price: 'Texto',
+        reference_value: 'Texto',
+        transaction_modality: 'Texto',
+    },
+    {
+        client_id: '11',
+        fenlab_id: 'Texto',
+        cadastral_reference: 'Texto',
+        min_price: 'Texto',
+        reference_value: 'Texto',
+        transaction_modality: 'Texto',
+    },
+]
+
 export const publications = [
     {
         id: 1,

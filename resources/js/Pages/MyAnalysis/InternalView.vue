@@ -18,6 +18,7 @@ import {
 } from '@/Components/ui'
 
 import { ArrowIcon, InfoIcon, XlsIcon, PdfIcon, DownloadIcon, ArrowUpIcon, CircleIcon, UploadIcon } from '@/Components/icons'
+import { Assets } from '@/Pages/MyAnalysis/Components/assets'
 
 const steps = [
     {
@@ -222,9 +223,7 @@ const steps = [
                 </div>
             </TabsContent>
             <TabsContent value="assets">
-                <h2>
-                    Activos
-                </h2>
+                <Assets />
             </TabsContent>
         </Tabs>
     </AuthenticatedLayout>

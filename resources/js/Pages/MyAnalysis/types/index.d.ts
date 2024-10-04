@@ -8,3 +8,12 @@ export interface Analysis {
     status: 'Pendiente' | 'En curso' | 'Completado'
     date: string
 }
+
+export interface DataAnalysisAsset {
+    client_id: string;
+    fenlab_id: string;
+    cadastral_reference: string;
+    min_price: string;
+    reference_value: string;
+    transaction_modality: string;
+}
