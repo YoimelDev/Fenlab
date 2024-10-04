@@ -117,4 +117,4 @@ export const theme = {
         },
     },
 }
-export const plugins = [animate, textScalePlugin]
+export const plugins = [animate, textScalePlugin()]
