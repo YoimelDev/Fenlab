@@ -5,13 +5,15 @@ import { FenlabLogo } from '@/Components/icons'
 <template>
     <div class="min-h-screen grid grid-cols-1 lg:grid-cols-2 bg-white">
         <div class="relative hidden lg:flex justify-center items-center">
-            <picture class="absolute top-0 left-0 w-full h-full z-0">
-                <img
-                    src="../../images/image_welcome.webp"
-                    alt="Welcome Image"
-                    class="w-full h-full object-cover"
-                >
-            </picture>
+            <video 
+                src="../../images/video_welcome.webm"
+                autoplay
+                loop
+                muted
+                class="absolute top-0 left-0 w-full h-full object-cover z-0"
+            />
+
+            <div class="absolute top-0 left-0 w-full h-full bg-[#43844E] opacity-90 z-10" />
 
             <header class="grid place-items-center gap-10 z-10">
                 <FenlabLogo 
