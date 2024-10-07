@@ -53,10 +53,6 @@ class CreatePasswordController extends Controller
 
   public function createPassword(Request $request)
   {
-    // Validar la solicitud
-    $request->validate([
-      'password' => 'required|min:8|confirmed',
-    ]);
     $email = "";
     // Desencriptar el email
     try {
@@ -69,7 +65,7 @@ class CreatePasswordController extends Controller
     // Verificar si el token existe en la tabla de restablecimiento de contraseñas
     $reset = DB::table('password_reset_tokens')->where([
       'email' => $email,
-      'token' => $request->query('token')
+      'token' => hash('sha256', $request->query('token'))
     ])->first();
 
     if (!$reset) {
@@ -85,8 +81,8 @@ class CreatePasswordController extends Controller
     );
 
     // Eliminar el registro del token para evitar reutilizaciones
-    DB::table('password_resets')->where([
-      'email' => $request->input('email')
+    DB::table('password_reset_tokens')->where([
+      'email' => $email
     ])->delete();
 
     return response()->json([
