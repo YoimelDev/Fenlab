@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Head, Link } from '@inertiajs/vue3'
 import { Button } from '@/Components/ui/button'
+import { FenlabLogo } from '@/Components/icons'
 
 defineProps<{
     canLogin?: boolean
@@ -13,61 +14,55 @@ defineProps<{
 <template>
     <Head title="Welcome" />
     
-    <div class="bg-[#F2F4F8] text-black/50 dark:bg-black dark:text-white/50">
-        <div
-            class="relative min-h-screen flex flex-col items-center justify-center selection:bg-[#FF2D20] selection:text-white"
-        >
-            <div class="container flex items-center gap-20">
-                <div class="text-[#21272A] flex-1">
-                    <h1 class="text-4xl font-bold tracking-tight lg:text-[54px] leading-[60px]">
-                        Fenlab: <br>
-                        Software de análisis <br>
-                        financiero e inmobiliario
-                    </h1>
+    <div class="relative min-h-screen flex flex-col items-center justify-center bg-[#F2F4F8] text-black/50 dark:bg-black dark:text-white/50 selection:bg-[#FF2D20] selection:text-white">
+        <video 
+            src="../../images/video_welcome.webm"
+            autoplay
+            loop
+            muted
+            class="absolute top-0 left-0 w-full h-full object-cover z-0"
+        />
 
-                    <ul class="my-12 ml-6 list-disc text-lg">
-                        <li>
-                            Cashflow Model of Performing and Re-Performing loans secured & unsecured
-                        </li>
+        <div class="absolute top-0 left-0 w-full h-full bg-[#43844E] opacity-90 z-10" />
+        
+        <div class="container relative z-10 flex flex-col justify-center items-center gap-10">
+            <header class="grid place-items-center gap-10">
+                <FenlabLogo 
+                    role="heading"
+                    aria-level="1"
+                    aria-describedby="Fenlab"
+                    class="text-white h-20"
+                />
 
-                        <li>
-                            Non Performing Loans secured Model
-                        </li>
+                <p class="text-white text-4xl font-light">
+                    Software de analísis financiero e inmobiliario
+                </p>
+            </header>
 
-                        <li>
-                            REO Model
-                        </li>
-                    </ul>
 
-                    <nav class="flex flex-wrap gap-4">
-                        <Button as-child>
-                            <Link :href="route('login')">
-                                Inicia sesión
-                            </Link>
-                        </Button>
+            <nav class="flex flex-col flex-wrap gap-10 max-w-96 w-full">
+                <Button
+                    class="bg-[#344F50] text-white hover:bg-white hover:text-black"
+                    as-child
+                >
+                    <Link :href="route('login')">
+                        Inicia sesión
+                    </Link>
+                </Button>
 
-                        <Button 
-                            as-child
-                            variant="outline"
-                        >
-                            <Link
-                                v-if="canRegister"
-                                :href="route('register')"
-                            >
-                                Conctáctanos
-                            </Link>
-                        </Button>
-                    </nav>
-                </div>
-
-                <picture class="relative w-full h-[505px] flex-1 hidden lg:block">
-                    <img
-                        src="../../images/Desktop.png"
-                        alt="Fenlab"
-                        class="absolute left-20 w-full h-full"
+                <Button
+                    class="bg-transparent text-white border-white hover:bg-white hover:text-black"
+                    as-child
+                    variant="outline"
+                >
+                    <Link
+                        v-if="canRegister"
+                        :href="route('register')"
                     >
-                </picture>
-            </div>
+                        Conctáctanos
+                    </Link>
+                </Button>
+            </nav>
         </div>
     </div>
 </template>
