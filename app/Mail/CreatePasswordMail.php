@@ -13,14 +13,14 @@ class CreatePasswordMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $token;
+    public $resetUrl;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($token)
+    public function __construct($resetUrl)
     {
-        $this->token = $token;
+        $this->resetUrl = $resetUrl;
     }
 
     /**
@@ -58,12 +58,10 @@ class CreatePasswordMail extends Mailable
      *
      * @return $this
      */
+
     public function build()
     {
-        return $this->markdown('emails.password-create')
-            ->subject('Restablecer contraseña')
-            ->with([
-                'url' => url('/create-password?token=' . $this->token),
-            ]);
+        return $this->view('emails.create_password')
+            ->with(['resetUrl' => $this->resetUrl]);
     }
 }
