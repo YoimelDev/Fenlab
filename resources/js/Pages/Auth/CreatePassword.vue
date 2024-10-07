@@ -1,40 +1,54 @@
 <script setup lang="ts">
+import axios from 'axios'
 import { ref } from 'vue'
 import GuestLayout from '@/Layouts/GuestLayout.vue'
 import InputError from '@/Components/InputError.vue'
 import { Head, useForm } from '@inertiajs/vue3'
 
-import { Input } from '@/Components/ui/input'
-import { Label } from '@/Components/ui/label'
-import { Button } from '@/Components/ui/button'
-
+import { Input, Label, Button, useToast, Toaster } from '@/Components/ui'
 import { EyeClosedIcon, EyeOpenIcon } from '@radix-icons/vue'
+import { getParamValue } from '@/lib/utils'
 
-const props = defineProps<{
-    token: string
-    email: string
-}>()
-
+const { toast } = useToast()
 const showPassword = ref(false)
+
 const form = useForm({
-    email: props.email,
+    email: getParamValue('email'),
     password: '',
-    token: props.token,
+    token: getParamValue('token'),
 })
 
-const submit = () => {
-    // form.post(route('password.email'))
-    console.log('submit', {
-        email: form.email,
-        password: form.password,
-        token: form.token,
-    })    
+const submit = async () => {
+    document.body.style.cursor = 'wait'
+    form.processing = true
+
+    try {
+        await axios.post(route('create-password'), form.data())        
+        
+        toast({
+            variant: 'info',
+            title: '¡Contraseña creada!',
+        })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+        toast({
+            variant: 'danger',
+            title: '¡Ups! Algo salió mal.',
+            description: error.response.data.message,
+        })
+    } finally {
+        document.body.style.cursor = 'default'
+        form.processing = false
+        form.reset()
+    }
 }
 </script>
 
 <template>
+    <Toaster />
+
     <GuestLayout>
-        <Head title="Forgot Password" />
+        <Head title="Create Password" />
 
         <div class="mb-4 text-sm text-gray-600">
             Crear una contraseña para tu cuenta.
@@ -49,10 +63,7 @@ const submit = () => {
                     type="email"
                     placeholder="Email"
                     class="mt-2"
-                    :value="form.email"
-                    required
-                    autofocus
-                    autocomplete="username"
+                    v-model="form.email"
                     disabled
                 />
             </div>

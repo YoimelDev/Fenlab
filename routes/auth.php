@@ -37,7 +37,7 @@ Route::middleware('guest')->group(function () {
 
     Route::get('/create-password', function () {
         return Inertia::render('Auth/CreatePassword');
-    })->name('create-password');
+    });
 });
 
 Route::middleware('auth')->group(function () {

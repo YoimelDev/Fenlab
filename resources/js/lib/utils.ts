@@ -13,3 +13,8 @@ export function valueUpdater<T extends Updater<unknown>>(updaterOrValue: T, ref:
         ? updaterOrValue(ref.value)
         : updaterOrValue
 }
+
+export function getParamValue(param: string): string {
+    const urlParams = new URLSearchParams(window.location.search)
+    return urlParams.get(param) || ''
+}
