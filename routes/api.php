@@ -2,10 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Auth\CreatePasswordController;
 
-Route::post('/send-create-password', [NewPasswordController::class, 'sendCreatePasswordEmail']);
-Route::post('/create-password', [NewPasswordController::class, 'createPassword']);
-
-
-require __DIR__ . '/api.php';
+Route::post('/send-create-password', [CreatePasswordController::class, 'sendCreatePasswordEmail']);
+Route::post('/create-password', [CreatePasswordController::class, 'createPassword']);

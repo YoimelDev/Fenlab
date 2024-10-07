@@ -1,17 +1,16 @@
 @component('mail::message')
-    # Restablecer Contraseña
+# Restablecer Contraseña
 
-    Hola,
+Hola,
 
-    Hemos recibido una solicitud para restablecer tu contraseña. Haz clic en el botón de abajo para crear una nueva
-    contraseña:
+Hemos recibido una solicitud para crear tu cuenta en Fenlab. Para generar tu contraseña, haz clic en el botón de abajo:
 
-    @component('mail::button', ['url' => $url])
-        Crear Nueva Contraseña
-    @endcomponent
+@component('mail::button', ['url' => $url])
+    Crear Nueva Contraseña
+@endcomponent
 
-    Si no solicitaste este cambio, no es necesario que hagas nada.
+Si no solicitaste este generación de contraseña, no es necesario que hagas nada.
 
-    Gracias,<br>
-    {{ config('app.name') }}
+Gracias,<br>
+{{ config('app.name') }}
 @endcomponent
