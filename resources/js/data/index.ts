@@ -540,3 +540,18 @@ export const kpiOverview = [
         isPositive: false,
     },
 ]
+
+export const kpiMyAnalysis = [
+    {
+        title: 'Volumen de análisis hechos mes actual vs mes anterior..',
+        value: '10.000',
+        percentage: '+35,74%',
+        isPositive: true,
+    },
+    {
+        title: 'Volumen activos modelados mes actual vs mes anterior.',
+        value: '10.000',
+        percentage: '+35,74%',
+        isPositive: false,
+    },
+]

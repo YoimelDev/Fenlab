@@ -28,7 +28,7 @@ import {
 import { AssessmentIcon, ArrowIcon, ShoppingBagIcon, SellIcon } from '@/Components/icons'
 import { PlusIcon } from '@radix-icons/vue'
 
-import { dataAnalysis, projects } from '@/data'
+import { dataAnalysis, kpiMyAnalysis, projects } from '@/data'
 import { columns } from './Components/dataTable'
 
 const step = ref(1)
@@ -363,23 +363,11 @@ const activeSelectionBadge = ref('pl/spl s')
 
         <div class="flex flex-wrap gap-10">
             <Kpi
-                variant="default"
-                :is-positive="true"
-            />
-
-            <Kpi
-                variant="primary"
-                :is-positive="false"
-            />
-
-            <Kpi
-                variant="primary"
-                :is-positive="false"
-            />
-
-            <Kpi
-                variant="primary"
-                :is-positive="false"
+                v-for="(kpi, index) in kpiMyAnalysis"
+                :key="kpi.title"
+                :data="kpi"
+                :variant="index === 0 ? 'default' : 'primary'"
+                :is-positive="kpi.isPositive"
             />
         </div>
      
