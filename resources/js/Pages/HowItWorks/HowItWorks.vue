@@ -4,11 +4,8 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 
 import {
     Video,
-    Accordion, 
-    AccordionContent, 
-    AccordionItem, 
-    AccordionTrigger,
 } from '@/Components/ui'
+import { Model1, Model2, Model3 } from '@/Pages/HowItWorks/Components'
 
 import { HelpIcon } from '@/Components/icons'
 </script>
@@ -54,35 +51,9 @@ import { HelpIcon } from '@/Components/icons'
                 </div>
             </header>
 
-            <div class="mt-10">
-                <h3 class="text-xl">
-                    Nombre Modelo 1
-                </h3>
-
-                <p class="mt-4 text-sm">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean condimentum justo vitae urna elementum, ac pulvinar leo malesuada. Nunc ut dui non dolor dapibus finibus sit amet sit amet sem. Sed eleifend justo sit amet lectus tempus, eget dapibus ex dignissim. Pellentesque congue ex eu libero ullamcorper bibendum.
-                </p>
-            </div>
-
-            <Accordion
-                class="mt-10 space-y-4"
-                type="single"
-                collapsible
-            >
-                <AccordionItem value="item-1">
-                    <AccordionTrigger>Pregunta 1</AccordionTrigger>
-                    <AccordionContent>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean condimentum justo vitae urna elementum, ac pulvinar leo malesuada. Nunc ut dui non dolor dapibus finibus sit amet sit amet sem. Sed eleifend justo sit amet lectus tempus, eget dapibus ex dignissim. Pellentesque congue ex eu libero ullamcorper bibendum.
-                    </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="item-2">
-                    <AccordionTrigger>Pregunta 2</AccordionTrigger>
-                    <AccordionContent>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean condimentum justo vitae urna elementum, ac pulvinar leo malesuada. Nunc ut dui non dolor dapibus finibus sit amet sit amet sem. Sed eleifend justo sit amet lectus tempus, eget dapibus ex dignissim. Pellentesque congue ex eu libero ullamcorper bibendum.
-                    </AccordionContent>
-                </AccordionItem>
-            </Accordion>
+            <Model1 />
+            <Model2 />
+            <Model3 />
         </section>
     </AuthenticatedLayout>
 </template>
