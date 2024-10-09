@@ -97,6 +97,11 @@
   grid-auto-flow: column;
 }
 
+.v-sidebar-menu .vsm--title {
+  flex: initial !important;
+  gap: 24px !important;
+}
+
 .vsm--link {
   padding: 10px 0 10px 8px !important;
   gap: 8px !important;
@@ -122,6 +127,10 @@
   width: 24px !important;
   margin: 0px !important;
   background-color: initial !important;
+}
+
+.vsm--icon:not(:has(svg)) {
+  height: 10px !important;
 }
 
 .vsm--toggle-btn {

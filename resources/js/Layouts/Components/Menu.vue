@@ -54,22 +54,28 @@ const menu = [
             text: 7,
             class: 'grid place-items-center rounded-full text-xs bg-grey text-white h-[18px] w-[18px]',
         },
+        icon: {},
     },
     {
-        title: 'Publicados',
+        title: 'Publicados',  
+        icon: {},
     },
     {
         title: 'Pendientes Aprobación',
+        icon: {},
     },
     {
         title: 'Aprobación PBC',
+        icon: {},
     },
     {
         title: 'Pendientes Firma',
+        icon: {},
     },
     {
         title: 'Operaciones Cerradas',
         class: 'mb-8',
+        icon: {},
     },
     {
         component: separator,
