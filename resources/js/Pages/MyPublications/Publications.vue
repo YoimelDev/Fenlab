@@ -22,7 +22,7 @@ import {
 import { AssessmentIcon, XlsIcon } from '@/Components/icons'
 import { PlusIcon } from '@radix-icons/vue'
 
-import { publications } from '@/data'
+import { kpiOverview, publications } from '@/data'
 import { columns } from './Components/dataTable'
 
 </script>
@@ -244,23 +244,11 @@ import { columns } from './Components/dataTable'
 
         <div class="flex flex-wrap gap-10">
             <Kpi
-                variant="default"
-                :is-positive="true"
-            />
-
-            <Kpi
-                variant="primary"
-                :is-positive="false"
-            />
-
-            <Kpi
-                variant="primary"
-                :is-positive="false"
-            />
-
-            <Kpi
-                variant="primary"
-                :is-positive="false"
+                v-for="(kpi, index) in kpiOverview"
+                :key="kpi.title"
+                :data="kpi"
+                :variant="index === 0 ? 'default' : 'primary'"
+                :is-positive="kpi.isPositive"
             />
         </div>
      
