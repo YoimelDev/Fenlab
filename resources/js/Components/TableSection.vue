@@ -48,7 +48,7 @@ const badgeMap: Record<BadgeMode, BadgeVariants['variant']> = {
                             MODALIDAD
                         </TableHead>
                         <TableHead>NOMBRE PROYECTO</TableHead>
-                        <TableHead>ID CLIENTE</TableHead>
+                        <TableHead>ID FENLAB</TableHead>
                         <TableHead class="text-right">
                             ESTADO
                         </TableHead>
@@ -92,7 +92,7 @@ const badgeMap: Record<BadgeMode, BadgeVariants['variant']> = {
                     <TableRow>
                         <TableHead class="w-[78px]" />
                         <TableHead>NOMBRE PROYECTO</TableHead>
-                        <TableHead>ID CLIENTE</TableHead>
+                        <TableHead>ID FENLAB</TableHead>
                         <TableHead class="text-right">
                             PRECIO MÍNIMO
                         </TableHead>
@@ -138,7 +138,7 @@ const badgeMap: Record<BadgeMode, BadgeVariants['variant']> = {
                     <TableRow>
                         <TableHead class="w-[78px]" />
                         <TableHead>NOMBRE PROYECTO</TableHead>
-                        <TableHead>ID CLIENTE</TableHead>
+                        <TableHead>ID FENLAB</TableHead>
                         <TableHead class="text-right">
                             PRECIO MÍNIMO
                         </TableHead>
@@ -186,7 +186,7 @@ const badgeMap: Record<BadgeMode, BadgeVariants['variant']> = {
                             MODALIDAD
                         </TableHead>
                         <TableHead>NOMBRE PROYECTO</TableHead>
-                        <TableHead>ID CLIENTE</TableHead>
+                        <TableHead>ID FENLAB</TableHead>
                         <TableHead class="text-right">
                             FECHA
                         </TableHead>
@@ -230,7 +230,7 @@ const badgeMap: Record<BadgeMode, BadgeVariants['variant']> = {
                             MODALIDAD
                         </TableHead>
                         <TableHead>NOMBRE PROYECTO</TableHead>
-                        <TableHead>ID CLIENTE</TableHead>
+                        <TableHead>ID FENLAB</TableHead>
                         <TableHead class="text-right">
                             FECHA
                         </TableHead>
@@ -274,7 +274,7 @@ const badgeMap: Record<BadgeMode, BadgeVariants['variant']> = {
                             MODALIDAD
                         </TableHead>
                         <TableHead>NOMBRE PROYECTO</TableHead>
-                        <TableHead>ID CLIENTE</TableHead>
+                        <TableHead>ID FENLAB</TableHead>
                         <TableHead class="text-right">
                             FECHA
                         </TableHead>
