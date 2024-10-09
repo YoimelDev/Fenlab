@@ -513,3 +513,30 @@ export const publications = [
         reference_value: 'Texto',
     },
 ]
+
+export const kpiOverview = [
+    {
+        title: 'Análisis hechos mes actual vs mes anterior.',
+        value: '10.000',
+        percentage: '+35,74%',
+        isPositive: true,
+    },
+    {
+        title: 'Operaciones publicadas mes actual vs mes anterior.',
+        value: '10.000',
+        percentage: '+35,74%',
+        isPositive: false,
+    },
+    {
+        title: 'Operaciones aprobadas mes actual vs mes anterior.',
+        value: '10.000',
+        percentage: '+35,74%',
+        isPositive: false,
+    },
+    {
+        title: 'Operaciones firmadas mes actual vs mes anterior.',
+        value: '10.000',
+        percentage: '+35,74%',
+        isPositive: false,
+    },
+]
