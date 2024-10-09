@@ -43,7 +43,6 @@ const menu = [
     {
         href: '/my-publications',
         title: 'Mis Publicaciones',
-        class: '[&_svg]:text-grey',
         icon: {
             element: h('div', [h(PictureIcon)]),
         },
@@ -95,7 +94,7 @@ const menu = [
         title: 'Cómo funciona',
         class: 'mt-8',
         icon: {
-            element: h('div', [h(HelpIcon, { class: 'text-[#686868]' })]),
+            element: h('div', [h(HelpIcon)]),
         },
     },
     {
@@ -108,7 +107,7 @@ const menu = [
         href: '/user-data',
         title: 'Datos Usuario',
         icon: {
-            element: h('div', [h(PersonIcon, { class: 'text-[#686868]' })]),
+            element: h('div', [h(PersonIcon)]),
         },
     },
 ]

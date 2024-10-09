@@ -122,6 +122,14 @@
   box-shadow: 3px 0 0 0 hsl(var(--electric-green)) inset !important; 
 }
 
+.vsm--link svg {
+  color: hsl(var(--grey));
+}
+
+.vsm--link_active svg {
+  color: #497C49;
+}
+
 .vsm--icon {
   height: 24px !important;
   width: 24px !important;
