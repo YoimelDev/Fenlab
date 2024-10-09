@@ -128,7 +128,7 @@ const activeSelectionBadge = ref('pl/spl s')
                                     </h3>
 
                                     <p class="text-sm">
-                                        Texto descriptivo lorem ipsum
+                                        Modeliza en posición comprador
                                     </p>
                                 </div>
                             </div>
@@ -147,7 +147,7 @@ const activeSelectionBadge = ref('pl/spl s')
                                     </h3>
 
                                     <p class="text-sm">
-                                        Texto descriptivo lorem ipsum
+                                        Modeliza en posición vendedora
                                     </p>
                                 </div>
                             </div>
@@ -167,13 +167,13 @@ const activeSelectionBadge = ref('pl/spl s')
                                     PL/SPL S
                                 </Badge>
 
-                                <div class="text-grey">
+                                <div class="flex-1 text-grey">
                                     <h3 class="text-lg font-bold">
                                         PL / RPL Secured
                                     </h3>
 
                                     <p class="text-sm">
-                                        Texto descriptivo lorem ipsum
+                                        Cashflow model perfoming & Re-perfoming loans Secured
                                     </p>
                                 </div>
                             </div>
@@ -191,13 +191,13 @@ const activeSelectionBadge = ref('pl/spl s')
                                     PL/SPL U
                                 </Badge>
 
-                                <div class="text-grey">
+                                <div class="flex-1 text-grey">
                                     <h3 class="text-lg font-bold">
                                         PL / RPL Unsecured
                                     </h3>
 
                                     <p class="text-sm">
-                                        Texto descriptivo lorem ipsum
+                                        Cashflow model perfoming & Re-performing loans Unsecured
                                     </p>
                                 </div>
                             </div>
@@ -212,13 +212,13 @@ const activeSelectionBadge = ref('pl/spl s')
                                     NPL
                                 </Badge>
 
-                                <div class="text-grey">
+                                <div class="flex-1 text-grey">
                                     <h3 class="text-lg font-bold">
                                         NPL Secured
                                     </h3>
 
                                     <p class="text-sm">
-                                        Texto descriptivo lorem ipsum
+                                        Modelo de recuperación judicial de non-perfoming loans secured
                                     </p>
                                 </div>
                             </div>
@@ -234,13 +234,13 @@ const activeSelectionBadge = ref('pl/spl s')
                                 </Badge>
 
 
-                                <div class="text-grey">
+                                <div class="flex-1 text-grey">
                                     <h3 class="text-lg font-bold">
                                         REO
                                     </h3>
 
                                     <p class="text-sm">
-                                        Texto descriptivo lorem ipsum
+                                        Modelo de recuperación judicial de activos inmobiliarios
                                     </p>
                                 </div>
                             </div>

@@ -27,17 +27,17 @@ const activeTab = ref('analysis')
 const steps = [
     {
         step: 1,
-        title: 'Texo paso 1',
+        title: 'Carga Cliente',
         description: '19/08/2024',
     },
     {
         step: 2,
-        title: 'Texo paso 2',
+        title: 'Análisis Fenlab',
         description: '',
     },
     {
         step: 3,
-        title: 'Texo paso 3',
+        title: 'Carga definitiva',
         description: '',
     },
 ]
