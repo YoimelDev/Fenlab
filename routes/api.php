@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\CreatePasswordController;
+use App\Http\Middleware\ApiKeyMiddleware;
 
-Route::post('/send-create-password', [CreatePasswordController::class, 'sendCreatePasswordEmail']);
-Route::post('/create-password', [CreatePasswordController::class, 'createPassword'])->name('create-password');
+Route::middleware([ApiKeyMiddleware::class])->group(function () {
+  Route::post('/send-password-email', [CreatePasswordController::class, 'sendCreatePasswordEmail']);
+  Route::post('/create-password', [CreatePasswordController::class, 'createPassword']);
+});
