@@ -28,7 +28,11 @@ const submit = async () => {
     form.processing = true
 
     try {
-        await axios.post(route('create-password'), form.data())        
+        await axios.post(route('create-password'), form.data(), {
+            headers: {
+                'api_key': import.meta.env.VITE_API_KEY || '',
+            },
+        })
         
         toast({
             variant: 'info',
