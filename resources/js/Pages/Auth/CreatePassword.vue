@@ -9,13 +9,18 @@ import { Input, Label, Button, useToast, Toaster } from '@/Components/ui'
 import { EyeClosedIcon, EyeOpenIcon } from '@radix-icons/vue'
 import { getParamValue } from '@/lib/utils'
 
+const props = defineProps<{
+    email: string
+    token: string
+}>()
+
 const { toast } = useToast()
 const showPassword = ref(false)
 
 const form = useForm({
     email: getParamValue('email'),
     password: '',
-    token: getParamValue('token'),
+    token: props.token,
 })
 
 const submit = async () => {
@@ -63,7 +68,8 @@ const submit = async () => {
                     type="email"
                     placeholder="Email"
                     class="mt-2"
-                    v-model="form.email"
+                    :default-value="email"
+                    :value="email"
                     disabled
                 />
             </div>

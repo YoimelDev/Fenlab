@@ -10,9 +10,25 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class CreatePasswordController extends Controller
 {
+
+  /**
+   * Display the password create view.
+   */
+  public function create(Request $request): Response
+  {
+    $email = Crypt::decryptString($request->query('email'));
+
+    return Inertia::render('Auth/CreatePassword', [
+      'email' => $email,
+      'token' => $request->query('token'),
+    ]);
+  }
+
   public function sendCreatePasswordEmail(Request $request)
   {
     // Validar que el campo 'email' está presente y tiene un formato válido
