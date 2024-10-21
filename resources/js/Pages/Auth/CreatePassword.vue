@@ -3,7 +3,7 @@ import axios from 'axios'
 import { ref } from 'vue'
 import GuestLayout from '@/Layouts/GuestLayout.vue'
 import InputError from '@/Components/InputError.vue'
-import { Head, useForm } from '@inertiajs/vue3'
+import { Head, useForm, router } from '@inertiajs/vue3'
 
 import { Input, Label, Button, useToast, Toaster } from '@/Components/ui'
 import { EyeClosedIcon, EyeOpenIcon } from '@radix-icons/vue'
@@ -38,6 +38,10 @@ const submit = async () => {
             variant: 'info',
             title: '¡Contraseña creada!',
         })
+
+        setTimeout(() => {
+            router.visit('/login')
+        }, 2000)
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
         toast({
