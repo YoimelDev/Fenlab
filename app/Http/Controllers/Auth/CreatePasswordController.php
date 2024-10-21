@@ -62,7 +62,6 @@ class CreatePasswordController extends Controller
 
     return response()->json([
       'message' => 'Correo enviado para restablecer contraseña',
-      'url' => $resetUrl
     ]);
   }
 
