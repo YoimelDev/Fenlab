@@ -30,7 +30,7 @@ const submit = async () => {
     try {
         await axios.post(route('create-password'), form.data(), {
             headers: {
-                'api_key': import.meta.env.VITE_API_KEY || '',
+                'API_KEY': import.meta.env.VITE_API_KEY || '',
             },
         })
         
