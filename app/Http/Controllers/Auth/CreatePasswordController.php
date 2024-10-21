@@ -71,7 +71,7 @@ class CreatePasswordController extends Controller
     $email = "";
     // Desencriptar el email
     try {
-      $email = Crypt::decryptString($request->query('email'));
+      $email = Crypt::decryptString($request->email);
     } catch (\Exception $e) {
       return response()->json(['message' => 'El correo electrónico es inválido o ha expirado.'], 400);
     }
@@ -80,7 +80,7 @@ class CreatePasswordController extends Controller
     // Verificar si el token existe en la tabla de restablecimiento de contraseñas
     $reset = DB::table('password_reset_tokens')->where([
       'email' => $email,
-      'token' => hash('sha256', $request->query('token'))
+      'token' => hash('sha256', $request->token)
     ])->first();
 
     if (!$reset) {
@@ -92,7 +92,7 @@ class CreatePasswordController extends Controller
     // Crear el usuario si no existe
     $user = User::firstOrCreate(
       ['email' => $email],  // Condición para buscar al usuario
-      ['password' => Hash::make($request->input('password'))]  // Crear el usuario con la nueva contraseña
+      ['password' => Hash::make($request->password)]  // Crear el usuario con la nueva contraseña
     );
 
     // Eliminar el registro del token para evitar reutilizaciones
