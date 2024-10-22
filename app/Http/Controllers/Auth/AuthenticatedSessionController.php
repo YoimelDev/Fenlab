@@ -4,9 +4,13 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\ApiToken;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -31,9 +35,114 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
+        $token = $this->getSfToken();
+
+        $user = $this->getFenlabUser($token, $request->email);
+
+        $awsToken = $this->loginAws($user);
+
         $request->session()->regenerate();
 
         return redirect()->intended(route('dashboard', absolute: false));
+    }
+
+
+    public function getFenlabUser($token, $email)
+    {
+        $urlCheckUser = env('SF_FENLAB_API_URL') . "services/apexrest/company/fenlab/validate";
+        // Cuerpo de la solicitud
+        $body = [
+            'email' => $email,
+        ];
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+            'Accept' => 'application/json',
+        ])->post($urlCheckUser, $body);
+
+        if ($response->successful()) {
+            $data = $response->json(); // Intenta decodificar como JSON
+            if ($data) {
+                return $data;
+                Log::info('USER ES', $data);
+            }
+        } else {
+            // Manejar error
+            dd($response->status(), $response->body());
+        }
+    }
+
+
+    public function getSfToken()
+    {
+        $existingToken = ApiToken::where('type', 'sf')->first();
+        if (!$existingToken || $existingToken->expires_at <= now()) {
+            $clientSecret = env('SF_CLIENT_SECRET');
+            $clientId = env('SF_CLIENT_ID');
+            $apiUrl = env('SF_API_URL');
+            $apiUsername = env('SF_USERNAME');
+            $apiPassword = env('SF_PASSWORD');
+
+
+            $urlWithParams = $apiUrl . "/services/oauth2/token?grant_type=password&client_id=" . $clientId . "&client_secret=" . $clientSecret . "&username=" . $apiUsername . "&password=" . $apiPassword;
+
+            $response = Http::post($urlWithParams);
+
+            // Verificar si la respuesta es JSON
+            if ($response->successful()) {
+                $data = $response->json(); // Intenta decodificar como JSON
+                if ($data) {
+                    // Procesar datos
+                    $issued_at = Carbon::createFromTimestamp($data["issued_at"] / 1000);
+                    // Sumar las 2 horas para la expiración:
+                    $expires_at = $issued_at->copy()->addHours(2);
+
+                    ApiToken::updateOrCreate(['type' => 'sf'], [
+                        'type' => 'sf',
+                        'token' => $data['access_token'],
+                        'issued_at' => $issued_at,
+                        'expires_at' => $expires_at
+                    ]);
+
+                    return $data['access_token'];
+                }
+            } else {
+                // Manejar error
+                dd($response->status(), $response->body());
+            }
+        } else {
+            return $existingToken->token;
+        }
+    }
+
+    public function loginAws($user)
+    {
+
+        $url = env('VITE_FENLAB_API_URL') . 'auth/login';
+        $apiKey = env('VITE_FENLAB_API_KEY');
+
+        $user['rols'] = strtolower($user['rols']);
+
+        $body = [
+            "username" => $user['email'],
+            "role" => $user['rols'],
+            "companyId" => $user['companyId']
+        ];
+
+        $response = Http::withHeaders([
+            'API_KEY' => $apiKey,
+            'Accept' => 'application/json',
+        ])->post($url, $body);
+
+        if ($response->successful()) {
+            $data = $response->json(); // Intenta decodificar como JSON
+            if ($data) {
+                return $data;
+                Log::info('USER ES', $data);
+            }
+        } else {
+            // Manejar error
+            dd($response->status(), $response->body());
+        }
     }
 
     /**
