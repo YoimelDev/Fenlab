@@ -4,6 +4,15 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import { Kpi } from '@/Components/ui/kpi'
 import TableSection from '@/Components/TableSection.vue'
 import { kpiOverview } from '@/data'
+import { fenlabApi } from '@/api/fenlab.api'
+
+const test = async () => {
+    const response = await fenlabApi.get('company-master-data')
+    console.log(response, 'response')
+}
+
+test()
+
 </script>
 
 <template>

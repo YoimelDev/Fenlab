@@ -1,27 +1,19 @@
+import { usePage } from '@inertiajs/vue3'
 import axios from 'axios'
 
-interface LoginResponse {
-    token: string
-}
-
-const fenlabAuthLogin = axios.create({
-    baseURL: import.meta.env.FENLAB_API_URL,
+export const fenlabApi = axios.create({
+    baseURL: import.meta.env.VITE_FENLAB_API_URL,
     headers: {
-        API_KEY: import.meta.env.FENLAB_API_KEY,
+        Accept: 'application/json',
     },
 })
 
-export const fenlabLogin = async (email: string, password: string) => {
-    try {
-        const response = await fenlabAuthLogin.post<LoginResponse>(
-            `${import.meta.env.FENLAB_LOGIN_ENDPOINT}`,
-            {
-                email,
-                password,
-            },
-        )
-        return response.data
-    } catch (error) {
-        console.log(error)
+fenlabApi.interceptors.request.use(config => {
+    const token = (usePage().props.auth as { loginToken: string }).loginToken
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`
     }
-}
+    return config
+}, error => {
+    return Promise.reject(error)
+})
