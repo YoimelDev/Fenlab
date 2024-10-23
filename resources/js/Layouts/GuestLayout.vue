@@ -24,7 +24,7 @@ import { FenlabLogo } from '@/Components/icons'
                 />
 
                 <p class="text-white text-2xl font-light">
-                    Software de analísis financiero e inmobiliario
+                    Gain insights, drive success
                 </p>
             </header>
         </div>
