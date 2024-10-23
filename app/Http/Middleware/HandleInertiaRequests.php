@@ -33,6 +33,8 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'auth' => [
                 'user' => $request->user(),
+                'salesforceUser' => $request->session()->get('salesforceUser'),
+                'loginToken' => $request->session()->get('loginToken'),
             ],
         ];
     }

@@ -39,8 +39,10 @@ class AuthenticatedSessionController extends Controller
 
         $user = $this->getFenlabUser($token, $request->email);
 
-        $awsToken = $this->loginAws($user);
+        $loginToken = $this->loginAws($user);
 
+        $request->session()->put('salesforceUser', $user);
+        $request->session()->put('loginToken', $loginToken);
         $request->session()->regenerate();
 
         return redirect()->intended(route('dashboard', absolute: false));
@@ -63,11 +65,11 @@ class AuthenticatedSessionController extends Controller
             $data = $response->json(); // Intenta decodificar como JSON
             if ($data) {
                 return $data;
-                Log::info('USER ES', $data);
             }
         } else {
-            // Manejar error
-            dd($response->status(), $response->body());
+            return response()->json([
+                'message' => 'Unauthorized'
+            ]);
         }
     }
 
@@ -106,8 +108,9 @@ class AuthenticatedSessionController extends Controller
                     return $data['access_token'];
                 }
             } else {
-                // Manejar error
-                dd($response->status(), $response->body());
+                return response()->json([
+                    'message' => 'Unauthorized'
+                ]);
             }
         } else {
             return $existingToken->token;
@@ -136,12 +139,12 @@ class AuthenticatedSessionController extends Controller
         if ($response->successful()) {
             $data = $response->json(); // Intenta decodificar como JSON
             if ($data) {
-                return $data;
-                Log::info('USER ES', $data);
+                return $data['token'];
             }
         } else {
-            // Manejar error
-            dd($response->status(), $response->body());
+            return response()->json([
+                'message' => 'Unauthorized'
+            ]);
         }
     }
 
