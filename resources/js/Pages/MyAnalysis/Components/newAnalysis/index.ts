@@ -1,0 +1,1 @@
+export { default as NewAnalysis } from './NewAnalysis.vue'

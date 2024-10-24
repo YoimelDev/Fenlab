@@ -1,8 +1,9 @@
 import { h } from 'vue'
 import { Link } from '@inertiajs/vue3'
 import type { ColumnDef } from '@tanstack/vue-table'
-import { type Analysis } from '@/Pages/MyAnalysis/types'
+import { type Project } from '@/types/fenlab'
 import { Badge, type BadgeVariants } from '@/Components/ui/badge'
+import { useDateFormat } from '@vueuse/core'
 
 type BadgeMode = 'REO' | 'NPL' | 'PL/SPL' | 'Pendiente' | 'En curso' | 'Completado';
 
@@ -15,26 +16,26 @@ const badgeMap: Record<BadgeMode, BadgeVariants['variant']> = {
     Completado: 'success',
 }
 
-export const columns: ColumnDef<Analysis>[] = [
+export const columns: ColumnDef<Project>[] = [
     {
         header: () => h('div', { class: 'w-[78px]' }, 'MODALIDAD'),
-        accessorKey: 'mode',
+        accessorKey: 'modelType',
         meta: '!w-[78px]' ,
         cell: (row) => {
-            const mode = row.getValue() as BadgeMode
+            const modelType = row.getValue() as BadgeMode
             return h(
                 'div',
                 { class: 'font-medium' },
-                h(Badge, { variant: badgeMap[mode] }, mode),
+                h(Badge, { variant: badgeMap[modelType] }, modelType),
             )
         },
     },
     {
         header: 'NOMBRE PROYECTO',
-        accessorKey: 'project',
+        accessorKey: 'name',
         cell: (row) => {
-            const project = row.getValue() as string
-            return h(Link, { href: '/my-analysis/1', class: 'font-medium' }, project)
+            const name = row.getValue() as string
+            return h(Link, { href: '/my-analysis/1', class: 'font-medium' }, name)
         },
         
     },
@@ -50,7 +51,7 @@ export const columns: ColumnDef<Analysis>[] = [
     },
     {
         header: 'ACTIVOS',
-        accessorKey: 'assets',
+        accessorKey: '_count.projectAssets',
     },
     {
         header: 'ESTADO',
@@ -66,10 +67,11 @@ export const columns: ColumnDef<Analysis>[] = [
     },
     {
         header: () => h('div', { class: 'text-right' }, 'FECHA'),
-        accessorKey: 'date',
+        accessorKey: 'createdAt',
         cell: (row) => {
             const date = row.getValue() as string
-            return h('p', { class: 'text-grey text-right' }, date)
+            const formatted = useDateFormat(date, 'DD/MM/YYYY')
+            return h('p', { class: 'text-grey text-right' }, formatted.value)
         },
     },
 ]
