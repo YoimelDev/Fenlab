@@ -34,7 +34,6 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
                 'salesforceUser' => $request->session()->get('salesforceUser'),
-                'loginToken' => $request->session()->get('loginToken'),
             ],
         ];
     }
