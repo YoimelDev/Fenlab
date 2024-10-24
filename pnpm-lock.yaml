@@ -38,6 +38,9 @@ dependencies:
   tailwindcss-text-scale:
     specifier: ^0.3.1
     version: 0.3.1(tailwindcss@3.4.9)
+  vue-loading-overlay:
+    specifier: ^6.0
+    version: 6.0.6(vue@3.4.37)
   vue-sidebar-menu:
     specifier: ^5.4.1
     version: 5.4.1
@@ -2714,6 +2717,15 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /vue-loading-overlay@6.0.6(vue@3.4.37):
+    resolution: {integrity: sha512-ZPrWawjCoNKGbCG9z4nePgbs/K9KXPa1j1oAJXP6T8FQho3NO+/chhjx4MLYFzfpwr+xkiQ8SNrV1kUG1bZPAw==}
+    engines: {node: '>=12.13.0'}
+    peerDependencies:
+      vue: ^3.2.0
+    dependencies:
+      vue: 3.4.37(typescript@5.5.4)
+    dev: false
 
   /vue-sidebar-menu@5.4.1:
     resolution: {integrity: sha512-Ze9q7M0xxkLUI6U16ZqAn4dHMpeHlO+ot2b7P3Ef9akI4gvELAJ3yHD79FMdZqGrqtoTFypM7uH/8jm5IL/yjA==}
