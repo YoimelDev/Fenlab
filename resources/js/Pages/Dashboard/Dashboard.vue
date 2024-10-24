@@ -2,17 +2,8 @@
 import { Head } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import { Kpi } from '@/Components/ui/kpi'
-import TableSection from '@/Components/TableSection.vue'
+import { TableSection } from './Components/dataTable'
 import { kpiOverview } from '@/data'
-import { fenlabApi } from '@/api/fenlab.api'
-
-const test = async () => {
-    const response = await fenlabApi.get('company-master-data')
-    console.log(response, 'response')
-}
-
-test()
-
 </script>
 
 <template>

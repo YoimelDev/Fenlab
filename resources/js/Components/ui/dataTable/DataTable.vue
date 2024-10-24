@@ -36,11 +36,15 @@ import {
     Button,
 } from '@/Components/ui/button'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   columnFilter?: string
-}>()
+  activatePagination?: boolean
+}>(), {
+    columnFilter: '',
+    activatePagination: true,
+})
 
 const sorting = ref<SortingState>([])
 const columnFilters = ref<ColumnFiltersState>([])
@@ -122,7 +126,7 @@ const table = useVueTable({
                             :colspan="columns.length"
                             class="h-24 text-center"
                         >
-                            No results.
+                            No hay datos
                         </TableCell>
                     </TableRow>
                 </template>
@@ -131,6 +135,7 @@ const table = useVueTable({
     </div>
 
     <Pagination
+        v-if="activatePagination"
         v-slot="{ page }"
         :total="table.getPageCount() * 10"
         :sibling-count="1"
