@@ -81,12 +81,12 @@ const menu = [
         component: separator,
     },
     {
-        header: usePage<PageProps>().props.auth.salesforceUser.name || 'Usuario',
+        header: usePage<PageProps>()?.props?.auth?.salesforceUser?.name || 'Usuario',
         class: 'mt-8 !text-grey',        
         hiddenOnCollapse: true,
     },
     {
-        header: usePage<PageProps>().props.auth.salesforceUser.companyCommercialName || 'Empresa',
+        header: usePage<PageProps>()?.props?.auth?.salesforceUser?.companyCommercialName || 'Empresa',
         class: '!py-0 !text-grey !font-light',
         hiddenOnCollapse: true,
     },
