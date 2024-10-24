@@ -20,7 +20,7 @@ export const toastVariants = cva(
             variant: {
                 default: 'border bg-background text-foreground',
                 info: 'rounded-none border-0 border-l-[3px] border-blue pl-4 bg-info-gradient [&_svg]:text-blue',
-                danger: 'rounded-none border-0 border-l-[3px] border-danger pl-4 bg-danger-gradient [&_svg]:text-danger',
+                danger: 'rounded-none border-0 border-l-[3px] border-danger pl-4 bg-[#F8EAE9] [&_svg]:text-danger',
             },
         },
         defaultVariants: {

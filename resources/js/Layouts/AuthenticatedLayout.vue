@@ -2,11 +2,14 @@
 import { useLocalStorage } from '@vueuse/core'
 
 import Menu from '@/Layouts/Components/Menu.vue'
+import { Toaster } from '@/Components/ui'
 
 const isCollapsed = useLocalStorage<boolean>('collapse', false)
 </script>
 
 <template>
+    <Toaster />
+
     <div>
         <Menu />
 
