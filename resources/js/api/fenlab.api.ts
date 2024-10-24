@@ -1,19 +1,9 @@
-import { usePage } from '@inertiajs/vue3'
 import axios from 'axios'
 
 export const fenlabApi = axios.create({
-    baseURL: import.meta.env.VITE_FENLAB_API_URL,
+    baseURL: route('api'),
     headers: {
-        Accept: 'application/json',
+        API_KEY: import.meta.env.VITE_API_KEY || '',
     },
 })
 
-fenlabApi.interceptors.request.use(config => {
-    const token = (usePage().props.auth as { loginToken: string }).loginToken
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`
-    }
-    return config
-}, error => {
-    return Promise.reject(error)
-})

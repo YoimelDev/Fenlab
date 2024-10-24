@@ -163,56 +163,6 @@ export interface Subtipologia {
     __EMPTY_3?:     string;
 }
 
-
-// Projects
-
-export interface Projects {
-    data: Data[];
-    meta: Meta;
-}
-
-export interface Data {
-    id:          string;
-    name:        Name;
-    modelType:   ModelType;
-    description: Description;
-    _count:      Count;
-    status:      Status;
-    createdAt:   Date;
-}
-
-export interface Count {
-    projectAssets: number;
-}
-
-export enum Description {
-    MyTestProject = 'my test project',
-    String = 'string',
-}
-
-export enum ModelType {
-    NPL = 'NPL',
-    Reo = 'REO',
-}
-
-export enum Name {
-    Reo = 'REO',
-    String = 'string',
-    TestProject = 'test project',
-}
-
-export enum Status {
-    AnálisisCompleto = 'Análisis completo',
-    SinEmpezar = 'Sin empezar',
-}
-
-export interface Meta {
-    currentPage: number;
-    perPage:     number;
-    totalItems:  number;
-    totalPages:  number;
-}
-
 // Project
 
 export interface Project {
