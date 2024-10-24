@@ -28,6 +28,10 @@ import { PlusIcon } from '@radix-icons/vue'
 import { fenlabApi } from '@/api/fenlab.api'
 import { CompanyMasterData } from '@/types/fenlab'
 
+const props = defineProps<{
+    getAnalysis: () => void
+}>()
+
 const { toast } = useToast()
 const step = ref(1)
 const isDialogOpen = ref(false)
@@ -82,11 +86,11 @@ const submitAnalysis = async () => {
         toast({
             variant: 'info',
             title: '¡Análisis creado!',
-            duration: 5000,
         })
 
         resetNewAnalysis()
-        step.value = 1   
+        step.value = 1
+        props.getAnalysis()
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -94,7 +98,6 @@ const submitAnalysis = async () => {
             variant: 'danger',
             title: '¡Ups! Algo salió mal.',
             description: error.response.data.message.join('\n'),
-            duration: 5000,
         })
     } finally {
         loader?.hide()    

@@ -49,7 +49,7 @@ onMounted(() => {
                 Mis Análisis
             </h1>
 
-            <NewAnalysis />
+            <NewAnalysis :get-analysis="getAnalysis" />
         </header>
 
         <div class="flex flex-wrap gap-10">
@@ -63,6 +63,7 @@ onMounted(() => {
         </div>
      
         <DataTable
+            :key="analysis.length"
             :columns="columns"
             :data="analysis"
         />
