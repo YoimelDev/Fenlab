@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { h } from 'vue'
-import { Link } from '@inertiajs/vue3'
+import { Link, usePage } from '@inertiajs/vue3'
 import { useLocalStorage } from '@vueuse/core'
 
 import { SidebarMenu } from 'vue-sidebar-menu'
@@ -9,6 +9,7 @@ import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
 import ApplicationLogo from '@/Components/ApplicationLogo.vue'
 import { PinLeftIcon, PinRightIcon } from '@radix-icons/vue'
 import { HomeIcon, AssessmentIcon, HelpIcon, PersonIcon, PictureIcon, ReceiptIcon } from '@/Components/icons'
+import { PageProps } from '@/types'
 
 type collapse = boolean | string;
 
@@ -80,12 +81,12 @@ const menu = [
         component: separator,
     },
     {
-        header: 'Nombre de usuario',
+        header: usePage<PageProps>().props.auth.salesforceUser.name || 'Usuario',
         class: 'mt-8 !text-grey',        
         hiddenOnCollapse: true,
     },
     {
-        header: 'Empresa',
+        header: usePage<PageProps>().props.auth.salesforceUser.companyCommercialName || 'Empresa',
         class: '!py-0 !text-grey !font-light',
         hiddenOnCollapse: true,
     },
