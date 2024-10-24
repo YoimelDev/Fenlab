@@ -35,9 +35,9 @@ export const columns: ColumnDef<Project>[] = [
         accessorKey: 'name',
         cell: (row) => {
             const name = row.getValue() as string
-            return h(Link, { href: '/my-analysis/1', class: 'font-medium' }, name)
-        },
-        
+            const id = row.row.original.id
+            return h(Link, { href: `/my-analysis/${id}`, class: 'font-medium' }, name)
+        },        
     },
     {
         header: () => h('div', { class: 'w-[500px]' }, 'DESCRIPCIÓN'),
@@ -46,8 +46,7 @@ export const columns: ColumnDef<Project>[] = [
         cell: (row) => {
             const description = row.getValue() as string
             return h('p', { class: 'w-[434px] truncate' }, description)
-        },
-        
+        },        
     },
     {
         header: 'ACTIVOS',
