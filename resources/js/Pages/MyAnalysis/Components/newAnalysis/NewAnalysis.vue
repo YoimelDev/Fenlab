@@ -82,6 +82,7 @@ const submitAnalysis = async () => {
         toast({
             variant: 'info',
             title: '¡Análisis creado!',
+            duration: 5000,
         })
 
         resetNewAnalysis()
@@ -93,6 +94,7 @@ const submitAnalysis = async () => {
             variant: 'danger',
             title: '¡Ups! Algo salió mal.',
             description: error.response.data.message.join('\n'),
+            duration: 5000,
         })
     } finally {
         loader?.hide()    
