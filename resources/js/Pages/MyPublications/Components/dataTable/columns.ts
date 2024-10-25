@@ -1,19 +1,8 @@
 import { h } from 'vue'
 import type { ColumnDef } from '@tanstack/vue-table'
 import { type publication } from '@/Pages/MyPublications/types'
-import { Badge, type BadgeVariants } from '@/Components/ui/badge'
+import { Badge, badgeMap, type BadgeMode } from '@/Components/ui/badge'
 import DropdownAction from './DataTableDropdown.vue'
-
-type BadgeMode = 'REO' | 'NPL' | 'PL/SPL' | 'Pendiente' | 'En curso' | 'Completado';
-
-const badgeMap: Record<BadgeMode, BadgeVariants['variant']> = {
-    REO: 'default',
-    NPL: 'primary',
-    'PL/SPL': 'secondary',
-    Pendiente: 'pending',
-    'En curso': 'progress',
-    Completado: 'success',
-}
 
 export const columns: ColumnDef<publication>[] = [
     {

@@ -1,4 +1,5 @@
 import { type VariantProps, cva } from 'class-variance-authority'
+import { ModelType, Status } from '@/types/fenlab'
 
 export { default as Badge } from './Badge.vue'
 
@@ -28,3 +29,16 @@ export const badgeVariants = cva(
 )
 
 export type BadgeVariants = VariantProps<typeof badgeVariants>
+
+export type BadgeMode = ModelType | Status;
+
+export const badgeMap: Record<BadgeMode, BadgeVariants['variant']> = {
+    REO: 'default',
+    NPL: 'primary',
+    'PL/SPL': 'secondary',
+    Pendiente: 'pending',
+    'En curso': 'progress',
+    Completado: 'success',
+    'Análisis completo': 'success',
+    'Sin empezar': 'pending',
+}

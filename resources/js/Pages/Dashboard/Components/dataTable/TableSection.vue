@@ -17,19 +17,7 @@ import { columnsAnalysis } from './columnsAnalysis'
 import { fenlabApi } from '@/api/fenlab.api'
 import { Projects, Project } from '@/types/fenlab'
 import { invoices } from '@/data'
-import { type BadgeVariants, Badge, Avatar, AvatarFallback, AvatarImage } from '@/Components/ui'
-
-type BadgeMode = 'REO' | 'NPL' | 'PL/SPL' | 'Pendiente' | 'En curso' | 'Completado';
-
-const badgeMap: Record<BadgeMode, BadgeVariants['variant']> = {
-    REO: 'default',
-    NPL: 'primary',
-    'PL/SPL': 'secondary',
-    Pendiente: 'pending',
-    'En curso': 'progress',
-    Completado: 'success',
-}
-
+import { type BadgeMode, badgeMap, Badge, Avatar, AvatarFallback, AvatarImage } from '@/Components/ui'
 const analysis = ref<Project[]>([])
 
 const getAnalysis = async () => {

@@ -2,19 +2,10 @@ import { h } from 'vue'
 import { Link } from '@inertiajs/vue3'
 import type { ColumnDef } from '@tanstack/vue-table'
 import { type Project } from '@/types/fenlab'
-import { Badge, type BadgeVariants } from '@/Components/ui/badge'
+import { Badge, badgeMap, type BadgeMode } from '@/Components/ui/badge'
 import { useDateFormat } from '@vueuse/core'
 
-type BadgeMode = 'REO' | 'NPL' | 'PL/SPL' | 'Pendiente' | 'En curso' | 'Completado';
 
-const badgeMap: Record<BadgeMode, BadgeVariants['variant']> = {
-    REO: 'default',
-    NPL: 'primary',
-    'PL/SPL': 'secondary',
-    Pendiente: 'pending',
-    'En curso': 'progress',
-    Completado: 'success',
-}
 
 export const columns: ColumnDef<Project>[] = [
     {

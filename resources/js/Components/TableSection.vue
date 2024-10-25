@@ -10,19 +10,9 @@ import {
     TableHeader,
     TableRow,
 } from '@/Components/ui/table'
-import { type BadgeVariants, Badge, Avatar, AvatarFallback, AvatarImage } from '@/Components/ui'
+import { type BadgeMode, badgeMap, Badge, Avatar, AvatarFallback, AvatarImage } from '@/Components/ui'
 import { invoices } from '@/data'
 
-type BadgeMode = 'REO' | 'NPL' | 'PL/SPL' | 'Pendiente' | 'En curso' | 'Completado';
-
-const badgeMap: Record<BadgeMode, BadgeVariants['variant']> = {
-    REO: 'default',
-    NPL: 'primary',
-    'PL/SPL': 'secondary',
-    Pendiente: 'pending',
-    'En curso': 'progress',
-    Completado: 'success',
-}
 </script>
 
 <template>

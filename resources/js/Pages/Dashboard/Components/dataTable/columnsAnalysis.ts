@@ -1,18 +1,7 @@
 import { h } from 'vue'
 import type { ColumnDef } from '@tanstack/vue-table'
 import { type Project } from '@/types/fenlab'
-import { Badge, type BadgeVariants } from '@/Components/ui/badge'
-
-type BadgeMode = 'REO' | 'NPL' | 'PL/SPL' | 'Pendiente' | 'En curso' | 'Completado';
-
-const badgeMap: Record<BadgeMode, BadgeVariants['variant']> = {
-    REO: 'default',
-    NPL: 'primary',
-    'PL/SPL': 'secondary',
-    Pendiente: 'pending',
-    'En curso': 'progress',
-    Completado: 'success',
-}
+import { Badge, badgeMap, type BadgeMode } from '@/Components/ui/badge'
 
 export const columnsAnalysis: ColumnDef<Project>[] = [
     {
