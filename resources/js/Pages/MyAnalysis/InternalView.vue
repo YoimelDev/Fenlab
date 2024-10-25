@@ -16,13 +16,23 @@ import {
     TabsContent,
     TabsList,
     TabsTrigger,
+    badgeMap,
+    BadgeMode,
 } from '@/Components/ui'
 
-import { ArrowIcon, InfoIcon, XlsIcon, PdfIcon, DownloadIcon, ArrowUpIcon, CircleIcon, UploadIcon } from '@/Components/icons'
+import { useDropZone } from '@vueuse/core'
+import { ArrowIcon, InfoIcon, XlsIcon, DownloadIcon, ArrowUpIcon, CircleIcon, UploadIcon } from '@/Components/icons'
 import { Assets } from '@/Pages/MyAnalysis/Components/assets'
+import { ProjectById } from '@/types/fenlab'
 
+defineProps<{
+    project: ProjectById
+}>()
 
 const activeTab = ref('analysis')
+const filesData = ref<{ name: string, size: number, type: string, lastModified: number }[]>([])
+const dropZoneRef = ref<HTMLDivElement>()
+const fileInput = ref<HTMLInputElement | null>(null)
 
 const steps = [
     {
@@ -42,6 +52,52 @@ const steps = [
     },
 ]
 
+function onDrop(files: File[] | null) {
+    filesData.value = []
+    if (files) {
+        filesData.value = files.map(file => ({
+            name: file.name,
+            size: file.size,
+            type: file.type,
+            lastModified: file.lastModified,
+        }))
+    }
+}
+
+const { isOverDropZone } = useDropZone(dropZoneRef, onDrop)
+
+function handleFileChange(event: Event) {
+    const target = event.target as HTMLInputElement
+    if (target.files && target.files.length > 0) {
+        onDrop(Array.from(target.files))
+    }
+}
+
+function openFileDialog() {
+    if (fileInput.value) {
+        fileInput.value.click()
+    }
+}
+
+// async function uploadFile() {
+//     if (fileInput.value && fileInput.value.files && fileInput.value.files.length > 0) {
+//         const formData = new FormData()
+//         formData.append('file', fileInput.value.files[0])
+
+//         try {
+//             const response = await axios.post('/upload', formData, {
+//                 headers: {
+//                     'Content-Type': 'multipart/form-data',
+//                 },
+//             })
+//             console.log('File uploaded successfully:', response.data)
+//         } catch (error) {
+//             console.error('Error uploading file:', error)
+//         }
+//     } else {
+//         console.error('No file selected')
+//     }
+// }
 </script>
 
 <template>
@@ -63,26 +119,26 @@ const steps = [
                             variant="left"
                         />
 
-                        <span class="hidden sm:inline">
-                            Proyecto Zeus
+                        <span class="hidden sm:inline capitalize">
+                            {{ project.name }}
                         </span>
                     </Link>
                 </Button>
 
                 <Badge
-                    variant="default"
+                    :variant="badgeMap[project.modelType as BadgeMode]"
                     size="sm"
                 >
-                    REO
+                    {{ project.modelType }}
                 </Badge>
 
                 <InfoIcon />
 
                 <Badge
-                    variant="pending"
+                    :variant="badgeMap[project.status as BadgeMode]"
                     size="sm"
                 >
-                    ESTADO 1
+                    {{ project.status }}
                 </Badge>
             </div>
 
@@ -152,16 +208,28 @@ const steps = [
             </TabsList>
             <TabsContent value="analysis">
                 <div class="my-4 p-2 bg-white">
-                    <div class="grid place-items-center p-5 border-2 border-dashed border-[#C1C1C1] rounded-sm">
+                    <div
+                        ref="dropZoneRef"
+                        class="grid place-items-center p-5 border-2 border-dashed border-[#C1C1C1] rounded-sm"
+                        :class="[isOverDropZone && 'border-electric-green']"
+                    >
                         <p class="flex items-center gap-2 mb-5 text-grey text-sm">
                             Arrastra aquí tu archivo excel cumplimentado 
 
                             <CircleIcon variant="help" />
                         </p>
 
+                        <input
+                            type="file"
+                            ref="fileInput"
+                            @change="handleFileChange"
+                            class="hidden"
+                        >
+
                         <Button
                             variant="green"
                             size="xs"
+                            @click="openFileDialog"
                         >
                             <UploadIcon class="mr-2" />
                             Cargar excel
@@ -169,7 +237,7 @@ const steps = [
                     </div>
                 </div>
 
-                <ArrowUpIcon />
+                <!-- <ArrowUpIcon />
 
                 <div class="my-4">
                     <div class="flex gap-4 my-2">
@@ -210,7 +278,7 @@ const steps = [
 
                         <DownloadIcon class="absolute top-4 right-4" />
                     </div>
-                </div>
+                </div> -->
 
                 <ArrowUpIcon />
 
@@ -235,8 +303,46 @@ const steps = [
                                 Texto descripción del documento.
                             </p>
                         </div>
+                    </div>
+                </div>
 
-                        <DownloadIcon class="absolute top-4 right-4" />
+                <ArrowUpIcon 
+                    v-if="project.firstExcel"
+                />
+
+                <div
+                    v-if="project.firstExcel"
+                    class="my-4"
+                >    
+                    <div class="relative flex items-center gap-4 w-full p-4 bg-white ">
+                        <XlsIcon
+                            v-if="project.firstExcel.extension == 'xlsx'"
+                        />
+    
+                        <div>
+                            <p class="text-black text-lg font-bold">
+                                {{ project.firstExcel.title }}
+                            </p>
+                            <p class="text-grey text-sm">
+                                {{ project.firstExcel.description }}
+                            </p>
+                        </div>
+
+                        <Button
+                            v-if="project.firstExcel.url"
+                            variant="ghost"
+                            size="xs"
+                            as-child
+                        >
+                            <a
+                                class="absolute top-4 right-4"
+                                :href="project.firstExcel.url"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <DownloadIcon />
+                            </a>
+                        </Button>
                     </div>
                 </div>
             </TabsContent>

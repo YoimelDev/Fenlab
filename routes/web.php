@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\MyAnalysisController;
 use App\Mail\ContactEmail;
 use App\Models\Contact;
 use Illuminate\Foundation\Application;
@@ -23,13 +24,8 @@ Route::middleware('auth')->group(function () {
     })->name('dashboard');
 
     Route::prefix('my-analysis')->group(function () {
-        Route::get('/', function () {
-            return Inertia::render('MyAnalysis/Analysis');
-        })->name('analysis');
-
-        Route::get('/1', function () {
-            return Inertia::render('MyAnalysis/InternalView');
-        })->name('analysis1');
+        Route::get('/', [MyAnalysisController::class, 'index'])->name('analysis');
+        Route::get('/{id}', [MyAnalysisController::class, 'showInternalView'])->name('analysis.show');
     });
 
     Route::prefix('my-publications')->group(function () {
