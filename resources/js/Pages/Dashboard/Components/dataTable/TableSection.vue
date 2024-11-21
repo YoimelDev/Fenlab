@@ -21,7 +21,7 @@ import { type BadgeMode, badgeMap, Badge, Avatar, AvatarFallback, AvatarImage } 
 const analysis = ref<Project[]>([])
 
 const getAnalysis = async () => {
-    const { data: response } = await fenlabApi.post<Projects>('/', {
+    const { data: response } = await fenlabApi.post<Projects>('', {
         method: 'get',
         path: 'projects',
         body: {
