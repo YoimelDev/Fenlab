@@ -30,13 +30,17 @@ class SalesforceController extends Controller
             return $existingToken->token;
         }
 
-        $response = Http::post($this->apiUrl . "/services/oauth2/token", [
-            'grant_type' => 'password',
-            'client_id' => env('SF_CLIENT_ID'),
-            'client_secret' => env('SF_CLIENT_SECRET'),
-            'username' => env('SF_USERNAME'),
-            'password' => env('SF_PASSWORD')
-        ]);
+
+        $clientSecret = env('SF_CLIENT_SECRET');
+        $clientId = env('SF_CLIENT_ID');
+        $apiUrl = env('SF_API_URL');
+        $apiUsername = env('SF_USERNAME');
+        $apiPassword = env('SF_PASSWORD');
+
+
+        $urlWithParams = $apiUrl . "/services/oauth2/token?grant_type=password&client_id=" . $clientId . "&client_secret=" . $clientSecret . "&username=" . $apiUsername . "&password=" . $apiPassword;
+
+        $response = Http::post($urlWithParams);
 
         if (!$response->successful()) {
             throw new \RuntimeException('Failed to obtain Salesforce token');
