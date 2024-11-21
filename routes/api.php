@@ -31,6 +31,6 @@ Route::middleware([ApiKeyMiddleware::class])->group(function () {
 });
 
 Route::middleware([ApiKeyMiddleware::class, 'web'])->group(function () {
-    Route::post('/', [FenlabApiController::class, 'store'])->name('api');
+    Route::post('', [FenlabApiController::class, 'store'])->name('api');
 });
 
