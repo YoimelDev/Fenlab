@@ -67,7 +67,7 @@ class SalesforceController extends Controller
         }
     }
 
-    private function makeApiRequest(string $endpoint, array $data, string $method = 'POST'): JsonResponse
+    private function makeApiRequest(string $endpoint, array $data, string $method = 'post'): JsonResponse
     {
         try {
             $token = $this->getValidToken();
@@ -101,7 +101,8 @@ class SalesforceController extends Controller
     {
         return $this->makeApiRequest(
             '/services/apexrest/company/fenlab/pending-approval',
-            ['email' => $request->email]
+            ['email' => $request->email],
+            'get'
         );
     }
 
@@ -117,7 +118,8 @@ class SalesforceController extends Controller
     {
         return $this->makeApiRequest(
             '/services/apexrest/company/fenlab/closedWonAuctions',
-            ['email' => $request->email]
+            ['email' => $request->email],
+            'get'
         );
     }
 
@@ -126,7 +128,8 @@ class SalesforceController extends Controller
     {
         return $this->makeApiRequest(
             '/services/apexrest/company/fenlab/pendingPBC',
-            ['email' => $request->email]
+            ['email' => $request->email],
+            'get'
         );
     }
 
@@ -143,7 +146,8 @@ class SalesforceController extends Controller
     {
         return $this->makeApiRequest(
             '/services/apexrest/company/fenlab/pendingNotary',
-            ['email' => $request->email]
+            ['email' => $request->email],
+            'get'
         );
     }
 
