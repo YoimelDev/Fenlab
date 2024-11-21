@@ -1,0 +1,157 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\ApiToken;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+
+class SalesforceController extends Controller
+{
+    private const TOKEN_TYPE = 'sf';
+    private const TOKEN_EXPIRY_HOURS = 2;
+    
+    private string $baseUrl;
+    private string $apiUrl;
+
+    public function __construct()
+    {
+        $this->baseUrl = rtrim(env('SF_FENLAB_API_URL'), '/');
+        $this->apiUrl = rtrim(env('SF_API_URL'), '/');
+    }
+
+    private function getValidToken(): string
+    {
+        $existingToken = ApiToken::where('type', self::TOKEN_TYPE)->first();
+        
+        if ($existingToken && $existingToken->expires_at > now()) {
+            return $existingToken->token;
+        }
+
+        $response = Http::post($this->apiUrl . "/services/oauth2/token", [
+            'grant_type' => 'password',
+            'client_id' => env('SF_CLIENT_ID'),
+            'client_secret' => env('SF_CLIENT_SECRET'),
+            'username' => env('SF_USERNAME'),
+            'password' => env('SF_PASSWORD')
+        ]);
+
+        if (!$response->successful()) {
+            throw new \RuntimeException('Failed to obtain Salesforce token');
+        }
+
+        $data = $response->json();
+        $issued_at = Carbon::createFromTimestamp($data["issued_at"] / 1000);
+        
+        ApiToken::updateOrCreate(
+            ['type' => self::TOKEN_TYPE],
+            [
+                'token' => $data['access_token'],
+                'issued_at' => $issued_at,
+                'expires_at' => $issued_at->copy()->addHours(self::TOKEN_EXPIRY_HOURS)
+            ]
+        );
+
+        return $data['access_token'];
+    }
+
+    public function getSfToken(): JsonResponse
+    {
+        try {
+            $token = $this->getValidToken();
+            return response()->json(['token' => $token]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 401);
+        }
+    }
+
+    private function makeApiRequest(string $endpoint, array $data, string $method = 'POST'): JsonResponse
+    {
+        try {
+            $token = $this->getValidToken();
+            
+            $response = Http::withHeaders([
+                'Authorization' => "Bearer {$token}",
+                'Accept' => 'application/json',
+            ])->$method($this->baseUrl . $endpoint, $data);
+
+            if (!$response->successful()) {
+                throw new \RuntimeException("API request failed: {$response->status()}");
+            }
+
+            return response()->json($response->json());
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 401);
+        }
+    }
+
+    // API Endpoints
+    public function getFenlabUser(Request $request): JsonResponse
+    {
+        return $this->makeApiRequest(
+            '/services/apexrest/company/fenlab/validate',
+            ['email' => $request->email]
+        );
+    }
+
+    // Auction related endpoints
+    public function getPendingApproval(Request $request): JsonResponse
+    {
+        return $this->makeApiRequest(
+            '/services/apexrest/company/fenlab/pending-approval',
+            ['email' => $request->email]
+        );
+    }
+
+    public function approveAuction(Request $request): JsonResponse
+    {
+        return $this->makeApiRequest(
+            '/services/apexrest/fenlab/approveAuction',
+            $request->all()
+        );
+    }
+
+    public function getClosedAuctions(Request $request): JsonResponse
+    {
+        return $this->makeApiRequest(
+            '/services/apexrest/company/fenlab/closedWonAuctions',
+            ['email' => $request->email]
+        );
+    }
+
+    // PBC related endpoints
+    public function getPendingPBC(Request $request): JsonResponse
+    {
+        return $this->makeApiRequest(
+            '/services/apexrest/company/fenlab/pendingPBC',
+            ['email' => $request->email]
+        );
+    }
+
+    public function approvePBC(Request $request): JsonResponse
+    {
+        return $this->makeApiRequest(
+            '/services/apexrest/fenlab/approvePBC',
+            $request->all()
+        );
+    }
+
+    // Notary related endpoints
+    public function getPendingNotary(Request $request): JsonResponse
+    {
+        return $this->makeApiRequest(
+            '/services/apexrest/company/fenlab/pendingNotary',
+            ['email' => $request->email]
+        );
+    }
+
+    public function acceptNotary(Request $request): JsonResponse
+    {
+        return $this->makeApiRequest(
+            '/services/apexrest/fenlab/acceptNotary',
+            $request->all()
+        );
+    }
+}

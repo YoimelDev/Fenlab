@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\SalesforceController;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Models\ApiToken;
 use Carbon\Carbon;
@@ -17,6 +18,13 @@ use Inertia\Response;
 
 class AuthenticatedSessionController extends Controller
 {
+    protected $salesforceController;
+
+    public function __construct(SalesforceController $salesforceController)
+    {
+        $this->salesforceController = $salesforceController;
+    }
+
     /**
      * Display the login view.
      */
@@ -35,86 +43,16 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
-        $token = $this->getSfToken();
+        $sfToken = $this->salesforceController->getSfToken()->original['token'];
+        $userResponse = $this->salesforceController->getFenlabUser($request)->original;
 
-        $user = $this->getFenlabUser($token, $request->email);
+        $loginToken = $this->loginAws($userResponse);
 
-        $loginToken = $this->loginAws($user);
-
-        $request->session()->put('salesforceUser', $user);
+        $request->session()->put('salesforceUser', $userResponse);
         $request->session()->put('loginToken', $loginToken);
         $request->session()->regenerate();
 
         return redirect()->intended(route('dashboard', absolute: false));
-    }
-
-
-    public function getFenlabUser($token, $email)
-    {
-        $urlCheckUser = env('SF_FENLAB_API_URL') . "services/apexrest/company/fenlab/validate";
-        // Cuerpo de la solicitud
-        $body = [
-            'email' => $email,
-        ];
-        $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . $token,
-            'Accept' => 'application/json',
-        ])->post($urlCheckUser, $body);
-
-        if ($response->successful()) {
-            $data = $response->json(); // Intenta decodificar como JSON
-            if ($data) {
-                return $data;
-            }
-        } else {
-            return response()->json([
-                'message' => 'Unauthorized'
-            ]);
-        }
-    }
-
-
-    public function getSfToken()
-    {
-        $existingToken = ApiToken::where('type', 'sf')->first();
-        if (!$existingToken || $existingToken->expires_at <= now()) {
-            $clientSecret = env('SF_CLIENT_SECRET');
-            $clientId = env('SF_CLIENT_ID');
-            $apiUrl = env('SF_API_URL');
-            $apiUsername = env('SF_USERNAME');
-            $apiPassword = env('SF_PASSWORD');
-
-
-            $urlWithParams = $apiUrl . "/services/oauth2/token?grant_type=password&client_id=" . $clientId . "&client_secret=" . $clientSecret . "&username=" . $apiUsername . "&password=" . $apiPassword;
-
-            $response = Http::post($urlWithParams);
-
-            // Verificar si la respuesta es JSON
-            if ($response->successful()) {
-                $data = $response->json(); // Intenta decodificar como JSON
-                if ($data) {
-                    // Procesar datos
-                    $issued_at = Carbon::createFromTimestamp($data["issued_at"] / 1000);
-                    // Sumar las 2 horas para la expiración:
-                    $expires_at = $issued_at->copy()->addHours(2);
-
-                    ApiToken::updateOrCreate(['type' => 'sf'], [
-                        'type' => 'sf',
-                        'token' => $data['access_token'],
-                        'issued_at' => $issued_at,
-                        'expires_at' => $expires_at
-                    ]);
-
-                    return $data['access_token'];
-                }
-            } else {
-                return response()->json([
-                    'message' => 'Unauthorized'
-                ]);
-            }
-        } else {
-            return $existingToken->token;
-        }
     }
 
     public function loginAws($user)
