@@ -59,7 +59,7 @@ const resetNewAnalysis = () => {
 
 const getCompanyMasterData = async () => {
     try {
-        const { data: response } = await fenlabApi.post<CompanyMasterData>('/', {
+        const { data: response } = await fenlabApi.post<CompanyMasterData>('', {
             method: 'get',
             path: 'company-master-data',
         })
@@ -77,7 +77,7 @@ const submitAnalysis = async () => {
     const loader = $loading?.show()
 
     try {
-        await fenlabApi.post('/', {
+        await fenlabApi.post('', {
             method: 'post',
             path: 'projects',
             body: { ...newAnalysis },
