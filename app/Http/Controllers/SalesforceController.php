@@ -76,10 +76,10 @@ class SalesforceController extends Controller
         try {
             $token = $this->getValidToken();
             
-            $response = Http::withHeaders([
-                'Authorization' => "Bearer {$token}",
-                'Accept' => 'application/json',
-            ])->$method($this->baseUrl . $endpoint, $data);
+            $response = Http::withToken($token)
+                ->$method($this->baseUrl . $endpoint, [
+                    'email' => $data['email']
+                ]);
 
             if (!$response->successful()) {
                 throw new \RuntimeException("API request failed: {$response->status()}");
