@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Head } from '@inertiajs/vue3'
+import { onMounted, ref } from 'vue'
+import { Head, usePage } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 
 import {
@@ -9,12 +10,38 @@ import {
     TableHead,
     TableHeader,
     TableRow,
+    toast,
 } from '@/Components/ui'
 
-import { InfoIcon, PersonIcon } from '@/Components/icons'
+import { InfoIcon } from '@/Components/icons'
 
-import { dataAnalysis_2 } from '@/data'
 import { EditMasterData } from '@/Pages/UserData/Components/editMasterData'
+import { PageProps } from '@/types'
+import { CompanyMasterData } from '@/types/fenlab'
+import { fenlabApi } from '@/api'
+
+const { props } = usePage<PageProps>()
+const masterData = ref<CompanyMasterData | null>(null)
+
+const getCompanyMasterData = async () => {
+    try {
+        const { data: response } = await fenlabApi.post<CompanyMasterData>('', {
+            method: 'get',
+            path: 'company-master-data',
+        })
+
+        masterData.value = response
+    } catch {
+        toast({
+            variant: 'danger',
+            title: '¡Ups! Algo salió mal.',
+        })
+    }
+}
+
+onMounted(() => {
+    getCompanyMasterData()    
+})
 </script>
 
 <template>
@@ -22,28 +49,26 @@ import { EditMasterData } from '@/Pages/UserData/Components/editMasterData'
 
     <AuthenticatedLayout>
         <section>
-            <header>
-                <div class="flex justify-between">
-                    <h2 class="flex items-center gap-4 text-xl font-bold leading-5">
-                        <PersonIcon
-                            class="text-black "
-                        />
-                        Cómo funciona
-                    </h2>
-                </div>
-            </header>
-
-            <div class="mt-20 space-y-4">
-                <p class="text-xl font-bold">
-                    Nombre de usuario
+            <div class="space-y-4">
+                <p 
+                    v-if="props.auth.salesforceUser.name"
+                    class="text-xl font-bold"
+                >
+                    {{ props.auth.salesforceUser.name }}
                 </p>
 
-                <p class="text-grey text-xl font-light">
-                    email@email.com
+                <p 
+                    v-if="props.auth.salesforceUser.email"
+                    class="text-grey text-xl font-light"
+                >
+                    {{ props.auth.salesforceUser.email }}
                 </p>
 
-                <p class="text-grey text-xl font-light">
-                    Empresa
+                <p 
+                    v-if="props.auth.salesforceUser.companyCommercialName"
+                    class="text-grey text-xl font-light"
+                >
+                    {{ props.auth.salesforceUser.companyCommercialName }}
                 </p>
             </div>
         </section>
@@ -57,7 +82,11 @@ import { EditMasterData } from '@/Pages/UserData/Components/editMasterData'
                         Master Data Financiera
                     </h2>
 
-                    <EditMasterData />
+                    <EditMasterData
+                        :key="masterData?.WACC"
+                        :master-data="masterData" 
+                        @updated="getCompanyMasterData"
+                    />
                 </div>
 
                 <p class="flex items-center gap-2 mt-4 text-grey">
@@ -85,14 +114,14 @@ import { EditMasterData } from '@/Pages/UserData/Components/editMasterData'
                     <TableBody>
                         <TableRow
                             class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]"
-                            v-for="data in dataAnalysis_2"
-                            :key="data.id"
+                            v-for="data in masterData?.macro"
+                            :key="data.ano"
                         >
                             <TableCell class="!bg-[#ECECEC] font-bold">
-                                {{ data.year }}
+                                Año {{ data.ano }}
                             </TableCell>
-                            <TableCell>{{ data.ipc }}</TableCell>
-                            <TableCell>{{ data.hpa }}</TableCell>
+                            <TableCell>{{ data.IPC }}</TableCell>
+                            <TableCell>{{ data.HPA }}</TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
@@ -104,7 +133,7 @@ import { EditMasterData } from '@/Pages/UserData/Components/editMasterData'
                 </h3>
 
                 <p class="text-xl">
-                    144.039
+                    {{ masterData?.WACC }}
                 </p>
             </div>
 
@@ -114,7 +143,7 @@ import { EditMasterData } from '@/Pages/UserData/Components/editMasterData'
                 </h3>
 
                 <p class="text-xl">
-                    144.039
+                    {{ masterData?.managementFee }}
                 </p>
             </div>
         </section>

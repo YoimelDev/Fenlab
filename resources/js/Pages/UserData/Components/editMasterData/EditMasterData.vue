@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { reactive, ref } from 'vue'
+import { fenlabApi } from '@/api'
 import {    
     Input,
     Button, 
@@ -14,21 +16,49 @@ import {
     TableHead,
     TableHeader,
     TableRow,
+    toast,
 } from '@/Components/ui'
 
-import { dataAnalysis } from '@/data'
+import { CompanyMasterData } from '@/types/fenlab'
 
-// // Crear una copia reactiva de dataAnalysis
-// const dataAnalysis = ref(initialDataAnalysis.map(data => ({ ...data })));
+const props = defineProps({
+    masterData: {
+        type: Object as () => CompanyMasterData | null,
+        required: true,
+    },
+})
 
-// const saveChanges = () => {
-//     // Aquí puedes manejar la lógica para guardar los cambios, por ejemplo, enviarlos a un servidor
-//     console.log('Datos guardados:', dataAnalysis.value);
-// };
+const isDialogOpen = ref(false)
+const localMasterData = reactive({ ...props.masterData })
+
+const emits = defineEmits(['updated'])
+
+const postData = async () => {
+    try {
+        await fenlabApi.post('', {
+            method: 'post',
+            path: 'company-master-data',
+            body: { ...localMasterData },
+        })
+
+        toast({
+            variant: 'info',
+            title: 'Datos guardados correctamente',
+        }) 
+        emits('updated')
+    } catch {
+        toast({
+            variant: 'danger',
+            title: '¡Ups! Algo salió mal.',
+        })
+    } finally {
+        isDialogOpen.value = false
+    }
+}
 </script>
 
 <template>
-    <Dialog>
+    <Dialog v-model:open="isDialogOpen">
         <DialogTrigger>
             <Button
                 variant="ghost"
@@ -63,21 +93,21 @@ import { dataAnalysis } from '@/data'
                         <TableBody>
                             <TableRow
                                 class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]"
-                                v-for="data in dataAnalysis"
-                                :key="data.id"
+                                v-for="data in localMasterData.macro"
+                                :key="data.ano"
                             >
                                 <TableCell class="!bg-[#ECECEC] font-bold w-[140px]">
-                                    {{ data.year }}
+                                    {{ data.ano }}
                                 </TableCell>
                                 <TableCell>
                                     <input
-                                        v-model="data.ipc"
+                                        v-model="data.IPC"
                                         class="w-full h-full outline-none hover:bg-gray-100"
                                     >
                                 </TableCell>
                                 <TableCell>
                                     <input
-                                        v-model="data.hpa"
+                                        v-model="data.HPA"
                                         class="w-full h-full outline-none"
                                     >
                                 </TableCell>
@@ -93,6 +123,7 @@ import { dataAnalysis } from '@/data'
                         required
                         autofocus
                         autocomplete="wacc"
+                        v-model.number="localMasterData.WACC"
                     />
                 </div>
             </div>
@@ -102,6 +133,7 @@ import { dataAnalysis } from '@/data'
                     class="gap-1 w-full"
                     variant="green"
                     size="sm"
+                    @click="postData"
                 >
                     Guardar
                 </Button>
