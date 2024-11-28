@@ -18,6 +18,7 @@ import {
     TabsTrigger,
     badgeMap,
     BadgeMode,
+    toast,
 } from '@/Components/ui'
 
 import { useDropZone } from '@vueuse/core'
@@ -25,14 +26,15 @@ import { ArrowIcon, InfoIcon, XlsIcon, DownloadIcon, ArrowUpIcon, CircleIcon, Up
 import { Assets } from '@/Pages/MyAnalysis/Components/assets'
 import { ProjectById } from '@/types/fenlab'
 import { ProjectsAssets } from './types'
+import { fenlabApi } from '@/api'
 
-defineProps<{
+const props = defineProps<{
     project: ProjectById
     assets: ProjectsAssets
 }>()
 
 const activeTab = ref('analysis')
-const filesData = ref<{ name: string, size: number, type: string, lastModified: number }[]>([])
+const filesData = ref<{ file: File, name: string, size: number, type: string, lastModified: number }[]>([])
 const dropZoneRef = ref<HTMLDivElement>()
 const fileInput = ref<HTMLInputElement | null>(null)
 
@@ -58,6 +60,7 @@ function onDrop(files: File[] | null) {
     filesData.value = []
     if (files) {
         filesData.value = files.map(file => ({
+            file,
             name: file.name,
             size: file.size,
             type: file.type,
@@ -75,31 +78,55 @@ function handleFileChange(event: Event) {
     }
 }
 
-function openFileDialog() {
-    if (fileInput.value) {
-        fileInput.value.click()
-    }
+const formatFileSize = (bytes: number) => {
+    if (bytes === 0) return '0 Bytes'
+    const k = 1024
+    const sizes = ['Bytes', 'KB', 'MB', 'GB']
+    const i = Math.floor(Math.log(bytes) / Math.log(k))
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
 }
 
-// async function uploadFile() {
-//     if (fileInput.value && fileInput.value.files && fileInput.value.files.length > 0) {
-//         const formData = new FormData()
-//         formData.append('file', fileInput.value.files[0])
-
-//         try {
-//             const response = await axios.post('/upload', formData, {
-//                 headers: {
-//                     'Content-Type': 'multipart/form-data',
-//                 },
-//             })
-//             console.log('File uploaded successfully:', response.data)
-//         } catch (error) {
-//             console.error('Error uploading file:', error)
-//         }
-//     } else {
-//         console.error('No file selected')
+// function openFileDialog() {
+//     if (fileInput.value) {
+//         fileInput.value.click()
 //     }
 // }
+
+async function uploadFile() {
+    if (filesData.value.length > 0) {
+        const formData = new FormData()
+        formData.append('method', 'post')
+        formData.append('path', `projects/${props.project.id}/${props.project.modelType}/first-excel`)
+        formData.append('file', filesData.value[0].file)
+
+        try {
+            await fenlabApi.post('', formData)
+
+            toast({
+                variant: 'info',
+                title: 'Archivo subido correctamente',
+            })
+            
+            // Clear the file input and filesData after successful upload
+            filesData.value = []
+            if (fileInput.value) fileInput.value.value = ''
+            
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+            toast({
+                variant: 'danger',
+                title: '¡Ups! Algo salió mal.',
+                description: error.response.data.message.join('\n'),
+            })
+        }
+    } else {
+        toast({
+            variant: 'danger',
+            title: '¡Ups! Algo salió mal.',
+            description: 'No se ha seleccionado ningún archivo.',
+        })
+    }
+}
 </script>
 
 <template>
@@ -215,96 +242,44 @@ function openFileDialog() {
                         class="grid place-items-center p-5 border-2 border-dashed border-[#C1C1C1] rounded-sm"
                         :class="[isOverDropZone && 'border-electric-green']"
                     >
-                        <p class="flex items-center gap-2 mb-5 text-grey text-sm">
-                            Arrastra aquí tu archivo excel cumplimentado 
-
-                            <CircleIcon variant="help" />
-                        </p>
+                        <template v-if="filesData.length === 0">
+                            <p class="flex items-center gap-2 mb-5 text-grey text-sm">
+                                Arrastra aquí tu archivo excel cumplimentado 
+                                <CircleIcon variant="help" />
+                            </p>
+                        </template>
+                        <template v-else>
+                            <div class="w-full mb-4">
+                                <div
+                                    v-for="file in filesData"
+                                    :key="file.name"
+                                    class="flex items-center justify-between p-2 bg-gray-50 rounded"
+                                >
+                                    <div class="flex items-center gap-2">
+                                        <XlsIcon class="w-5 h-5" />
+                                        <span class="text-sm font-medium">{{ file.name }}</span>
+                                    </div>
+                                    <span class="text-xs text-gray-500">{{ formatFileSize(file.size) }}</span>
+                                </div>
+                            </div>
+                        </template>
 
                         <input
                             type="file"
                             ref="fileInput"
                             @change="handleFileChange"
                             class="hidden"
+                            accept=".xlsx,.xls"
                         >
 
                         <Button
                             variant="green"
                             size="xs"
-                            @click="openFileDialog"
+                            @click="uploadFile"
                         >
                             <UploadIcon class="mr-2" />
-                            Cargar excel
+                            {{ filesData.length === 0 ? 'Cargar excel' : 'Subir archivo' }}
                         </Button>
-                    </div>
-                </div>
-
-                <!-- <ArrowUpIcon />
-
-                <div class="my-4">
-                    <div class="flex gap-4 my-2">
-                        <p class="px-2 text-black text-[10px] font-medium bg-white rounded-sm">
-                            Texto paso 2
-                        </p>
-                        <p class="text-black text-[10px] font-medium">
-                            01/17/2024
-                        </p>
-                    </div>
-    
-                    <div class="relative flex items-center gap-4 w-full p-4 mb-4 bg-white ">
-                        <XlsIcon />
-    
-                        <div>
-                            <p class="text-black text-lg font-bold">
-                                NombreArchivo_Nombre.xls
-                            </p>
-                            <p class="text-grey text-sm">
-                                Texto descripción del documento.
-                            </p>
-                        </div>
-
-                        <DownloadIcon class="absolute top-4 right-4" />
-                    </div>
-
-                    <div class="relative flex items-center gap-4 w-full p-4 bg-white ">
-                        <PdfIcon />
-    
-                        <div>
-                            <p class="text-black text-lg font-bold">
-                                Fichas de Activos Analizados
-                            </p>
-                            <p class="text-grey text-sm">
-                                Texto descripción del documento.
-                            </p>
-                        </div>
-
-                        <DownloadIcon class="absolute top-4 right-4" />
-                    </div>
-                </div> -->
-
-                <ArrowUpIcon />
-
-                <div class="my-4">
-                    <div class="flex gap-4 my-2">
-                        <p class="px-2 text-black text-[10px] font-medium bg-white rounded-sm">
-                            Texto paso 1
-                        </p>
-                        <p class="text-black text-[10px] font-medium">
-                            01/17/2024
-                        </p>
-                    </div>
-    
-                    <div class="relative flex items-center gap-4 w-full p-4 bg-white ">
-                        <XlsIcon />
-    
-                        <div>
-                            <p class="text-black text-lg font-bold">
-                                NombreArchivo.xls
-                            </p>
-                            <p class="text-grey text-sm">
-                                Texto descripción del documento.
-                            </p>
-                        </div>
                     </div>
                 </div>
 
