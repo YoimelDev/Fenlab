@@ -18,12 +18,22 @@ class FenlabApiController extends Controller
         $url = env('VITE_FENLAB_API_URL') . $request->path;
         $token = $request->session()->get('loginToken');
         $method = $request->method;
-        $body = $request->body ?? [];
-
-        $response = Http::withHeaders([
+        
+        $httpRequest = Http::withHeaders([
             'Authorization' => 'Bearer ' . $token,
             'Accept' => 'application/json',
-        ])->$method($url, $body);
+        ]);
+
+        if ($request->hasFile('file')) {
+            $response = $httpRequest->attach(
+                'file',
+                $request->file('file')->getContent(),
+                $request->file('file')->getClientOriginalName()
+            )->$method($url);
+        } else {
+            $body = $request->body ?? [];
+            $response = $httpRequest->$method($url, $body);
+        }
 
         return response()->json($response->json(), $response->status());
     }

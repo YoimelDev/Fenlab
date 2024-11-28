@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+import { router } from '@inertiajs/vue3'
 import { fenlabApi } from '@/api'
 import {  
     Button, 
@@ -10,7 +12,6 @@ import {
     toast,
 } from '@/Components/ui'
 import type { AssetData } from '@/Pages/MyAnalysis/types'
-import { ref } from 'vue'
 
 const props = defineProps<{
     asset: AssetData
@@ -41,6 +42,7 @@ const postData = async () => {
         })
     } finally {
         emits('updated')
+        router.reload()
     }
 }
 </script>

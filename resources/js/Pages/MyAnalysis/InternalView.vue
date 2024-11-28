@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Head, Link } from '@inertiajs/vue3'
+import { inject, ref } from 'vue'
+import { Head, Link, router } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 
 import { 
@@ -26,6 +26,7 @@ import { ArrowIcon, InfoIcon, XlsIcon, DownloadIcon, ArrowUpIcon, CircleIcon, Up
 import { Assets } from '@/Pages/MyAnalysis/Components/assets'
 import { ProjectById } from '@/types/fenlab'
 import { ProjectsAssets } from './types'
+import { PluginApi } from 'vue-loading-overlay'
 import { fenlabApi } from '@/api'
 
 const props = defineProps<{
@@ -33,6 +34,7 @@ const props = defineProps<{
     assets: ProjectsAssets
 }>()
 
+const $loading = inject<PluginApi>('$loading')
 const activeTab = ref('analysis')
 const filesData = ref<{ file: File, name: string, size: number, type: string, lastModified: number }[]>([])
 const dropZoneRef = ref<HTMLDivElement>()
@@ -86,14 +88,18 @@ const formatFileSize = (bytes: number) => {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
 }
 
-// function openFileDialog() {
-//     if (fileInput.value) {
-//         fileInput.value.click()
-//     }
-// }
+function openFileDialog() {
+    if (fileInput.value) {
+        fileInput.value.click()
+    }
+}
 
-async function uploadFile() {
+async function uploadFile(event: Event) {
+    event.stopPropagation()
+
     if (filesData.value.length > 0) {
+        const loader = $loading?.show()
+
         const formData = new FormData()
         formData.append('method', 'post')
         formData.append('path', `projects/${props.project.id}/${props.project.modelType}/first-excel`)
@@ -107,7 +113,6 @@ async function uploadFile() {
                 title: 'Archivo subido correctamente',
             })
             
-            // Clear the file input and filesData after successful upload
             filesData.value = []
             if (fileInput.value) fileInput.value.value = ''
             
@@ -118,6 +123,9 @@ async function uploadFile() {
                 title: '¡Ups! Algo salió mal.',
                 description: error.response.data.message.join('\n'),
             })
+        } finally {
+            loader?.hide() 
+            router.reload()
         }
     } else {
         toast({
@@ -241,6 +249,8 @@ async function uploadFile() {
                         ref="dropZoneRef"
                         class="grid place-items-center p-5 border-2 border-dashed border-[#C1C1C1] rounded-sm"
                         :class="[isOverDropZone && 'border-electric-green']"
+                        @click="openFileDialog"
+                        role="button"
                     >
                         <template v-if="filesData.length === 0">
                             <p class="flex items-center gap-2 mb-5 text-grey text-sm">
