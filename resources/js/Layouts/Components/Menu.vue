@@ -8,7 +8,7 @@ import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
 
 import ApplicationLogo from '@/Components/ApplicationLogo.vue'
 import { PinLeftIcon, PinRightIcon } from '@radix-icons/vue'
-import { HomeIcon, AssessmentIcon, HelpIcon, PersonIcon, PictureIcon, ReceiptIcon } from '@/Components/icons'
+import { HomeIcon, AssessmentIcon, HelpIcon, PersonIcon, PictureIcon } from '@/Components/icons'
 import { PageProps } from '@/types'
 
 type collapse = boolean | string;
@@ -96,12 +96,6 @@ const menu = [
         class: 'mt-8',
         icon: {
             element: h('div', [h(HelpIcon)]),
-        },
-    },
-    {
-        title: 'Facturación',
-        icon: {
-            element: h('div', [h(ReceiptIcon)]),
         },
     },
     {

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { MoreHorizontal } from 'lucide-vue-next'
 import { 
     Button,
@@ -10,10 +11,17 @@ import {
     DropdownMenuTrigger,   
 } from '@/Components/ui'
 import PostDialog from './PostDialog.vue'
+import type { AssetData } from '@/Pages/MyAnalysis/types'
+
+defineProps<{
+    asset: AssetData
+}>()
+
+const isDialogOpen = ref(false)
 </script>
 
 <template>
-    <Dialog>
+    <Dialog v-model:open="isDialogOpen">
         <DropdownMenu>
             <DropdownMenuTrigger as-child>
                 <Button
@@ -33,6 +41,9 @@ import PostDialog from './PostDialog.vue'
             </DropdownMenuContent>
         </DropdownMenu>
 
-        <PostDialog />
+        <PostDialog 
+            :asset="asset"
+            @updated="() => isDialogOpen = false"
+        />
     </Dialog>
 </template>

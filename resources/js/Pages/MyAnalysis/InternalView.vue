@@ -24,9 +24,11 @@ import { useDropZone } from '@vueuse/core'
 import { ArrowIcon, InfoIcon, XlsIcon, DownloadIcon, ArrowUpIcon, CircleIcon, UploadIcon } from '@/Components/icons'
 import { Assets } from '@/Pages/MyAnalysis/Components/assets'
 import { ProjectById } from '@/types/fenlab'
+import { ProjectsAssets } from './types'
 
 defineProps<{
     project: ProjectById
+    assets: ProjectsAssets
 }>()
 
 const activeTab = ref('analysis')
@@ -347,7 +349,9 @@ function openFileDialog() {
                 </div>
             </TabsContent>
             <TabsContent value="assets">
-                <Assets />
+                <Assets 
+                    :assets="assets.data"
+                />
             </TabsContent>
         </Tabs>
     </AuthenticatedLayout>

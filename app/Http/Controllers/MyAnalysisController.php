@@ -28,9 +28,16 @@ class MyAnalysisController extends Controller
             'Authorization' => 'Bearer ' . $token,
             'Accept' => 'application/json',
         ])->get($url);
+
+        $urlAssets = env('VITE_FENLAB_API_URL') . 'projects/' . $id . '/assets';
+        $assets = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+            'Accept' => 'application/json',
+        ])->get($urlAssets);
         
         return Inertia::render('MyAnalysis/InternalView', [
             'project' => $response->json(),
+            'assets' => $assets->json(),
         ]);
     }
 }
