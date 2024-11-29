@@ -5,7 +5,7 @@ export interface Analysis {
     project: string
     description: string
     assets: number
-    status: 'Pendiente' | 'En curso' | 'Completado'
+    status: 'Sin empezar' | 'Análisis en curso' | 'Análisis completo' | 'Carga definitiva'
     date: string
 }
 

@@ -39,6 +39,8 @@ export const badgeMap: Record<BadgeMode, BadgeVariants['variant']> = {
     Pendiente: 'pending',
     'En curso': 'progress',
     Completado: 'success',
-    'Análisis completo': 'success',
     'Sin empezar': 'pending',
+    'Análisis en curso': 'progress',
+    'Análisis completo': 'success',
+    'Carga definitiva': 'success',
 }

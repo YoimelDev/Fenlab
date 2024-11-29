@@ -19,7 +19,7 @@ interface Count {
 
 export type ModelType = 'NPL' | 'REO' | 'PL/SPL';
 
-export type Status = 'Análisis completo' | 'Sin empezar' | 'Pendiente' | 'En curso' | 'Completado';
+export type Status = 'Sin empezar' | 'Análisis en curso' | 'Análisis completo' | 'Carga definitiva' | 'Pendiente' | 'En curso' | 'Completado';
 
 interface Meta {
     currentPage: number;
