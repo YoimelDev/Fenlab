@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, ref } from 'vue'
+import { inject, ref, computed } from 'vue'
 import { Head, Link, router } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 
@@ -28,6 +28,7 @@ import { ProjectById } from '@/types/fenlab'
 import { ProjectsAssets } from './types'
 import { PluginApi } from 'vue-loading-overlay'
 import { fenlabApi } from '@/api'
+import { useDateFormat } from '@vueuse/core'
 
 const props = defineProps<{
     project: ProjectById
@@ -44,7 +45,7 @@ const steps = [
     {
         step: 1,
         title: 'Carga Cliente',
-        description: '19/08/2024',
+        description: useDateFormat(props.project.createdAt, 'DD/MM/YYYY'),
     },
     {
         step: 2,
@@ -57,6 +58,31 @@ const steps = [
         description: '',
     },
 ]
+
+const currentStep = computed(() => {
+    switch (props.project.status) {
+    case 'Sin empezar':
+        return 1
+    case 'Análisis en curso':
+        return 2
+    case 'Análisis completo':
+    case 'Carga definitiva':
+        return 3
+    default:
+        return 1
+    }
+})
+
+const isStepDisabled = (step: number) => {
+    const statusOrder = {
+        'Sin empezar': 1,
+        'Análisis en curso': 2,
+        'Análisis completo': 3,
+        'Carga definitiva': 3,
+    }
+    const currentStatusLevel = statusOrder[props.project.status as keyof typeof statusOrder]
+    return step !== currentStatusLevel
+}
 
 function onDrop(files: File[] | null) {
     filesData.value = []
@@ -94,6 +120,10 @@ function openFileDialog() {
     }
 }
 
+const excelType = computed(() => {
+    return props.project.status === 'Análisis en curso' ? 'second-excel' : 'first-excel'
+})
+
 async function uploadFile(event: Event) {
     event.stopPropagation()
 
@@ -102,7 +132,7 @@ async function uploadFile(event: Event) {
 
         const formData = new FormData()
         formData.append('method', 'post')
-        formData.append('path', `projects/${props.project.id}/${props.project.modelType}/first-excel`)
+        formData.append('path', `projects/${props.project.id}/${props.project.modelType}/${excelType.value}`)
         formData.append('file', filesData.value[0].file)
 
         try {
@@ -180,7 +210,7 @@ async function uploadFile(event: Event) {
             </div>
 
             <!-- download button -->
-            <Button
+            <!-- <Button
                 v-if="activeTab === 'assets'"
                 variant="outline"
                 size="sm"
@@ -188,11 +218,15 @@ async function uploadFile(event: Event) {
                 Descargar análisis
 
                 <DownloadIcon class="ml-3 text-electric-green" />
-            </Button>
+            </Button> -->
         </header>
 
        
-        <Stepper class="flex w-full items-start gap-2 my-10">
+        <Stepper 
+            v-model="currentStep"
+            :allow-click="false"
+            class="flex w-full items-start gap-2 my-10"
+        >
             <StepperItem
                 v-for="step in steps"
                 :key="step.step"
@@ -210,7 +244,12 @@ async function uploadFile(event: Event) {
                         variant="green"
                         size="icon"
                         class="z-10 rounded-full shrink-0"
-                        :class="[state === 'active', state === 'inactive' && 'bg-[#686868]/50']"
+                        :class="[
+                            state === 'active',
+                            state === 'inactive' && 'bg-[#686868]/50',
+                            isStepDisabled(step.step) && 'opacity-50 cursor-not-allowed'
+                        ]"
+                        :disabled="isStepDisabled(step.step)"
                     >
                         {{ step.step }}
                     </Button>

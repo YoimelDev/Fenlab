@@ -38,6 +38,8 @@ export const columns: ColumnDef<AssetData>[] = [
         header: () => '',
         accessorKey: 'id',
         cell: (row) => {
+            if (row.row.original.model.npl.credito.isPublishable === false) return
+
             return h('div', { class: 'relative' }, h(DropdownAction, {
                 asset: row.row.original,
             }))

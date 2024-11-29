@@ -27,7 +27,7 @@ export interface AssetData {
     id:          string;
     idCliente:   string;
     idFencia:    string;
-    status:      string;
+    status:      'Sin empezar' | 'Análisis en curso' | 'Análisis completo' | 'Carga definitiva';
     publishedAt: null;
     projectId:   string;
     createdAt:   Date;
