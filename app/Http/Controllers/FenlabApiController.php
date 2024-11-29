@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreFenlabApiRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 
 class FenlabApiController extends Controller
 {
@@ -25,11 +26,18 @@ class FenlabApiController extends Controller
         ]);
 
         if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $fileName = $file->getClientOriginalName();
+            $path = $file->storeAs('temp', $fileName, 'local');
+            $fullPath = storage_path('app/' . $path);
+
             $response = $httpRequest->attach(
                 'file',
-                $request->file('file')->getContent(),
-                $request->file('file')->getClientOriginalName()
+                file_get_contents($fullPath),
+                $fileName
             )->$method($url);
+
+            Storage::disk('local')->delete($path);
         } else {
             $body = $request->body ?? [];
             $response = $httpRequest->$method($url, $body);
