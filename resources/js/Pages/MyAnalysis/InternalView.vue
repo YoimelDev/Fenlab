@@ -41,6 +41,7 @@ const activeTab = ref('analysis')
 const filesData = ref<{ file: File, name: string, size: number, type: string, lastModified: number }[]>([])
 const dropZoneRef = ref<HTMLDivElement>()
 const fileInput = ref<HTMLInputElement | null>(null)
+const fileError = ref('')
 
 const steps = [
     {
@@ -127,43 +128,33 @@ const excelType = computed(() => {
 
 async function uploadFile(event: Event) {
     event.stopPropagation()
+    fileError.value = ''
 
-    if (filesData.value.length > 0) {
-        const loader = $loading?.show()
+    if (filesData.value.length === 0) {
+        fileError.value = 'No se ha seleccionado ningún archivo.'
+        return
+    }
 
-        const formData = new FormData()
-        formData.append('method', 'post')
-        formData.append('path', `projects/${props.project.id}/${props.project.modelType}/${excelType.value}`)
-        formData.append('file', filesData.value[0].file)
+    const loader = $loading?.show()
+    const formData = new FormData()
+    formData.append('method', 'post')
+    formData.append('path', `projects/${props.project.id}/${props.project.modelType}/${excelType.value}`)
+    formData.append('file', filesData.value[0].file)
 
-        try {
-            await fenlabApi.post('', formData)
-
-            toast({
-                variant: 'info',
-                title: 'Archivo subido correctamente',
-            })
-            
-            filesData.value = []
-            if (fileInput.value) fileInput.value.value = ''
-            
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (error: any) {
-            toast({
-                variant: 'danger',
-                title: '¡Ups! Algo salió mal.',
-                description: error.response.data.message.join('\n'),
-            })
-        } finally {
-            loader?.hide() 
-            router.reload()
-        }
-    } else {
+    try {
+        await fenlabApi.post('', formData)
         toast({
-            variant: 'danger',
-            title: '¡Ups! Algo salió mal.',
-            description: 'No se ha seleccionado ningún archivo.',
+            variant: 'info',
+            title: 'Archivo subido correctamente',
         })
+        filesData.value = []
+        if (fileInput.value) fileInput.value.value = ''
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+        fileError.value = error.response?.data?.message?.join('\n') || 'Error al subir el archivo'
+    } finally {
+        loader?.hide() 
+        router.reload()
     }
 }
 </script>
@@ -290,10 +281,18 @@ async function uploadFile(event: Event) {
             </TabsList>
             <TabsContent value="analysis">
                 <div class="my-4 p-2 bg-white">
+                    <!-- Add error message display -->
+                    <div 
+                        v-if="fileError"
+                        class="mb-4 p-4 bg-red-50 border border-red-200 rounded-sm text-red-600"
+                    >
+                        {{ fileError }}
+                    </div>
+
                     <div
                         ref="dropZoneRef"
                         class="grid place-items-center p-5 border-2 border-dashed border-[#C1C1C1] rounded-sm"
-                        :class="[isOverDropZone && 'border-electric-green']"
+                        :class="[isOverDropZone && 'border-electric-green', fileError && 'border-red-300']"
                         @click="openFileDialog"
                         role="button"
                     >
