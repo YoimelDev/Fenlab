@@ -31,6 +31,8 @@ class FenlabApiController extends Controller
             $path = $file->storeAs('temp', $fileName, 'local');
             $fullPath = storage_path('app/' . $path);
 
+            $httpRequest->asMultipart();
+
             try {
                 $response = $httpRequest->attach(
                     'file',
