@@ -40,6 +40,7 @@ export interface ProjectById {
     timeToValidateIdealistaExcelInSeconds: number;
     timeToRunModelInSeconds: number;
     firstExcel: FirstExcel;
+    template: FirstExcel;
     outputBBDD: FirstExcel;
     outputCF: FirstExcel;
     strats: FirstExcel;
