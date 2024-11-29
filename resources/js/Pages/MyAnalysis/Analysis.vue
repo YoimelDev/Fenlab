@@ -20,10 +20,7 @@ const analysis = ref<Project[]>([])
 const getAnalysis = async () => {
     const { data: response } = await fenlabApi.post<Projects>('', {
         method: 'get',
-        path: 'projects',
-        body: {
-            perPage: 100,
-        },
+        path: 'projects?sortBy=id&reverse=true&perPage=100',
     })
 
     analysis.value = response.data
@@ -49,7 +46,7 @@ onMounted(() => {
                 Mis Análisis
             </h1>
 
-            <NewAnalysis :get-analysis="getAnalysis" />
+            <NewAnalysis />
         </header>
 
         <div class="flex flex-wrap gap-10">

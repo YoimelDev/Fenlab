@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted, inject } from 'vue'
+import { router } from '@inertiajs/vue3'
 
 import { 
     useToast,
@@ -26,11 +27,7 @@ import {  ArrowIcon, ShoppingBagIcon, SellIcon } from '@/Components/icons'
 import { PlusIcon } from '@radix-icons/vue'
 
 import { fenlabApi } from '@/api/fenlab.api'
-import { CompanyMasterData } from '@/types/fenlab'
-
-const props = defineProps<{
-    getAnalysis: () => void
-}>()
+import { CompanyMasterData, ProjectById } from '@/types/fenlab'
 
 const { toast } = useToast()
 const step = ref(1)
@@ -53,10 +50,6 @@ const masterData = ref<CompanyMasterData>()
 const newAnalysis = reactive(initialAnalysis())
 const activeSelection = ref('buy')
 
-const resetNewAnalysis = () => {
-    Object.assign(newAnalysis, initialAnalysis())
-}
-
 const getCompanyMasterData = async () => {
     try {
         const { data: response } = await fenlabApi.post<CompanyMasterData>('', {
@@ -77,7 +70,7 @@ const submitAnalysis = async () => {
     const loader = $loading?.show()
 
     try {
-        await fenlabApi.post('', {
+        const { data }: { data: ProjectById } = await fenlabApi.post('', {
             method: 'post',
             path: 'projects',
             body: { ...newAnalysis },
@@ -87,11 +80,8 @@ const submitAnalysis = async () => {
             variant: 'info',
             title: '¡Análisis creado!',
         })
-
-        resetNewAnalysis()
-        step.value = 1
-        props.getAnalysis()
-
+        
+        router.visit(`/my-analysis/${data.id}`)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
         toast({

@@ -110,6 +110,7 @@ export const theme = {
             'accordion-up': 'accordion-up 0.2s ease-out',
             'collapsible-down': 'collapsible-down 0.2s ease-in-out',
             'collapsible-up': 'collapsible-up 0.2s ease-in-out',
+            spin: 'spin 1s linear infinite',
         },
         backgroundImage	: {
             'info-gradient': 'linear-gradient(0deg, rgba(0, 77, 242, 0.1), rgba(0, 77, 242, 0.1)), linear-gradient(to right, #FFFFFF, #E8F0FE)',

@@ -44,7 +44,10 @@ class FenlabApiController extends Controller
             }
         } else {
             $body = $request->body ?? [];
-            $response = $httpRequest->$method($url, $body);
+            if ($body) {
+                $response = $httpRequest->$method($url, $body);
+            } else
+                $response = $httpRequest->$method($url);
         }
 
         return response()->json($response->json(), $response->status());

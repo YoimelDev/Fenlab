@@ -23,6 +23,7 @@ import {
 
 import { useDropZone } from '@vueuse/core'
 import { ArrowIcon, InfoIcon, XlsIcon, DownloadIcon, ArrowUpIcon, CircleIcon, UploadIcon } from '@/Components/icons'
+import { UpdateIcon } from '@radix-icons/vue'
 import { Assets } from '@/Pages/MyAnalysis/Components/assets'
 import { ProjectById } from '@/types/fenlab'
 import { ProjectsAssets } from './types'
@@ -199,7 +200,12 @@ async function uploadFile(event: Event) {
                     {{ project.modelType }}
                 </Badge>
 
-                <InfoIcon />
+                <UpdateIcon
+                    v-if="currentStep == 2"
+                    class="h-4 w-4 text-black animate-spin"
+                />
+
+                <InfoIcon v-else />
 
                 <Badge
                     :variant="badgeMap[project.status as BadgeMode]"
@@ -236,7 +242,7 @@ async function uploadFile(event: Event) {
             >
                 <StepperSeparator
                     v-if="step.step !== steps[steps.length - 1].step"
-                    class="absolute left-[calc(50%+20px)] right-[calc(-50%+10px)] top-5 block h-0.5 shrink-0 rounded-full bg-muted group-data-[state=completed]:bg-electric-green"
+                    class="absolute left-[calc(50%+20px)] right-[calc(-50%+10px)] top-5 block h-0.5 shrink-0 rounded-full bg-[#686868]/30 group-data-[state=completed]:bg-electric-green"
                 />
             
                 <StepperTrigger as-child>
