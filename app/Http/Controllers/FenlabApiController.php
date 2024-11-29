@@ -31,13 +31,15 @@ class FenlabApiController extends Controller
             $path = $file->storeAs('temp', $fileName, 'local');
             $fullPath = storage_path('app/' . $path);
 
-            $response = $httpRequest->attach(
-                'file',
-                file_get_contents($fullPath),
-                $fileName
-            )->$method($url);
-
-            Storage::disk('local')->delete($path);
+            try {
+                $response = $httpRequest->attach(
+                    'file',
+                    file_get_contents($fullPath),
+                    $fileName
+                )->$method($url);
+            } finally {
+                Storage::disk('local')->delete($path);
+            }
         } else {
             $body = $request->body ?? [];
             $response = $httpRequest->$method($url, $body);
