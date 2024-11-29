@@ -60,6 +60,9 @@ class CreatePasswordController extends Controller
     // Enviar el correo con la URL generada
     Mail::to($email)->send(new \App\Mail\CreatePasswordMail($resetUrl));
 
+    Mail::to('altas.fenlab@fencia.es')->send(new PasswordCreatedConfirmationMail($user));
+
+
     return response()->json([
       'message' => 'Correo enviado para restablecer contraseña',
     ]);
