@@ -66,7 +66,9 @@ class AuthenticatedSessionController extends Controller
         $body = [
             "username" => $user['email'],
             "role" => $user['rols'],
-            "companyId" => $user['companyId']
+            "companyId" => $user['companyId'],
+            "company" => $user['companyCommercialName'],
+            "shortCompany" => $user['companyCommercialName'],
         ];
 
         $response = Http::withHeaders([

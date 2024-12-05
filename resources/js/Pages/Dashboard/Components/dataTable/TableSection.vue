@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { ref, onMounted, type Component } from 'vue'
-import { Link } from '@inertiajs/vue3'
+import { Link, usePage } from '@inertiajs/vue3'
 import { PictureIcon, AssessmentIcon } from '@/Components/icons'
 import { ArrowRightIcon } from '@radix-icons/vue'
-import { DataTable, Button } from '@/Components/ui'
+import { DataTable, Button, toast } from '@/Components/ui'
 import { columnsAnalysis, pendingPublishColumns, pendingApprovalColumns, publishedColumns } from './columns'
 import { fenlabApi } from '@/api/fenlab.api'
 import { type Project } from '@/types/fenlab'
 import type { ColumnDef } from '@tanstack/vue-table'
+import { PageProps } from '@/types'
 
 interface Section {
     id: string
@@ -45,8 +46,12 @@ const sections = ref<Section[]>([
         data: [],
         columns: pendingPublishColumns as ColumnDef<Project, unknown>[],
         getData: async () => {
-            const { data } = await fenlabApi.get('/salesforce/pending-publish')
-            return data
+            const { data: response } = await fenlabApi.post('', {
+                method: 'get',
+                path: 'projects/assets/publishable',
+                body: { perPage: 5 },
+            })
+            return response.data
         },
     },
     {
@@ -64,7 +69,9 @@ const sections = ref<Section[]>([
         data: [],
         columns: pendingApprovalColumns as ColumnDef<Project, unknown>[],
         getData: async () => {
-            const { data } = await fenlabApi.get('/salesforce/pending-approval')
+            const { data } = await fenlabApi.get('/salesforce/pending-approval', {
+                params: { email: usePage<PageProps>().props.auth.salesforceUser.email },
+            })
             return data
         },
     },
@@ -75,7 +82,9 @@ const sections = ref<Section[]>([
         data: [],
         columns: pendingApprovalColumns as ColumnDef<Project, unknown>[],
         getData: async () => {
-            const { data } = await fenlabApi.get('/salesforce/pending-pbc')
+            const { data } = await fenlabApi.get('/salesforce/pending-pbc', {
+                params: { email: usePage<PageProps>().props.auth.salesforceUser.email },
+            })
             return data
         },
     },
@@ -86,16 +95,32 @@ const sections = ref<Section[]>([
         data: [],
         columns: pendingApprovalColumns as ColumnDef<Project, unknown>[],
         getData: async () => {
-            const { data } = await fenlabApi.get('/salesforce/pending-notary')
+            const { data } = await fenlabApi.get('/salesforce/pending-notary', {
+                params: { email: usePage<PageProps>().props.auth.salesforceUser.email },
+            })
             return data
         },
     },
 ])
 
 onMounted(async () => {
-    for (const section of sections.value) {
-        section.data = await section.getData()
+    const loadSectionData = async (section: Section) => {
+        try {
+            section.data = await section.getData()
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+            toast({
+                variant: 'danger',
+                title: '¡Ups! Algo salió mal.',
+                description: error.response.data.error,
+            })
+        }
     }
+
+    // Cargar todas las secciones en paralelo
+    await Promise.allSettled(
+        sections.value.map(section => loadSectionData(section)),
+    )
 })
 </script>
 
