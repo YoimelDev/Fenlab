@@ -4,13 +4,11 @@ export interface DefaultMasterData {
     id:                                           string;
     WACC:                                         number;
     managementFee:                                number;
-    costeDesahucioAbogado:                        number;
-    costeDesahucioProcurador:                     number;
     brokerFeeMinimo:                              number;
     macro:                                        Macro[];
     brokerFee:                                    BrokerFee[];
     seguridad:                                    Seguridad;
-    mesesVentas:                                  number;
+    mesesVentaEstadoActual:                       number;
     marketingAnualSobreValorInmueble:             number;
     incentivoPorDefecto:                          number;
     costeHipotecariaAbogado:                      number;

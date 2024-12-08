@@ -41,8 +41,8 @@ const initialAnalysis = () => ({
     masterData: {
         wacc: '',
         managementFee: '',
-        costeDesahucioAbogado: '',
-        costeDesahucioProcurador: '',
+        costeLanzamientoAbogado: '',
+        costeLanzamientoProcurador: '',
     },
 })
 
@@ -340,25 +340,25 @@ onMounted(() => {
 
                     <div class="flex gap-6">
                         <Input
-                            id="costeDesahucioAbogado"
+                            id="costeLanzamientoAbogado"
                             type="text"
                             placeholder="Abogado"
                             class="mt-2"
-                            v-model="newAnalysis.masterData.costeDesahucioAbogado"
+                            v-model="newAnalysis.masterData.costeLanzamientoAbogado"
                             required
                             autofocus
-                            autocomplete="costeDesahucioAbogado"
+                            autocomplete="costeLanzamientoAbogado"
                         />
 
                         <Input
-                            id="costeDesahucioProcurador"
+                            id="costeLanzamientoProcurador"
                             type="text"
                             placeholder="Procurador"
                             class="mt-2"
-                            v-model="newAnalysis.masterData.costeDesahucioProcurador"
+                            v-model="newAnalysis.masterData.costeLanzamientoProcurador"
                             required
                             autofocus
-                            autocomplete="costeDesahucioProcurador"
+                            autocomplete="costeLanzamientoProcurador"
                         />
                     </div>
                 </div>

@@ -3,12 +3,10 @@ export interface CompanyMasterData {
     macro:                            Macro[];
     WACC:                             number;
     managementFee:                    number;
-    costeDesahucioAbogado:            number;
-    costeDesahucioProcurador:         number;
     brokerFeeMinimo:                  number;
     brokerFee:                        BrokerFee[];
     seguridad:                        Seguridad;
-    mesesVentas:                      number;
+    mesesVentaEstadoActual:           number;
     marketingAnualSobreValorInmueble: number;
     costeHipotecariaAbogado:          number;
     costeHipotecariaProcurador:       number;
