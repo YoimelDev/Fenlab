@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
 import { Head } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 
@@ -9,26 +8,12 @@ import {
 } from '@/Components/ui'
 
 import { AssessmentIcon } from '@/Components/icons'
-import { fenlabApi } from '@/api/fenlab.api'
 import { columns } from './Components/dataTable'
-import { Projects, Project } from '@/types/fenlab'
+import { Project } from '@/types/fenlab'
 import { kpiMyAnalysis } from '@/data'
 import { NewAnalysis } from './Components/newAnalysis'
 
-const analysis = ref<Project[]>([])
-
-const getAnalysis = async () => {
-    const { data: response } = await fenlabApi.post<Projects>('', {
-        method: 'get',
-        path: 'projects?sortBy=id&reverse=true&perPage=100',
-    })
-
-    analysis.value = response.data
-}
-
-onMounted(() => {
-    getAnalysis()
-})
+defineProps<{ analysis: Project[] }>()
 
 </script>
 

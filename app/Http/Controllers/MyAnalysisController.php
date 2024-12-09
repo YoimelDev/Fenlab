@@ -11,9 +11,21 @@ class MyAnalysisController extends Controller
     /**
      * Show the analysis view.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Inertia::render('MyAnalysis/Analysis');
+        $token = $request->session()->get('loginToken');
+        $url = env('VITE_FENLAB_API_URL') . 'projects?sortBy=id&reverse=true&perPage=100';
+
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+            'Accept' => 'application/json',
+        ])->get($url);
+
+        $analysis = $response->json('data') ?? [];
+
+        return Inertia::render('MyAnalysis/Analysis', [
+            'analysis' => $analysis,
+        ]);
     }
 
     /**
