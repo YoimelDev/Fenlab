@@ -36,8 +36,8 @@ class HandleInertiaRequests extends Middleware
                 'salesforceUser' => $request->session()->get('salesforceUser'),
             ],
             'flash' => [
-                'success' => fn () => $request->session()->get('success'),
-                'error' => fn () => $request->session()->get('error'),
+                'success' => fn () => $request->session()->pull('success'),
+                'error' => fn () => $request->session()->pull('error'),
             ],
         ];
     }

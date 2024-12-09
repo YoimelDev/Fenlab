@@ -26,7 +26,7 @@ import { ArrowIcon, InfoIcon, XlsIcon, DownloadIcon, ArrowUpIcon, CircleIcon, Up
 import { UpdateIcon } from '@radix-icons/vue'
 import { Assets } from '@/Pages/MyAnalysis/Components/assets'
 import { ProjectById } from '@/types/fenlab'
-import { ProjectsAssets } from './types'
+import { ProjectsAssets, ApiErrorResponse } from './types'
 import { PluginApi } from 'vue-loading-overlay'
 import { fenlabApi } from '@/api'
 import { useDateFormat } from '@vueuse/core'
@@ -142,7 +142,12 @@ async function uploadFile(event: Event) {
     formData.append('file', filesData.value[0].file)
 
     try {
-        await fenlabApi.post('', formData)
+        const response = await fenlabApi.post<ApiErrorResponse>('', formData)
+        if (!response.data.success) {
+            const errorMessages = response.data.errors.list.map((err) => `${err.header}: ${err.error}`).join('\n')
+            fileError.value = errorMessages
+            return
+        }
         toast({
             variant: 'info',
             title: 'Archivo subido correctamente',
@@ -285,6 +290,7 @@ async function uploadFile(event: Event) {
                     <div 
                         v-if="fileError"
                         class="mb-4 p-4 bg-red-50 border border-red-200 rounded-sm text-red-600"
+                        style="white-space: pre-line"
                     >
                         {{ fileError }}
                     </div>

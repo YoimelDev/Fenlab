@@ -99,3 +99,19 @@ export interface Meta {
     totalItems:  number;
     totalPages:  number;
 }
+
+export interface ApiErrorResponse {
+    success: boolean;
+    errors: ApiErrors;
+}
+
+export interface ApiErrors {
+    totalCount: number;
+    list: ErrorItem[];
+}
+
+export interface ErrorItem {
+    rowId: string;
+    header: string;
+    error: string;
+}
