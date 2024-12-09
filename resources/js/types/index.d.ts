@@ -21,4 +21,8 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
         user: User
         salesforceUser: SalesforceUser
     }
+    flash: {
+        success?: string
+        error?: string
+    }
 }

@@ -3,6 +3,7 @@
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\MyAnalysisController;
 use App\Http\Controllers\MyPublicationsController;
+use App\Http\Controllers\DashboardController;
 use App\Mail\ContactEmail;
 use App\Models\Contact;
 use Illuminate\Foundation\Application;
@@ -20,9 +21,7 @@ Route::get('/', function () {
 
 Route::middleware('auth')->group(function () {
 
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard/Dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::prefix('my-analysis')->group(function () {
         Route::get('/', [MyAnalysisController::class, 'index'])->name('analysis');

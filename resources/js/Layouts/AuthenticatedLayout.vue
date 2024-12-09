@@ -1,10 +1,36 @@
 <script setup lang="ts">
 import { useLocalStorage } from '@vueuse/core'
-
+import { usePage } from '@inertiajs/vue3'
+import { onMounted } from 'vue'
+import { type PageProps } from '@/types'
 import Menu from '@/Layouts/Components/Menu.vue'
-import { Toaster } from '@/Components/ui'
+import { Toaster, toast } from '@/Components/ui'
 
 const isCollapsed = useLocalStorage<boolean>('collapse', false)
+const page = usePage<PageProps>()
+
+onMounted(() => {
+    const flash = page.props.flash
+    
+    if (flash.error) {
+        const errors = flash.error.split(' | ')
+        errors.forEach((error: string) => {
+            toast({
+                variant: 'danger',
+                title: '¡Ups! Algo salió mal.',
+                description: error,
+            })
+        })
+    }
+    if (flash.success) {
+        toast({
+            variant: 'info',
+            title: '¡Éxito!',
+            description: flash.success,
+        })
+    }
+})
+
 </script>
 
 <template>

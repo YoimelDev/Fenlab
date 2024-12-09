@@ -4,6 +4,11 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import { Kpi } from '@/Components/ui/kpi'
 import { TableSection } from './Components/dataTable'
 import { kpiOverview } from '@/data'
+
+defineProps<{
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    sections: Record<string, any[]>
+}>()
 </script>
 
 <template>
@@ -20,6 +25,6 @@ import { kpiOverview } from '@/data'
             />
         </div>
 
-        <TableSection />
+        <TableSection :sections="sections" />
     </AuthenticatedLayout>
 </template>
