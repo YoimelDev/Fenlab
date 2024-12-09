@@ -1,3 +1,4 @@
+<!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
@@ -6,8 +7,8 @@ import { TableSection } from './Components/dataTable'
 import { kpiOverview } from '@/data'
 
 defineProps<{
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     sections: Record<string, any[]>
+    kpiData: Record<string, any>
 }>()
 </script>
 
@@ -23,6 +24,7 @@ defineProps<{
                 :variant="index === 0 ? 'default' : 'primary'"
                 :is-positive="kpi.isPositive"
             />
+            <!-- Add new KPIs here using the kpiData prop -->
         </div>
 
         <TableSection :sections="sections" />

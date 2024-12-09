@@ -81,6 +81,14 @@ class SalesforceController extends Controller
                 ->$method($this->baseUrl . $endpoint);
 
             if (!$response->successful()) {
+                $responseData = $response->json();
+
+                if (is_array($responseData) && !empty($responseData)) {
+                    if (isset($responseData[0]['message'])) {
+                        return response()->json(['error' => $responseData[0]['message']], $response->status());
+                    }
+                }
+
                 return response()->json(['error' => $response->body()], $response->status());
             }
 
@@ -159,6 +167,34 @@ class SalesforceController extends Controller
         return $this->makeApiRequest(
             '/services/apexrest/fenlab/acceptNotary',
             $request->all()
+        );
+    }
+
+    // KPI Endpoints
+    public function getPublishedKPI(Request $request): JsonResponse
+    {
+        return $this->makeApiRequest(
+            '/services/apexrest/opportunity/fenlab/published',
+            ['email' => $request->email],
+            'get'
+        );
+    }
+
+    public function getApprovedKPI(Request $request): JsonResponse
+    {
+        return $this->makeApiRequest(
+            '/services/apexrest/opportunity/fenlab/approved',
+            ['email' => $request->email],
+            'get'
+        );
+    }
+
+    public function getSignedKPI(Request $request): JsonResponse
+    {
+        return $this->makeApiRequest(
+            '/services/apexrest/opportunity/fenlab/signed',
+            ['email' => $request->email],
+            'get'
         );
     }
 }

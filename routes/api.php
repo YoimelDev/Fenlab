@@ -28,6 +28,11 @@ Route::middleware([ApiKeyMiddleware::class])->group(function () {
     
     // Closed Auctions routes
     Route::get('/salesforce/closed-auctions', [SalesforceController::class, 'getClosedAuctions']);
+    
+    // KPI routes
+    Route::get('/salesforce/published-kpi', [SalesforceController::class, 'getPublishedKPI']);
+    Route::get('/salesforce/approved-kpi', [SalesforceController::class, 'getApprovedKPI']);
+    Route::get('/salesforce/signed-kpi', [SalesforceController::class, 'getSignedKPI']);
 });
 
 Route::middleware([ApiKeyMiddleware::class, 'web'])->group(function () {

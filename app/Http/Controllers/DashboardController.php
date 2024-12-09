@@ -32,12 +32,19 @@ class DashboardController extends Controller
             'pendingNotary' => $this->getSalesforceData('pending-notary', $salesforceEmail),
         ];
 
+        $kpiData = [
+            'published' => $this->getSalesforceData('published-kpi', $salesforceEmail),
+            'approved' => $this->getSalesforceData('approved-kpi', $salesforceEmail),
+            'signed' => $this->getSalesforceData('signed-kpi', $salesforceEmail),
+        ];
+
         if (!empty($this->errors)) {
             session()->flash('error', implode(' | ', $this->errors));
         }
 
         return Inertia::render('Dashboard/Dashboard', [
             'sections' => $sections,
+            'kpiData' => $kpiData,
         ]);
     }
 
@@ -93,6 +100,9 @@ class DashboardController extends Controller
                 'pending-approval' => $this->salesforceController->getPendingApproval($request),
                 'pending-pbc' => $this->salesforceController->getPendingPBC($request),
                 'pending-notary' => $this->salesforceController->getPendingNotary($request),
+                'published-kpi' => $this->salesforceController->getPublishedKPI($request),
+                'approved-kpi' => $this->salesforceController->getApprovedKPI($request),
+                'signed-kpi' => $this->salesforceController->getSignedKPI($request),
                 default => response()->json([])
             };
 
