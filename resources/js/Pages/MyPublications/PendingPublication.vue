@@ -22,8 +22,13 @@ import {
 import { AssessmentIcon, XlsIcon } from '@/Components/icons'
 import { PlusIcon } from '@radix-icons/vue'
 
-import { kpiOverview, publications } from '@/data'
-import { columns } from './Components/dataTable'
+import { kpiOverview } from '@/data'
+import { columns } from './Components/pendingPublicationTable'
+
+defineProps<{
+    // TODO: Define the type of the props
+    projects: []
+}>()
 
 </script>
 
@@ -76,7 +81,7 @@ import { columns } from './Components/dataTable'
                                 </TabsTrigger>
                                 <TabsTrigger value="images">
                                     Imágenes
-                                </TabsTrigger>
+                                </tabstrigger>
                             </TabsList>
                             <TabsContent value="activeData">
                                 <div
@@ -254,7 +259,7 @@ import { columns } from './Components/dataTable'
      
         <DataTable
             :columns="columns"
-            :data="publications"
+            :data="[]"
         />
     </AuthenticatedLayout>
 </template>

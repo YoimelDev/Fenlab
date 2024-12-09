@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\MyAnalysisController;
+use App\Http\Controllers\MyPublicationsController;
 use App\Mail\ContactEmail;
 use App\Models\Contact;
 use Illuminate\Foundation\Application;
@@ -18,7 +19,7 @@ Route::get('/', function () {
 });
 
 Route::middleware('auth')->group(function () {
-    
+
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard/Dashboard');
     })->name('dashboard');
@@ -28,10 +29,13 @@ Route::middleware('auth')->group(function () {
         Route::get('/{id}', [MyAnalysisController::class, 'showInternalView'])->name('analysis.show');
     });
 
-    Route::prefix('my-publications')->group(function () {
-        Route::get('/', function () {
-            return Inertia::render('MyPublications/Publications');
-        })->name('publications');
+    Route::controller(MyPublicationsController::class)->prefix('my-publications')->group(function () {
+        Route::get('/pending', 'pending')->name('my-publications.pending');
+        Route::get('/published', 'published')->name('my-publications.published');
+        Route::get('/pending-approval', 'pendingApproval')->name('my-publications.pending-approval');
+        Route::get('/pending-pbc', 'pendingPBC')->name('my-publications.pending-pbc');
+        Route::get('/pending-notary', 'pendingNotary')->name('my-publications.pending-notary');
+        Route::get('/closed-auctions', 'closedAuctions')->name('my-publications.closed-auctions');
     });
 
     Route::prefix('user-data')->group(function () {
@@ -56,4 +60,4 @@ Route::get('/mail', function () {
     return new ContactEmail($contact);
 })->name('mail');
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

@@ -2,7 +2,7 @@ import { h } from 'vue'
 import type { ColumnDef } from '@tanstack/vue-table'
 import { type publication } from '@/Pages/MyPublications/types'
 import { Badge, badgeMap, type BadgeMode } from '@/Components/ui/badge'
-import DropdownAction from './DataTableDropdown.vue'
+import { DropdownAction } from '../dataTableDropdown'
 
 export const columns: ColumnDef<publication>[] = [
     {

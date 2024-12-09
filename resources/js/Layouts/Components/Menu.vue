@@ -42,13 +42,13 @@ const menu = [
         class: 'mt-8 !px-0 !text-grey',
     },
     {
-        href: '/my-publications',
         title: 'Mis Publicaciones',
         icon: {
             element: h('div', [h(PictureIcon)]),
         },
     },
     {
+        href: '/my-publications/pending',
         title: 'Pendientes Publicar',
         badge: {
             text: 7,
@@ -57,22 +57,27 @@ const menu = [
         icon: {},
     },
     {
+        href: '/my-publications/published',
         title: 'Publicados',  
         icon: {},
     },
     {
+        href: '/my-publications/pending-approval',
         title: 'Pendientes Aprobación',
         icon: {},
     },
     {
+        href: '/my-publications/pending-pbc',
         title: 'Aprobación PBC',
         icon: {},
     },
     {
+        href: '/my-publications/pending-notary',
         title: 'Pendientes Firma',
         icon: {},
     },
     {
+        href: '/my-publications/closed-auctions',
         title: 'Operaciones Cerradas',
         class: 'mb-8',
         icon: {},
