@@ -10,11 +10,11 @@ class PasswordCreatedConfirmationMail extends Mailable
 {
   use SerializesModels;
 
-  public $user;
+  public $email;
 
-  public function __construct(User $user)
+  public function __construct(string $email)
   {
-    $this->user = $user;
+    $this->email = $email;
   }
 
   public function build()
@@ -22,7 +22,7 @@ class PasswordCreatedConfirmationMail extends Mailable
     return $this->subject('Confirmación de creación de contraseña')
       ->view('emails.password_created_confirmation')
       ->with([
-        'user' => $this->user,
+        'email' => $this->email,
       ]);
   }
 }

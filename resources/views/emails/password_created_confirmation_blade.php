@@ -6,7 +6,7 @@
 </head>
 
 <body>
-  <p>Se ha creado una nueva contraseña para el usuario: {{ $user->email }}</p>
+  <p>Se ha creado una nueva contraseña para el usuario: {{ $email }}</p>
 </body>
 
 </html>
