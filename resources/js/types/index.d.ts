@@ -25,4 +25,5 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
         success?: string
         error?: string
     }
+    publishablePendingCount: number  // Updated variable name
 }

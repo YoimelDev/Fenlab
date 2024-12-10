@@ -19,8 +19,12 @@ class MyPublicationsController extends Controller
             'Accept' => 'application/json',
         ])->get($url);
 
+        $data = $response->json();
+        
+        session(['publishablePendingCount' => count($data['data'] ?? [])]);
+
         return Inertia::render('MyPublications/PendingPublication', [
-            'projects' => $response->json(),
+            'projects' => $data,
         ]);
     }
 

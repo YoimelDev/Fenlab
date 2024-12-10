@@ -1,26 +1,17 @@
 import { h } from 'vue'
 import type { ColumnDef } from '@tanstack/vue-table'
-import { type publication } from '@/Pages/MyPublications/types'
+import { type PublishableProject } from '@/Pages/MyPublications/types'
 import { Badge, badgeMap, type BadgeMode } from '@/Components/ui/badge'
-import { DropdownAction } from '../dataTableDropdown'
+// import { DropdownAction } from '../dataTableDropdown'
 
-export const columns: ColumnDef<publication>[] = [
-    {
-        header: 'NOMBRE PROYECTO',
-        accessorKey: 'name',
-        cell: (row) => {
-            const name = row.getValue() as string
-            return h('p', { class: 'font-bold' }, name)
-        },
-        
-    },
+export const columns: ColumnDef<PublishableProject>[] = [
     {
         header: 'ID CLIENTE',
-        accessorKey: 'client_id',
+        accessorKey: 'idCliente',
     },
     {
         header: 'ID FENCIA',
-        accessorKey: 'fencia_id',
+        accessorKey: 'idFencia',
     },
     {
         header: 'ESTADO',
@@ -36,22 +27,22 @@ export const columns: ColumnDef<publication>[] = [
     },
     {
         header: 'REF. CATASTRAL',
-        accessorKey: 'cadastral_reference',
+        accessorKey: 'model.referenciaCatastral',
     },
     {
         header: 'PRECIO MÍNIMO',
-        accessorKey: 'min_price',
+        accessorKey: 'model.npl.credito.precioMinimo',
     },
     {
         header: 'VALOR DE REFERENCIA',
-        accessorKey: 'reference_value',
+        accessorKey: 'model.npl.precioReferencia',
     },
-    {
-        id: 'actions',
-        header: () => '',
-        accessorKey: 'id',
-        cell: () => {
-            return h('div', { class: 'relative' }, h(DropdownAction, {}))
-        },
-    },
+    // {
+    //     id: 'actions',
+    //     header: () => '',
+    //     accessorKey: 'id',
+    //     cell: () => {
+    //         return h('div', { class: 'relative' }, h(DropdownAction, {}))
+    //     },
+    // },
 ]

@@ -19,6 +19,8 @@ const separator = h('hr', {
     },
 })
 
+const page = usePage<PageProps>()
+
 const menu = [
     {
         href: '/dashboard',
@@ -51,7 +53,7 @@ const menu = [
         href: '/my-publications/pending',
         title: 'Pendientes Publicar',
         badge: {
-            text: 7,
+            text: page.props.publishablePendingCount,
             class: 'grid place-items-center rounded-full text-xs bg-grey text-white h-[18px] w-[18px]',
         },
         icon: {},
@@ -86,12 +88,12 @@ const menu = [
         component: separator,
     },
     {
-        header: usePage<PageProps>()?.props?.auth?.salesforceUser?.name || 'Usuario',
+        header: page.props?.auth?.salesforceUser?.name || 'Usuario',
         class: 'mt-8 !text-grey',        
         hiddenOnCollapse: true,
     },
     {
-        header: usePage<PageProps>()?.props?.auth?.salesforceUser?.companyCommercialName || 'Empresa',
+        header: page.props?.auth?.salesforceUser?.companyCommercialName || 'Empresa',
         class: '!py-0 !text-grey !font-light',
         hiddenOnCollapse: true,
     },

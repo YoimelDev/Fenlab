@@ -38,6 +38,7 @@ const sections = ref<Section[]>([
         icon: PictureIcon,
         data: props.sections.pendingPublish,
         columns: pendingPublishColumns as ColumnDef<Project, unknown>[],
+        linkTo: 'my-publications.pending',
     },
     {
         id: 'published',

@@ -1,33 +1,37 @@
 
 import { h } from 'vue'
 import type { ColumnDef } from '@tanstack/vue-table'
-import { Avatar, AvatarFallback, AvatarImage } from '@/Components/ui'
+import { Badge, badgeMap, type BadgeMode } from '@/Components/ui/badge'
+import { PublishableProject } from '@/Pages/MyPublications/types'
 
-export const pendingPublishColumns: ColumnDef<any>[] = [
+export const pendingPublishColumns: ColumnDef<PublishableProject>[] = [
     {
-        header: () => h('div', { class: 'w-[78px]' }),
-        accessorKey: 'image',
+        header: 'ID CLIENTE',
+        accessorKey: 'idCliente',
+    },
+    {
+        header: () => h('div', { class: 'w-[78px]' }, 'ID FENCIA'),
+        accessorKey: 'idFencia',
+        meta: '!w-[78px]',
         cell: (row) => {
-            const image = row.getValue() as string
-            return h(Avatar, {}, {
-                default: () => [
-                    h(AvatarImage, { src: image, alt: 'Client logo' }),
-                    h(AvatarFallback, {}, 'FL'),
-                ],
-            })
+            const id = row.getValue() as string
+            return h('p', { class: 'w-[78px] truncate' }, id)
+        },        
+    },
+    {
+        header: 'ESTADO',
+        accessorKey: 'status',
+        cell: (row) => {
+            const status = row.getValue() as BadgeMode
+            return h(
+                'div',
+                { class: 'font-medium' },
+                h(Badge, { variant: badgeMap[status] }, status),
+            )
         },
     },
     {
-        header: 'NOMBRE PROYECTO',
-        accessorKey: 'project',
-    },
-    {
-        header: 'ID FENLAB',
-        accessorKey: 'client_id',
-    },
-    {
-        header: () => h('div', { class: 'text-right' }, 'PRECIO MÍNIMO'),
-        accessorKey: 'min_price',
-        cell: (row) => h('div', { class: 'text-right' }, row.getValue() as string),
+        header: 'PRECIO MÍNIMO',
+        accessorKey: 'model.npl.credito.precioMinimo',
     },
 ]

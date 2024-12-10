@@ -39,6 +39,7 @@ class HandleInertiaRequests extends Middleware
                 'success' => fn () => $request->session()->pull('success'),
                 'error' => fn () => $request->session()->pull('error'),
             ],
+            'publishablePendingCount' => $request->session()->get('publishablePendingCount', 0),
         ];
     }
 }

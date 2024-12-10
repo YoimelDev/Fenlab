@@ -24,10 +24,10 @@ import { PlusIcon } from '@radix-icons/vue'
 
 import { kpiOverview } from '@/data'
 import { columns } from './Components/pendingPublicationTable'
+import { type Publishable } from './types'
 
 defineProps<{
-    // TODO: Define the type of the props
-    projects: []
+    projects: Publishable
 }>()
 
 </script>
@@ -259,7 +259,7 @@ defineProps<{
      
         <DataTable
             :columns="columns"
-            :data="[]"
+            :data="projects.data"
         />
     </AuthenticatedLayout>
 </template>
