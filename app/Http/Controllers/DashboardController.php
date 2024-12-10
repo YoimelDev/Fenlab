@@ -83,7 +83,11 @@ class DashboardController extends Controller
                 return [];
             }
 
-            return $response->json('data') ?? [];
+            $data = $response->json();
+
+            session(['publishablePendingCount' => count($data['data'] ?? [])]);
+
+            return $data['data'] ?? [];
         } catch (\Exception $e) {
             $this->errors[] = 'Error al obtener publicaciones pendientes: ' . $e->getMessage();
             return [];

@@ -53,7 +53,7 @@ const menu = [
         href: '/my-publications/pending',
         title: 'Pendientes Publicar',
         badge: {
-            text: page.props.publishablePendingCount,
+            text: page.props.publishablePendingCount + '',
             class: 'grid place-items-center rounded-full text-xs bg-grey text-white h-[18px] w-[18px]',
         },
         icon: {},
