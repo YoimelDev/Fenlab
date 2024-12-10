@@ -344,6 +344,46 @@ async function uploadFile(event: Event) {
                 </div>
 
                 <ArrowUpIcon 
+                    v-if="project.outputBBDD"
+                />
+
+                <div
+                    v-if="project.outputBBDD"
+                    class="my-4"
+                >    
+                    <div class="relative flex items-center gap-4 w-full p-4 bg-white ">
+                        <XlsIcon
+                            v-if="project.outputBBDD.extension == 'xlsx'"
+                        />
+
+                        <div>
+                            <p class="text-black text-lg font-bold">
+                                {{ project.outputBBDD.title }}
+                            </p>
+                            <p class="text-grey text-sm">
+                                {{ project.outputBBDD.description }}
+                            </p>
+                        </div>
+
+                        <Button
+                            v-if="project.outputBBDD.url"
+                            variant="ghost"
+                            size="xs"
+                            as-child
+                        >
+                            <a
+                                class="absolute top-4 right-4"
+                                :href="project.outputBBDD.url"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <DownloadIcon />
+                            </a>
+                        </Button>
+                    </div>
+                </div>
+
+                <ArrowUpIcon 
                     v-if="project.firstExcel"
                 />
 
