@@ -65,9 +65,9 @@ const currentStep = computed(() => {
     switch (props.project.status) {
         case 'Sin empezar':
             return 1
+        case 'Análisis completo':
         case 'Análisis en curso':
             return 2
-        case 'Análisis completo':
         case 'Carga definitiva':
             return 3
         default:
