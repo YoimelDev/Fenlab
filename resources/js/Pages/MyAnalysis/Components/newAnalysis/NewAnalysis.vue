@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted, inject } from 'vue'
-import { router } from '@inertiajs/vue3'
 
 import { 
     useToast,
@@ -81,7 +80,7 @@ const submitAnalysis = async () => {
             title: '¡Análisis creado!',
         })
         
-        router.visit(`/my-analysis/${data.id}`)
+        window.location.href = `/my-analysis/${data.id}`
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
         toast({
