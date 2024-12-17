@@ -4,7 +4,7 @@ import { Link } from '@inertiajs/vue3'
 import { PictureIcon, AssessmentIcon } from '@/Components/icons'
 import { ArrowRightIcon } from '@radix-icons/vue'
 import { DataTable, Button } from '@/Components/ui'
-import { columnsAnalysis, pendingPublishColumns, pendingApprovalColumns, publishedColumns } from './columns'
+import { columnsAnalysis, pendingPublishColumns, pendingApprovalColumns, publishedColumns, pendingPBCColumns, pendingNotaryColumns } from './columns'
 import type { ColumnDef } from '@tanstack/vue-table'
 import type { Project } from '@/types/fenlab'
 
@@ -46,6 +46,7 @@ const sections = ref<Section[]>([
         icon: PictureIcon,
         data: props.sections.published,
         columns: publishedColumns as ColumnDef<Project, unknown>[],
+        linkTo: 'my-publications.published',
     },
     {
         id: 'pending-approval',
@@ -53,20 +54,23 @@ const sections = ref<Section[]>([
         icon: PictureIcon,
         data: props.sections.pendingApproval,
         columns: pendingApprovalColumns as ColumnDef<Project, unknown>[],
+        linkTo: 'my-publications.pending-approval',
     },
     {
         id: 'pending-pbc',
         title: 'Pendientes Aprobación PBC',
         icon: PictureIcon,
-        data: props.sections.pendingPbc,
-        columns: pendingApprovalColumns as ColumnDef<Project, unknown>[],
+        data: props.sections.pendingPBC,
+        columns: pendingPBCColumns as ColumnDef<Project, unknown>[],
+        linkTo: 'my-publications.pending-pbc',
     },
     {
         id: 'pending-notary',
         title: 'Pendientes Firma',
         icon: PictureIcon,
         data: props.sections.pendingNotary,
-        columns: pendingApprovalColumns as ColumnDef<Project, unknown>[],
+        columns: pendingNotaryColumns as ColumnDef<Project, unknown>[],
+        linkTo: 'my-publications.pending-notary',
     },
 ])
 </script>
@@ -76,7 +80,7 @@ const sections = ref<Section[]>([
         <section
             v-for="section in sections"
             :key="section.id"
-            class="h-fit py-8 px-4 bg-white rounded-sm [&>div]:m-0 [&>div]:p-0"
+            class="h-full py-8 px-4 bg-white rounded-sm [&>div]:m-0 [&>div]:p-0"
         >
             <header class="flex justify-between items-center mb-6">
                 <h2 class="flex items-center gap-4 text-xl font-bold leading-5">

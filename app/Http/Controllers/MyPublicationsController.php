@@ -9,19 +9,40 @@ use Inertia\Response;
 
 class MyPublicationsController extends Controller
 {
+    private array $errors = [];
+    private SalesforceController $salesforceController;
+
+    public function __construct(SalesforceController $salesforceController)
+    {
+        $this->salesforceController = $salesforceController;
+    }
+
     public function pending(Request $request): Response 
     {
-        $url = env('VITE_FENLAB_API_URL') . 'projects/assets/publishable';
-        $token = $request->session()->get('loginToken');
+        try {
+            $url = env('VITE_FENLAB_API_URL') . 'projects/assets/publishable';
+            $token = $request->session()->get('loginToken');
 
-        $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . $token,
-            'Accept' => 'application/json',
-        ])->get($url);
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $token,
+                'Accept' => 'application/json',
+            ])->get($url);
 
-        $data = $response->json();
-        
-        session(['publishablePendingCount' => count($data['data'] ?? [])]);
+            if (!$response->successful()) {
+                $this->errors[] = $response->json('message') ?? 'Error al obtener publicaciones pendientes';
+                $data = [];
+            } else {
+                $data = $response->json();
+                session(['publishablePendingCount' => count($data['data'] ?? [])]);
+            }
+        } catch (\Exception $e) {
+            $this->errors[] = 'Error al obtener publicaciones pendientes: ' . $e->getMessage();
+            $data = [];
+        }
+
+        if (!empty($this->errors)) {
+            session()->flash('error', implode(' | ', $this->errors));
+        }
 
         return Inertia::render('MyPublications/PendingPublication', [
             'projects' => $data,
@@ -35,61 +56,105 @@ class MyPublicationsController extends Controller
 
     public function pendingApproval(Request $request): Response
     {
-        $url = env('VITE_FENLAB_API_URL') . 'salesforce/pending-approval';
-        $token = $request->session()->get('loginToken');
+        $salesforceEmail = $request->session()->get('salesforceUser.email');
+        try {
+            $request->merge(['email' => $salesforceEmail]);
+            $response = $this->salesforceController->getPendingApproval($request);
+            $data = $response->getData(true);
 
-        $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . $token,
-            'Accept' => 'application/json',
-        ])->get($url);
+            if (isset($data['error'])) {
+                $this->errors[] = $data['error'];
+                $data = [];
+            }
+        } catch (\Exception $e) {
+            $this->errors[] = 'Error al obtener aprobaciones pendientes: ' . $e->getMessage();
+            $data = [];
+        }
+
+        if (!empty($this->errors)) {
+            session()->flash('error', implode(' | ', $this->errors));
+        }
 
         return Inertia::render('MyPublications/PendingApproval', [
-            'projects' => $response->json(),
+            'projects' => $data
         ]);
     }
 
     public function pendingPBC(Request $request): Response
     {
-        $url = env('VITE_FENLAB_API_URL') . 'salesforce/pending-pbc';
-        $token = $request->session()->get('loginToken');
+        $salesforceEmail = $request->session()->get('salesforceUser.email');
+        try {
+            $request->merge(['email' => $salesforceEmail]);
+            $response = $this->salesforceController->getPendingPBC($request);
+            $data = $response->getData(true);
 
-        $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . $token,
-            'Accept' => 'application/json',
-        ])->get($url);
+            if (isset($data['error'])) {
+                $this->errors[] = $data['error'];
+                $data = [];
+            }
+        } catch (\Exception $e) {
+            $this->errors[] = 'Error al obtener PBC pendientes: ' . $e->getMessage();
+            $data = [];
+        }
+
+        if (!empty($this->errors)) {
+            session()->flash('error', implode(' | ', $this->errors));
+        }
 
         return Inertia::render('MyPublications/PendingPBC', [
-            'projects' => $response->json(),
+            'projects' => $data
         ]);
     }
 
     public function pendingNotary(Request $request): Response
     {
-        $url = env('VITE_FENLAB_API_URL') . 'salesforce/pending-notary';
-        $token = $request->session()->get('loginToken');
+        $salesforceEmail = $request->session()->get('salesforceUser.email');
+        try {
+            $request->merge(['email' => $salesforceEmail]);
+            $response = $this->salesforceController->getPendingNotary($request);
+            $data = $response->getData(true);
 
-        $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . $token,
-            'Accept' => 'application/json',
-        ])->get($url);
+            if (isset($data['error'])) {
+                $this->errors[] = $data['error'];
+                $data = [];
+            }
+        } catch (\Exception $e) {
+            $this->errors[] = 'Error al obtener notarías pendientes: ' . $e->getMessage();
+            $data = [];
+        }
+
+        if (!empty($this->errors)) {
+            session()->flash('error', implode(' | ', $this->errors));
+        }
 
         return Inertia::render('MyPublications/PendingNotary', [
-            'projects' => $response->json(),
+            'projects' => $data
         ]);
     }
 
     public function closedAuctions(Request $request): Response
     {
-        $url = env('VITE_FENLAB_API_URL') . 'salesforce/closed-auctions';
-        $token = $request->session()->get('loginToken');
+        $salesforceEmail = $request->session()->get('salesforceUser.email');
+        try {
+            $request->merge(['email' => $salesforceEmail]);
+            $response = $this->salesforceController->getClosedAuctions($request);
+            $data = $response->getData(true);
 
-        $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . $token,
-            'Accept' => 'application/json',
-        ])->get($url);
+            if (isset($data['error'])) {
+                $this->errors[] = $data['error'];
+                $data = [];
+            }
+        } catch (\Exception $e) {
+            $this->errors[] = 'Error al obtener subastas cerradas: ' . $e->getMessage();
+            $data = [];
+        }
+
+        if (!empty($this->errors)) {
+            session()->flash('error', implode(' | ', $this->errors));
+        }
 
         return Inertia::render('MyPublications/ClosedAuctions', [
-            'projects' => $response->json(),
+            'projects' => $data
         ]);
     }
 }

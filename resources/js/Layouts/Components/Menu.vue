@@ -10,6 +10,7 @@ import ApplicationLogo from '@/Components/ApplicationLogo.vue'
 import { PinLeftIcon, PinRightIcon } from '@radix-icons/vue'
 import { HomeIcon, AssessmentIcon, HelpIcon, PersonIcon, PictureIcon } from '@/Components/icons'
 import { PageProps } from '@/types'
+import { Button } from '@/Components/ui'
 
 type collapse = boolean | string;
 
@@ -146,6 +147,24 @@ const onToggleCollapse = (collapsed: boolean) => {
                         </Link>
                     </div>
                 </div>
+            </div>
+        </template>
+
+        <template #footer>
+            <div class="flex justify-center w-full mt-10">
+                <Button
+                    class="w-full mb-2 text-grey"
+                    as-child
+                    variant="ghost"
+                    size="xs"
+                >
+                    <Link
+                        :href="route('logout')"
+                        method="post"
+                    >
+                        Cerrar Sesión
+                    </Link>
+                </Button>
             </div>
         </template>
 

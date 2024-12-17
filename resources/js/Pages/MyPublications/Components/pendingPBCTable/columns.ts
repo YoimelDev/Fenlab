@@ -1,11 +1,9 @@
-
 import { h } from 'vue'
 import type { ColumnDef } from '@tanstack/vue-table'
-import { type publication } from '@/Pages/MyPublications/types'
+import { type PendingPBC } from '@/Pages/MyPublications/types'
 import { Badge, badgeMap, type BadgeMode } from '@/Components/ui/badge'
-import { DropdownAction } from '../dataTableDropdown'
 
-export const columns: ColumnDef<publication>[] = [
+export const columns: ColumnDef<PendingPBC>[] = [
     {
         header: 'NOMBRE PROYECTO',
         accessorKey: 'name',
@@ -15,43 +13,39 @@ export const columns: ColumnDef<publication>[] = [
         },
     },
     {
-        header: 'ID CLIENTE',
-        accessorKey: 'client_id',
+        header: 'TIPO PBC',
+        accessorKey: 'PBCtype',
     },
     {
-        header: 'ID FENCIA',
-        accessorKey: 'fencia_id',
+        header: 'TIPO DE REGISTRO',
+        accessorKey: 'recordType',
     },
     {
-        header: 'ESTADO',
-        accessorKey: 'status',
+        header: 'ETAPA',
+        accessorKey: 'stage',
         cell: (row) => {
-            const status = row.getValue() as BadgeMode
+            const stage = row.getValue() as BadgeMode
             return h(
                 'div',
                 { class: 'font-medium' },
-                h(Badge, { variant: badgeMap[status] }, status),
+                h(Badge, { variant: badgeMap[stage] }, stage),
             )
         },
     },
     {
-        header: 'REF. CATASTRAL',
-        accessorKey: 'cadastral_reference',
+        header: 'FECHA APROBACIÓN PBC',
+        accessorKey: 'approvedPBCDate',
+        cell: (row) => {
+            const date = row.getValue()
+            return date ? date : '-'
+        },
     },
     {
-        header: 'PRECIO MÍNIMO',
-        accessorKey: 'min_price',
-    },
-    {
-        header: 'VALOR DE REFERENCIA',
-        accessorKey: 'reference_value',
-    },
-    {
-        id: 'actions',
-        header: () => '',
-        accessorKey: 'id',
-        cell: () => {
-            return h('div', { class: 'relative' }, h(DropdownAction, {}))
+        header: 'FECHA APROBACIÓN PBC2',
+        accessorKey: 'approvedPBC2Date',
+        cell: (row) => {
+            const date = row.getValue()
+            return date ? date : '-'
         },
     },
 ]

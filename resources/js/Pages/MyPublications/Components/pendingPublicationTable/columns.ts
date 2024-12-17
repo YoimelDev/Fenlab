@@ -2,7 +2,7 @@ import { h } from 'vue'
 import type { ColumnDef } from '@tanstack/vue-table'
 import { type PublishableProject } from '@/Pages/MyPublications/types'
 import { Badge, badgeMap, type BadgeMode } from '@/Components/ui/badge'
-// import { DropdownAction } from '../dataTableDropdown'
+import { DropdownAction } from '../dataTableDropdown'
 
 export const columns: ColumnDef<PublishableProject>[] = [
     {
@@ -37,12 +37,12 @@ export const columns: ColumnDef<PublishableProject>[] = [
         header: 'VALOR DE REFERENCIA',
         accessorKey: 'model.npl.precioReferencia',
     },
-    // {
-    //     id: 'actions',
-    //     header: () => '',
-    //     accessorKey: 'id',
-    //     cell: () => {
-    //         return h('div', { class: 'relative' }, h(DropdownAction, {}))
-    //     },
-    // },
+    {
+        id: 'actions',
+        header: () => '',
+        accessorKey: 'id',
+        cell: () => {
+            return h('div', { class: 'relative' }, h(DropdownAction, {}))
+        },
+    },
 ]

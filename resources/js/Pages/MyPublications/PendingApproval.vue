@@ -6,9 +6,10 @@ import { Kpi, DataTable } from '@/Components/ui'
 import { AssessmentIcon } from '@/Components/icons'
 import { kpiOverview } from '@/data'
 import { columns } from './Components/pendingApprovalTable'
+import { PendingApproval } from './types'
 
 defineProps<{
-    projects: []
+    projects: PendingApproval[]
 }>()
 </script>
 

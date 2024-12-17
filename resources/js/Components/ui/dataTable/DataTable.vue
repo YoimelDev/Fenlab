@@ -135,7 +135,7 @@ const table = useVueTable({
     </div>
 
     <Pagination
-        v-if="activatePagination"
+        v-if="activatePagination && table.getPageCount() > 1"
         v-slot="{ page }"
         :total="table.getPageCount() * 10"
         :sibling-count="1"

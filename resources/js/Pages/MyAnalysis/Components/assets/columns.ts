@@ -24,10 +24,18 @@ export const columns: ColumnDef<AssetData>[] = [
     {
         header: 'Precio mínimo',
         accessorKey: 'model.npl.credito.precioMinimo',
+        cell: (row) => {
+            const value = row.getValue() as string | number | null
+            return value ?? '-'
+        },
     },
     {
         header: 'Valor de referencia',
         accessorKey: 'model.npl.precioReferencia',
+        cell: (row) => {
+            const value = row.getValue() as string | number | null
+            return value ?? '-'
+        },
     },
     {
         header: 'Modalidad de transacción',

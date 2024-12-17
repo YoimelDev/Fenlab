@@ -1,9 +1,9 @@
 import { h } from 'vue'
 import type { ColumnDef } from '@tanstack/vue-table'
-import type { PendingApproval } from '@/Pages/MyPublications/types'
+import type { PendingPBC } from '@/Pages/MyPublications/types'
 import { Badge } from '@/Components/ui/badge'
 
-export const pendingApprovalColumns: ColumnDef<PendingApproval>[] = [
+export const pendingPBCColumns: ColumnDef<PendingPBC>[] = [
     {
         header: 'NOMBRE PROYECTO',
         accessorKey: 'name',
@@ -11,8 +11,12 @@ export const pendingApprovalColumns: ColumnDef<PendingApproval>[] = [
         cell: (row) => h('div', { class: 'w-[160px] truncate font-medium' }, row.getValue() as string),
     },
     {
-        header: 'EMPRESA',
-        accessorKey: 'companyName',
+        header: 'TIPO PBC',
+        accessorKey: 'PBCtype',
+    },
+    {
+        header: 'TIPO REGISTRO',
+        accessorKey: 'recordType',
     },
     {
         header: 'ETAPA',

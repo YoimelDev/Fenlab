@@ -90,3 +90,40 @@ export interface Meta {
     totalItems:  number;
     totalPages:  number;
 }
+
+export interface PendingApproval {
+    rejectedDate: string | null;
+    approvedDate: string | null;
+    stage: string;
+    companyName: string;
+    companyId: string;
+    name: string;
+    id: string;
+}
+
+export interface PendingPBC {
+    PBCtype: string;
+    recordType: string;
+    approvedPBC2Date: string | null;
+    approvedPBCDate: string | null;
+    stage: string;
+    companyId: string;
+    name: string;
+    id: string;
+}
+
+export interface PendingNotary {
+    fenlabId: string;
+    stage: string;
+    companyId: string;
+    name: string;
+    id: string;
+}
+
+export interface ClosedAuctions {
+    stage:       string;
+    companyName: string;
+    companyId:   string;
+    name:        string;
+    id:          string;
+}
