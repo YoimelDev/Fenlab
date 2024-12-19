@@ -40,6 +40,13 @@ export const columns: ColumnDef<AssetData>[] = [
     {
         header: 'Modalidad de transacción',
         accessorKey: 'model.type',
+        cell: (row) => {
+            const npl = row.row.original.model.npl
+            if (npl.subasta?.isPublishable) return 'Subasta'
+            if (npl.credito?.isPublishable) return 'Crédito'
+            if (npl.remate?.isPublishable) return 'Remate'
+            return '-'
+        },
     },
     {
         id: 'actions',

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { inject, ref, computed } from 'vue'
-import { Head, Link, router } from '@inertiajs/vue3'
+import { Head, Link, router, usePage } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 
 import {
@@ -30,6 +30,7 @@ import { ProjectsAssets, ApiErrorResponse } from './types'
 import { PluginApi } from 'vue-loading-overlay'
 import { fenlabApi } from '@/api'
 import { useDateFormat } from '@vueuse/core'
+import { PageProps } from '@/types'
 
 const props = defineProps<{
     project: ProjectById
@@ -60,6 +61,11 @@ const steps = [
         description: '',
     },
 ]
+
+const isAdmin = computed(() => {
+    const page = usePage<PageProps>()
+    return page.props.auth.salesforceUser.rols === 'Admin'
+})
 
 const currentStep = computed(() => {
     switch (props.project.status) {
@@ -96,7 +102,11 @@ function onDrop(files: File[] | null) {
             type: file.type,
             lastModified: file.lastModified,
         }))
-        uploadFile()
+        if (isAdmin.value && props.project.status === 'Análisis en curso') {
+            uploadIdealistaFile()
+        } else {
+            uploadFile()
+        }
     }
 }
 
@@ -157,6 +167,55 @@ async function uploadFile() {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
         fileError.value = error.response?.data?.message?.join('\n') || 'Error al subir el archivo'
+    } finally {
+        loader?.hide()
+        router.reload()
+    }
+}
+
+async function uploadIdealistaFile() {
+    fileError.value = ''
+
+    if (filesData.value.length === 0) {
+        fileError.value = 'No se ha seleccionado ningún archivo.'
+        return
+    }
+
+    const loader = $loading?.show()
+    const formData = new FormData()
+    formData.append('method', 'post')
+    formData.append('path', `projects/${props.project.id}/idealista-excel`)
+    formData.append('file', filesData.value[0].file)
+
+    try {
+        const response = await fenlabApi.post<ApiErrorResponse>('', formData)
+        if (!response.data.success) {
+            const errorMessages = response.data.errors.list.map((err) => `${err.header}: ${err.error}`).join('\n')
+            fileError.value = errorMessages
+            return
+        }
+
+        // Call model API after successful idealista upload
+        const modelResponse = await fenlabApi.post<ApiErrorResponse>('', {
+            method: 'post',
+            path: `projects/${props.project.id}/${props.project.modelType}`,
+        })
+
+        if (!modelResponse.data.success) {
+            fileError.value = 'Error al procesar el modelo'
+            return
+        }
+
+        toast({
+            variant: 'info',
+            title: 'Archivo procesado correctamente',
+        })
+        filesData.value = []
+        if (fileInput.value) fileInput.value.value = ''
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+        fileError.value = error.response?.data?.message?.join('\n') || 'Error al procesar el archivo'
     } finally {
         loader?.hide()
         router.reload()
@@ -279,12 +338,80 @@ async function uploadFile() {
                 </TabsTrigger>
             </TabsList>
             <TabsContent value="analysis">
+                <div class="my-4 p-6 bg-white rounded-sm border border-[#E5E7EB] shadow-sm">
+                    <p
+                        v-html="project.instructions"
+                        class="whitespace-pre-line text-gray-700 leading-relaxed"
+                    />
+                </div>
+
                 <div 
                     v-if="project.status === 'Análisis en curso'"
-                    class="my-4 p-8 bg-white flex items-center justify-center gap-3"
+                    class="my-4 p-8 bg-white"
                 >
-                    <UpdateIcon class="h-6 w-6 text-black animate-spin" />
-                    <span class="text-grey">Análisis en curso</span>
+                    <template v-if="isAdmin">
+                        <div
+                            v-if="fileError"
+                            class="mb-4 p-4 bg-red-50 border border-red-200 rounded-sm text-red-600"
+                            style="white-space: pre-line"
+                        >
+                            {{ fileError }}
+                        </div>
+
+                        <div
+                            ref="dropZoneRef"
+                            class="grid place-items-center p-5 border-2 border-dashed border-[#C1C1C1] rounded-sm"
+                            :class="[isOverDropZone && 'border-electric-green', fileError && 'border-red-300']"
+                            @click="openFileDialog"
+                            role="button"
+                        >
+                            <!-- Existing dropzone content -->
+                            <template v-if="filesData.length === 0">
+                                <p class="flex items-center gap-2 mb-5 text-grey text-sm">
+                                    Arrastra aquí el archivo de Idealista o haz clic para seleccionarlo
+                                    <CircleIcon variant="help" />
+                                </p>
+                                <Button
+                                    variant="green"
+                                    size="xs"
+                                    @click.stop="openFileDialog"
+                                >
+                                    <UploadIcon class="mr-2" />
+                                    Adjuntar archivo
+                                </Button>
+                            </template>
+                            <template v-else>
+                                <!-- Existing file list template -->
+                                <div class="w-full mb-4">
+                                    <div
+                                        v-for="file in filesData"
+                                        :key="file.name"
+                                        class="flex items-center justify-between p-2 bg-gray-50 rounded"
+                                    >
+                                        <div class="flex items-center gap-2">
+                                            <XlsIcon class="w-5 h-5" />
+                                            <span class="text-sm font-medium">{{ file.name }}</span>
+                                        </div>
+                                        <span class="text-xs text-gray-500">{{ formatFileSize(file.size) }}</span>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <input
+                                type="file"
+                                ref="fileInput"
+                                @change="handleFileChange"
+                                class="hidden"
+                                accept=".xlsx,.xls"
+                            >
+                        </div>
+                    </template>
+                    <template v-else>
+                        <div class="flex items-center justify-center gap-3">
+                            <UpdateIcon class="h-6 w-6 text-black animate-spin" />
+                            <span class="text-grey">Análisis en curso</span>
+                        </div>
+                    </template>
                 </div>
                 <div 
                     v-else-if="project.status !== 'Carga definitiva'"

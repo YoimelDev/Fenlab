@@ -7,7 +7,7 @@ export interface User {
 
 export interface SalesforceUser {
     title?: string
-    rols: string
+    rols: 'Admin' | string
     companyCommercialName: string
     companyBusinessName?: string
     companyId: string

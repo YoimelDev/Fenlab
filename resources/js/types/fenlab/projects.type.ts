@@ -33,6 +33,7 @@ export interface ProjectById {
     companyId: string;
     name: string;
     description: string;
+    instructions: string;
     status: Status;
     modelType: ModelType;
     timeToValidateFirstExcelInSeconds: number;
