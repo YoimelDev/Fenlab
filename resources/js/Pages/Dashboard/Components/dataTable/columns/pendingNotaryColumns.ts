@@ -24,8 +24,4 @@ export const pendingNotaryColumns: ColumnDef<PendingNotary>[] = [
             )
         },
     },
-    {
-        header: 'ID EMPRESA',
-        accessorKey: 'companyId',
-    },
 ]

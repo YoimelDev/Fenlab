@@ -24,8 +24,4 @@ export const pendingApprovalColumns: ColumnDef<PendingApproval>[] = [
             )
         },
     },
-    {
-        header: 'ID EMPRESA',
-        accessorKey: 'companyId',
-    },
 ]

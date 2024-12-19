@@ -76,11 +76,11 @@ const sections = ref<Section[]>([
 </script>
 
 <template>
-    <div class="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-10 mt-8">
+    <div class="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-10 mt-8 auto-rows-fr">
         <section
             v-for="section in sections"
             :key="section.id"
-            class="h-full py-8 px-4 bg-white rounded-sm [&>div]:m-0 [&>div]:p-0"
+            class="min-h-0 py-8 px-4 bg-white rounded-sm [&>div]:m-0 [&>div]:p-0"
         >
             <header class="flex justify-between items-center mb-6">
                 <h2 class="flex items-center gap-4 text-xl font-bold leading-5">

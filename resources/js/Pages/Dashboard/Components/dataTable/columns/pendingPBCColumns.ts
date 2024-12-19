@@ -28,8 +28,4 @@ export const pendingPBCColumns: ColumnDef<PendingPBC>[] = [
             )
         },
     },
-    {
-        header: 'ID EMPRESA',
-        accessorKey: 'companyId',
-    },
 ]
