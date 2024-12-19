@@ -20,6 +20,7 @@ import {
     TableHead,
     TableHeader,
     TableRow,
+    Label,
 } from '@/Components/ui'
 import { PluginApi } from 'vue-loading-overlay'
 import {  ArrowIcon, ShoppingBagIcon, SellIcon } from '@/Components/icons'
@@ -131,23 +132,29 @@ onMounted(() => {
                     v-show="step === 1"
                     class="flex flex-col gap-10"
                 >
-                    <Input
-                        id="name"
-                        type="text"
-                        placeholder="Nombre proyecto"
-                        class="mt-2"
-                        v-model="newAnalysis.name"
-                        required
-                        autofocus
-                        autocomplete="name"
-                    />
+                    <div class="space-y-2">
+                        <Label for="name">Nombre proyecto</Label>
+                        <Input
+                            id="name"
+                            type="text"
+                            placeholder="Nombre proyecto"
+                            class="mt-2"
+                            v-model="newAnalysis.name"
+                            required
+                            autofocus
+                            autocomplete="name"
+                        />
+                    </div>
 
-                    <Textarea
-                        id="description"
-                        class="resize-none h-[112px]"
-                        placeholder="Descripción"
-                        v-model="newAnalysis.description"
-                    />
+                    <div class="space-y-2">
+                        <Label for="description">Descripción</Label>
+                        <Textarea
+                            id="description"
+                            class="resize-none h-[112px]"
+                            placeholder="Descripción"
+                            v-model="newAnalysis.description"
+                        />
+                    </div>
                 </div>
 
                 <div
@@ -288,77 +295,93 @@ onMounted(() => {
 
                 <div
                     v-show="step === 4"
-                    class="flex flex-col gap-2"
+                    class="flex flex-col gap-2 max-h-[600px] overflow-y-auto"
                 >
-                    <Table>
-                        <TableHeader>
-                            <TableRow class="[&_th]:px-3 [&_th]:bg-white">
-                                <TableHead class="!bg-[#ECECEC] z-50 relative">
-                                    AÑO
-                                </TableHead>
-                                <TableHead>IPC (%)</TableHead>
-                                <TableHead>HPA (%)</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            <TableRow
-                                class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]"
-                                v-for="data in masterData?.macro"
-                                :key="data.ano"
-                            >
-                                <TableCell class="!bg-[#ECECEC] font-bold">
-                                    Año {{ data.ano }}
-                                </TableCell>
-                                <TableCell>{{ data.IPC }}</TableCell>
-                                <TableCell>{{ data.HPA }}</TableCell>
-                            </TableRow>
-                        </TableBody>
-                    </Table>
+                    <div class="space-y-2">
+                        <Label>Datos macroeconómicos</Label>
+                        <Table>
+                            <TableHeader>
+                                <TableRow class="[&_th]:px-3 [&_th]:bg-white">
+                                    <TableHead class="!bg-[#ECECEC] z-50 relative">
+                                        AÑO
+                                    </TableHead>
+                                    <TableHead>IPC (%)</TableHead>
+                                    <TableHead>HPA (%)</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                <TableRow
+                                    class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]"
+                                    v-for="data in masterData?.macro"
+                                    :key="data.ano"
+                                >
+                                    <TableCell class="!bg-[#ECECEC] font-bold">
+                                        Año {{ data.ano }}
+                                    </TableCell>
+                                    <TableCell>{{ data.IPC }}</TableCell>
+                                    <TableCell>{{ data.HPA }}</TableCell>
+                                </TableRow>
+                            </TableBody>
+                        </Table>
+                    </div>
 
-                    <Input
-                        id="wacc"
-                        type="text"
-                        placeholder="WACC - Coste de Capital"
-                        class="mt-2"
-                        v-model="newAnalysis.masterData.wacc"
-                        required
-                        autofocus
-                        autocomplete="wacc"
-                    />
+                    <div class="space-y-2">
+                        <Label for="wacc">WACC - Coste de Capital</Label>
+                        <Input
+                            id="wacc"
+                            type="text"
+                            placeholder="WACC - Coste de Capital"
+                            class="mt-2"
+                            v-model="newAnalysis.masterData.wacc"
+                            required
+                            autofocus
+                            autocomplete="wacc"
+                        />
+                    </div>
 
-                    <Input
-                        id="managementFee"
-                        type="text"
-                        placeholder="Management fee % s/ Valor inmueble"
-                        class="mt-2"
-                        v-model="newAnalysis.masterData.managementFee"
-                        required
-                        autofocus
-                        autocomplete="managementFee"
-                    />
+                    <div class="space-y-2">
+                        <Label for="managementFee">Management fee</Label>
+                        <Input
+                            id="managementFee"
+                            type="text"
+                            placeholder="Management fee % s/ Valor inmueble"
+                            class="mt-2"
+                            v-model="newAnalysis.masterData.managementFee"
+                            required
+                            autofocus
+                            autocomplete="managementFee"
+                        />
+                    </div>
 
+                    <Label>Coste de lanzamiento</Label>
                     <div class="flex gap-6">
-                        <Input
-                            id="costeLanzamientoAbogado"
-                            type="text"
-                            placeholder="Abogado"
-                            class="mt-2"
-                            v-model="newAnalysis.masterData.costeLanzamientoAbogado"
-                            required
-                            autofocus
-                            autocomplete="costeLanzamientoAbogado"
-                        />
+                        <div class="space-y-2 w-full">
+                            <Label for="costeLanzamientoAbogado">Abogado</Label>
+                            <Input
+                                id="costeLanzamientoAbogado"
+                                type="text"
+                                placeholder="Abogado"
+                                class="mt-2"
+                                v-model="newAnalysis.masterData.costeLanzamientoAbogado"
+                                required
+                                autofocus
+                                autocomplete="costeLanzamientoAbogado"
+                            />
+                        </div>
 
-                        <Input
-                            id="costeLanzamientoProcurador"
-                            type="text"
-                            placeholder="Procurador"
-                            class="mt-2"
-                            v-model="newAnalysis.masterData.costeLanzamientoProcurador"
-                            required
-                            autofocus
-                            autocomplete="costeLanzamientoProcurador"
-                        />
+                        <div class="space-y-2 w-full">
+                            <Label for="costeLanzamientoProcurador">Procurador</Label>
+                            <Input
+                                id="costeLanzamientoProcurador"
+                                type="text"
+                                placeholder="Procurador"
+                                class="mt-2"
+                                v-model="newAnalysis.masterData.costeLanzamientoProcurador"
+                                required
+                                autofocus
+                                autocomplete="costeLanzamientoProcurador"
+                            />
+                        </div>
                     </div>
                 </div>
             </div>

@@ -9,6 +9,7 @@ import {
     DialogHeader,
     DialogTitle,
     Input,
+    Label,
     toast,
 } from '@/Components/ui'
 import type { AssetData } from '@/Pages/MyAnalysis/types'
@@ -56,62 +57,78 @@ const postData = async () => {
         </DialogHeader>
 
         <div class="content">
-            <div
-                class="flex flex-col gap-4"
-            >
-                <Input
-                    id="idCliente"
-                    type="text"
-                    placeholder="ID cliente"
-                    class="mt-2"
-                    required
-                    v-model="formData.idCliente"
-                />
+            <div class="flex flex-col gap-4">
+                <div class="space-y-2">
+                    <Label for="idCliente">ID cliente</Label>
+                    <Input
+                        id="idCliente"
+                        type="text"
+                        placeholder="ID cliente"
+                        class="mt-2"
+                        required
+                        v-model="formData.idCliente"
+                    />
+                </div>
 
-                <Input
-                    id="idFencia"
-                    type="text"
-                    placeholder="ID fenlab"
-                    class="mt-2"
-                    required
-                    v-model="formData.idFencia"
-                />
+                <div class="space-y-2">
+                    <Label for="idFencia">ID fenlab</Label>
+                    <Input
+                        id="idFencia"
+                        type="text"
+                        placeholder="ID fenlab"
+                        class="mt-2"
+                        required
+                        v-model="formData.idFencia"
+                    />
+                </div>
 
-                <Input
-                    id="referenciaCatastral"
-                    type="text"
-                    placeholder="Referencia catastral"
-                    class="mt-2"
-                    required
-                    v-model="formData.model.referenciaCatastral"
-                />
+                <div class="space-y-2">
+                    <Label for="referenciaCatastral">Referencia catastral</Label>
+                    <Input
+                        id="referenciaCatastral"
+                        type="text"
+                        placeholder="Referencia catastral"
+                        class="mt-2"
+                        required
+                        v-model="formData.model.referenciaCatastral"
+                    />
+                </div>
 
-                <Input
-                    id="min_price"
-                    type="text"
-                    placeholder="Precio mínimo"
-                    class="mt-2"
-                    required
-                    v-model="formData.model.npl.credito.precioMinimo"
-                />
+                <div class="space-y-2">
+                    <Label for="min_price">Precio mínimo</Label>
+                    <Input
+                        id="min_price"
+                        type="text"
+                        placeholder="Precio mínimo"
+                        class="mt-2"
+                        required
+                        v-model="formData.model.npl.credito.precioMinimo"
+                    />
+                </div>
 
-                <Input
-                    id="reference_value"
-                    type="text"
-                    placeholder="Valor de referencia"
-                    class="mt-2"
-                    required
-                    v-model.number="formData.model.npl.precioReferencia"
-                />
+                <div class="space-y-2">
+                    <Label for="reference_value">Valor de referencia</Label>
+                    <Input
+                        id="reference_value"
+                        type="text"
+                        placeholder="Valor de referencia"
+                        class="mt-2"
+                        required
+                        v-model.number="formData.model.npl.precioReferencia"
+                    />
+                </div>
 
-                <Input
-                    id="transaction_modality"
-                    type="text"
-                    placeholder="Modalidad de transacción"
-                    class="mt-2"
-                    required
-                    v-model="formData.model.type"
-                />
+                <div class="space-y-2">
+                    <Label for="transaction_modality">Modalidad de transacción</Label>
+                    <Input
+                        id="transaction_modality"
+                        type="text"
+                        placeholder="Modalidad de transacción"
+                        class="mt-2"
+                        required
+                        v-model="formData.model.type"
+                    />
+                </div>
             </div>
         </div>
     

@@ -84,10 +84,14 @@ const postData = async () => {
                         <TableHeader>
                             <TableRow class="[&_th]:px-3 [&_th]:bg-white">
                                 <TableHead class="!bg-[#ECECEC] w-[140px] z-50 relative">
-                                    AÑO
+                                    <Label>AÑO</Label>
                                 </TableHead>
-                                <TableHead>IPC (%)</TableHead>
-                                <TableHead>HPA (%)</TableHead>
+                                <TableHead>
+                                    <Label>IPC (%)</Label>
+                                </TableHead>
+                                <TableHead>
+                                    <Label>HPA (%)</Label>
+                                </TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -115,16 +119,19 @@ const postData = async () => {
                         </TableBody>
                     </Table>
 
-                    <Input
-                        id="wacc"
-                        type="text"
-                        placeholder="WACC - Coste de Capital"
-                        class="mt-2"
-                        required
-                        autofocus
-                        autocomplete="wacc"
-                        v-model.number="localMasterData.WACC"
-                    />
+                    <div class="space-y-2">
+                        <Label for="wacc">WACC - Coste de Capital</Label>
+                        <Input
+                            id="wacc"
+                            type="text"
+                            placeholder="WACC - Coste de Capital"
+                            class="mt-2"
+                            required
+                            autofocus
+                            autocomplete="wacc"
+                            v-model.number="localMasterData.WACC"
+                        />
+                    </div>
                 </div>
             </div>
     

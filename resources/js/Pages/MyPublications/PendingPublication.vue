@@ -17,6 +17,7 @@ import {
     TabsContent,
     TabsList,
     TabsTrigger,
+    Label,
 } from '@/Components/ui'
 
 import { AssessmentIcon, XlsIcon } from '@/Components/icons'
@@ -87,65 +88,83 @@ defineProps<{
                                 <div
                                     class="flex flex-col gap-4"
                                 >
-                                    <Input
-                                        id="client_id"
-                                        type="text"
-                                        placeholder="ID cliente"
-                                        class="mt-2"
-                                        required
-                                        autofocus
-                                        autocomplete="client_id"
-                                    />
-                
-                                    <Input
-                                        id="fenlab_id"
-                                        type="text"
-                                        placeholder="ID fenlab"
-                                        class="mt-2"
-                                        required
-                                        autofocus
-                                        autocomplete="fenlab_id"
-                                    />
-                
-                                    <Input
-                                        id="cadastral_reference"
-                                        type="text"
-                                        placeholder="Referencia catastral"
-                                        class="mt-2"
-                                        required
-                                        autofocus
-                                        autocomplete="cadastral_reference"
-                                    />
-                
-                                    <Input
-                                        id="min_price"
-                                        type="text"
-                                        placeholder="Precio mínimo"
-                                        class="mt-2"
-                                        required
-                                        autofocus
-                                        autocomplete="min_price"
-                                    />
-                
-                                    <Input
-                                        id="reference_value"
-                                        type="text"
-                                        placeholder="Valor de referencia"
-                                        class="mt-2"
-                                        required
-                                        autofocus
-                                        autocomplete="reference_value"
-                                    />
-                
-                                    <Input
-                                        id="transaction_modality"
-                                        type="text"
-                                        placeholder="Modalidad de transacción"
-                                        class="mt-2"
-                                        required
-                                        autofocus
-                                        autocomplete="transaction_modality"
-                                    />
+                                    <div class="space-y-2">
+                                        <Label for="client_id">ID cliente</Label>
+                                        <Input
+                                            id="client_id"
+                                            type="text"
+                                            placeholder="ID cliente"
+                                            class="mt-2"
+                                            required
+                                            autofocus
+                                            autocomplete="client_id"
+                                        />
+                                    </div>
+                    
+                                    <div class="space-y-2">
+                                        <Label for="fenlab_id">ID fenlab</Label>
+                                        <Input
+                                            id="fenlab_id"
+                                            type="text"
+                                            placeholder="ID fenlab"
+                                            class="mt-2"
+                                            required
+                                            autofocus
+                                            autocomplete="fenlab_id"
+                                        />
+                                    </div>
+                    
+                                    <div class="space-y-2">
+                                        <Label for="cadastral_reference">Referencia catastral</Label>
+                                        <Input
+                                            id="cadastral_reference"
+                                            type="text"
+                                            placeholder="Referencia catastral"
+                                            class="mt-2"
+                                            required
+                                            autofocus
+                                            autocomplete="cadastral_reference"
+                                        />
+                                    </div>
+                    
+                                    <div class="space-y-2">
+                                        <Label for="min_price">Precio mínimo</Label>
+                                        <Input
+                                            id="min_price"
+                                            type="text"
+                                            placeholder="Precio mínimo"
+                                            class="mt-2"
+                                            required
+                                            autofocus
+                                            autocomplete="min_price"
+                                        />
+                                    </div>
+                    
+                                    <div class="space-y-2">
+                                        <Label for="reference_value">Valor de referencia</Label>
+                                        <Input
+                                            id="reference_value"
+                                            type="text"
+                                            placeholder="Valor de referencia"
+                                            class="mt-2"
+                                            required
+                                            autofocus
+                                            autocomplete="reference_value"
+                                        />
+                                    </div>
+                    
+                                    <div class="space-y-2">
+                                        <Label for="transaction_modality">Modalidad de transacción</Label>
+                                        <Input
+                                            id="transaction_modality"
+                                            type="text"
+                                            placeholder="Modalidad de transacción"
+                                            class="mt-2"
+                                            required
+                                            autofocus
+                                            autocomplete="transaction_modality"
+                                        />
+                                    </div>
                                 </div>
                             </TabsContent>
                             <TabsContent value="documents">
