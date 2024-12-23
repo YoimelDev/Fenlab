@@ -419,6 +419,28 @@ async function uploadIdealistaFile() {
                     </div>
                 </div>
 
+                <div v-if="project.strats" class="my-4">
+                    <div class="relative flex items-center gap-4 w-full p-4 bg-white ">
+                        <XlsIcon v-if="project.strats.extension == 'xlsx'" />
+
+                        <div>
+                            <p class="text-black text-lg font-bold">
+                                {{ project.strats.title }}
+                            </p>
+                            <p class="text-grey text-sm">
+                                {{ project.strats.description }}
+                            </p>
+                        </div>
+
+                        <Button v-if="project.strats.url" variant="ghost" size="xs" as-child>
+                            <a class="absolute top-4 right-4" :href="project.strats.url" target="_blank"
+                                rel="noopener noreferrer">
+                                <DownloadIcon />
+                            </a>
+                        </Button>
+                    </div>
+                </div>
+
                 <div class="flex justify-center items-center">
                     <ArrowUpIcon v-if="project.secondExcel" />
                 </div>
