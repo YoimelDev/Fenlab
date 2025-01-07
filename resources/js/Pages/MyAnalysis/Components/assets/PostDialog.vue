@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { router } from '@inertiajs/vue3'
 import { fenlabApi } from '@/api'
-import {  
-    Button, 
+import {
+    Button,
     DialogContent,
     DialogFooter,
     DialogHeader,
@@ -33,9 +33,9 @@ const postData = async () => {
         toast({
             variant: 'info',
             title: 'Datos guardados correctamente',
-        }) 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch(error: any) {
+        })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
         toast({
             variant: 'danger',
             title: '¡Ups! Algo salió mal.',
@@ -46,6 +46,15 @@ const postData = async () => {
         router.reload()
     }
 }
+
+const transactionModality = computed(() => {
+    const npl = formData.value.model.npl
+    if (npl.subasta?.isPublishable) return 'Subasta'
+    if (npl.credito?.isPublishable) return 'Crédito'
+    if (npl.remate?.isPublishable) return 'Remate'
+    return '-'
+})
+
 </script>
 
 <template>
@@ -60,85 +69,44 @@ const postData = async () => {
             <div class="flex flex-col gap-4">
                 <div class="space-y-2">
                     <Label for="idCliente">ID cliente</Label>
-                    <Input
-                        id="idCliente"
-                        type="text"
-                        placeholder="ID cliente"
-                        class="mt-2"
-                        required
-                        v-model="formData.idCliente"
-                    />
+                    <Input id="idCliente" type="text" placeholder="ID cliente" class="mt-2" disabled required
+                        v-model="formData.idCliente" />
                 </div>
 
                 <div class="space-y-2">
                     <Label for="idFencia">ID fenlab</Label>
-                    <Input
-                        id="idFencia"
-                        type="text"
-                        placeholder="ID fenlab"
-                        class="mt-2"
-                        required
-                        v-model="formData.idFencia"
-                    />
+                    <Input id="idFencia" type="text" placeholder="ID fenlab" class="mt-2" disabled required
+                        v-model="formData.idFencia" />
                 </div>
 
                 <div class="space-y-2">
                     <Label for="referenciaCatastral">Referencia catastral</Label>
-                    <Input
-                        id="referenciaCatastral"
-                        type="text"
-                        placeholder="Referencia catastral"
-                        class="mt-2"
-                        required
-                        v-model="formData.model.referenciaCatastral"
-                    />
+                    <Input id="referenciaCatastral" type="text" placeholder="Referencia catastral" disabled class="mt-2"
+                        required v-model="formData.model.referenciaCatastral" />
                 </div>
 
                 <div class="space-y-2">
-                    <Label for="min_price">Precio mínimo</Label>
-                    <Input
-                        id="min_price"
-                        type="text"
-                        placeholder="Precio mínimo"
-                        class="mt-2"
-                        required
-                        v-model="formData.model.npl.credito.precioMinimo"
-                    />
+                    <Label for="min_price">Precio mínimo (€)</Label>
+                    <Input id="min_price" type="text" placeholder="Precio mínimo" class="mt-2" required
+                        v-model="formData.model.npl.credito.precioMinimo" />
                 </div>
 
                 <div class="space-y-2">
-                    <Label for="reference_value">Valor de referencia</Label>
-                    <Input
-                        id="reference_value"
-                        type="text"
-                        placeholder="Valor de referencia"
-                        class="mt-2"
-                        required
-                        v-model.number="formData.model.npl.precioReferencia"
-                    />
+                    <Label for="reference_value">Valor de referencia (€)</Label>
+                    <Input id="reference_value" type="text" placeholder="Valor de referencia" disabled class="mt-2"
+                        required v-model.number="formData.model.npl.precioReferencia" />
                 </div>
 
                 <div class="space-y-2">
                     <Label for="transaction_modality">Modalidad de transacción</Label>
-                    <Input
-                        id="transaction_modality"
-                        type="text"
-                        placeholder="Modalidad de transacción"
-                        class="mt-2"
-                        required
-                        v-model="formData.model.type"
-                    />
+                    <Input id="transaction_modality" type="text" placeholder="Modalidad de transacción" class="mt-2"
+                        required :value="transactionModality" />
                 </div>
             </div>
         </div>
-    
+
         <DialogFooter class="flex justify-between mt-10">
-            <Button 
-                class="gap-1 w-full"
-                variant="green"
-                size="sm"
-                @click="postData"
-            >
+            <Button class="gap-1 w-full" variant="green" size="sm" @click="postData">
                 Publicar
             </Button>
         </DialogFooter>
