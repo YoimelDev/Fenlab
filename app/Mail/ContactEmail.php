@@ -19,10 +19,7 @@ class ContactEmail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct( $data ) 
-    {
-        $this->data = $data;
-    }
+    public function __construct() {}
 
     /**
      * Get the message envelope.
@@ -42,9 +39,6 @@ class ContactEmail extends Mailable
     {
         return new Content(
             view: 'mail.contact',
-            with: [
-                'data' => $this->data,
-            ],
         );
     }
 

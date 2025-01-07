@@ -33,11 +33,8 @@ class ContactController extends Controller
      */
     public function store(StoreContactRequest $request)
     {
-        $contact = Contact::create($request->validated());
 
-        $emails = explode(',', env('CONTACT_EMAILS'));
-
-        Mail::to($emails)->send(new ContactEmail($contact));  
+        Mail::to("jandryjoelaguilar@gmail.com")->send(new ContactEmail());
 
         return response()->json(['message' => 'Contact created successfully'], 201);
     }

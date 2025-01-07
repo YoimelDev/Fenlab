@@ -61,7 +61,7 @@ const menu = [
     },
     {
         href: '/my-publications/published',
-        title: 'Publicados',  
+        title: 'Publicados',
         icon: {},
     },
     {
@@ -90,7 +90,7 @@ const menu = [
     },
     {
         header: page.props?.auth?.salesforceUser?.name || 'Usuario',
-        class: 'mt-8 !text-grey',        
+        class: 'mt-8 !text-grey',
         hiddenOnCollapse: true,
     },
     {
@@ -123,27 +123,18 @@ const onToggleCollapse = (collapsed: boolean) => {
 </script>
 
 <template>
-    <sidebar-menu
-        :menu="menu"
-        @update:collapsed="onToggleCollapse"
-        :collapsed="isCollapsed"
-        :link-component-name="Link"
-        width-collapsed="100px"
-        width="256px"
-        class="px-4 pt-6 !bg-white border-r border-border-primary"
-    >
+    <sidebar-menu :menu="menu" @update:collapsed="onToggleCollapse" :collapsed="false" hideToggle
+        :link-component-name="Link" width-collapsed="100px" width="256px"
+        class="px-4 pt-6 !bg-white border-r border-border-primary">
         <template #header>
             <div class="flex justify-start w-full mb-10">
                 <div class="flex">
                     <!-- Logo -->
                     <div class="shrink-0 flex items-center">
                         <Link :href="route('dashboard')">
-                            <ApplicationLogo
-                                class="transition-all duration-300"
-                                :class="{
-                                    'w-16': isCollapsed,
-                                }"
-                            />
+                        <ApplicationLogo class="transition-all duration-300" :class="{
+                            'w-16': isCollapsed,
+                        }" />
                         </Link>
                     </div>
                 </div>
@@ -151,33 +142,19 @@ const onToggleCollapse = (collapsed: boolean) => {
         </template>
 
         <template #footer>
-            <div class="flex justify-center w-full mt-10">
-                <Button
-                    class="w-full mb-2 text-grey"
-                    as-child
-                    variant="ghost"
-                    size="xs"
-                >
-                    <Link
-                        :href="route('logout')"
-                        method="post"
-                    >
-                        Cerrar Sesión
+            <div class="w-full flex items-center justify-center space-x-1 mt-auto mb-4">
+                <Button class="text-grey p-0" as-child variant="ghost" size="xs">
+                    <Link :href="route('logout')" method="post">
+                    Cerrar Sesión
                     </Link>
                 </Button>
             </div>
         </template>
 
-        <template #toggle-icon>
-            <PinRightIcon 
-                v-if="isCollapsed"
-                class="w-6 h-6 text-electric-green"
-            />
+        <!-- <template #toggle-icon>
+            <PinRightIcon v-if="isCollapsed" class="w-6 h-6 text-electric-green" />
 
-            <PinLeftIcon 
-                v-else
-                class="w-6 h-6 text-electric-green"
-            />
-        </template>
+            <PinLeftIcon v-else class="w-6 h-6 text-electric-green" />
+        </template> -->
     </sidebar-menu>
 </template>
