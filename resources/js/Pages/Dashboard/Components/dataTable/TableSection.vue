@@ -44,7 +44,7 @@ const sections = ref<Section[]>([
         id: 'published',
         title: 'Publicados',
         icon: PictureIcon,
-        data: props.sections.published,
+        data: props.sections.published.Auctions,
         columns: publishedColumns as ColumnDef<Project, unknown>[],
         linkTo: 'my-publications.published',
     },
@@ -112,7 +112,7 @@ const sections = ref<Section[]>([
             <DataTable
                 :activate-pagination="false"
                 :columns="section.columns"
-                :data="section.data ?? []"
+                :data="(section.data ?? []).slice(0, 5)"
             />
         </section>
     </div>

@@ -10,6 +10,11 @@ import {
 import { AssessmentIcon } from '@/Components/icons'
 
 import { columns } from './Components/publishedTable'
+import { Published } from './types'
+
+defineProps<{
+    published: Published
+}>()
 
 </script>
 
@@ -30,7 +35,7 @@ import { columns } from './Components/publishedTable'
      
         <DataTable
             :columns="columns"
-            :data="[]"
+            :data="published.Auctions"
         />
     </AuthenticatedLayout>
 </template>

@@ -70,7 +70,9 @@ class MyPublicationsController extends Controller
             session()->flash('error', implode(' | ', $this->errors));
         }
 
-        return Inertia::render('MyPublications/Published');
+        return Inertia::render('MyPublications/Published', [
+            'published' => $data
+        ]);
     }
 
     public function pendingApproval(Request $request): Response
