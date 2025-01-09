@@ -1,16 +1,15 @@
 
 <script setup lang="ts">
-import { Head } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
+import { Head } from '@inertiajs/vue3'
 
-import { 
+import {
     DataTable,
 } from '@/Components/ui'
 
 import { AssessmentIcon } from '@/Components/icons'
 
 import { columns } from './Components/publishedTable'
-import KpisSection from '@/Components/common/KpisSection.vue'
 
 </script>
 
@@ -28,8 +27,6 @@ import KpisSection from '@/Components/common/KpisSection.vue'
                 Mis Publicaciones | Publicadas
             </h1>
         </header>
-
-        <KpisSection />
      
         <DataTable
             :columns="columns"

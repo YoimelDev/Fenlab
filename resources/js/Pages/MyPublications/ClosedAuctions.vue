@@ -6,7 +6,6 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import { Head } from '@inertiajs/vue3'
 import { columns } from './Components/closedAuctionsTable'
 import { ClosedAuctions } from './types'
-import KpisSection from '@/Components/common/KpisSection.vue'
 
 defineProps<{
     projects: ClosedAuctions[]
@@ -26,8 +25,6 @@ defineProps<{
                 Mis Publicaciones | Operaciones Cerradas
             </h1>
         </header>
-
-        <KpisSection />
      
         <DataTable
             :columns="columns"

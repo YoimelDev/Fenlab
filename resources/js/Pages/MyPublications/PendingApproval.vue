@@ -1,6 +1,5 @@
 
 <script setup lang="ts">
-import KpisSection from '@/Components/common/KpisSection.vue'
 import { AssessmentIcon } from '@/Components/icons'
 import { DataTable } from '@/Components/ui'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
@@ -26,8 +25,6 @@ defineProps<{
                 Mis Publicaciones | Pendientes de Aprobación
             </h1>
         </header>
-
-        <KpisSection />
      
         <DataTable
             :columns="columns"

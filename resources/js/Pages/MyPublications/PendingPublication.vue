@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { Head, Link } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
+import { Head, Link } from '@inertiajs/vue3'
 
-import { 
-    Input, 
-    Button, 
+import {
+    Button,
     DataTable,
     Dialog,
     DialogContent,
@@ -12,11 +11,12 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
+    Input,
+    Label,
     Tabs,
     TabsContent,
     TabsList,
     TabsTrigger,
-    Label,
 } from '@/Components/ui'
 
 import { AssessmentIcon, XlsIcon } from '@/Components/icons'
@@ -24,7 +24,6 @@ import { PlusIcon } from '@radix-icons/vue'
 
 import { columns } from './Components/pendingPublicationTable'
 import { type Publishable } from './types'
-import KpisSection from '@/Components/common/KpisSection.vue'
 
 defineProps<{
     projects: Publishable
@@ -264,8 +263,6 @@ defineProps<{
                 </DialogContent>
             </Dialog>
         </header>
-
-        <KpisSection />
      
         <DataTable
             :columns="columns"
