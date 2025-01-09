@@ -1,0 +1,1 @@
+export { default as NewPublicationDialog } from './NewPublicationDialog.vue'
