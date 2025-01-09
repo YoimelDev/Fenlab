@@ -33,6 +33,7 @@ class DashboardController extends Controller
         ];
 
         $kpiData = [
+            'analysis' => $this->getAnalysisKPI($token, $apiUrl),
             'published' => $this->getSalesforceData('published-kpi', $salesforceEmail),
             'approved' => $this->getSalesforceData('approved-kpi', $salesforceEmail),
             'signed' => $this->getSalesforceData('signed-kpi', $salesforceEmail),
@@ -65,6 +66,27 @@ class DashboardController extends Controller
             return $response->json('data') ?? [];
         } catch (\Exception $e) {
             $this->errors[] = 'Error al obtener análisis: ' . $e->getMessage();
+            return [];
+        }
+    }
+
+    private function getAnalysisKPI($token, $apiUrl)
+    {
+        try {
+            $url = env('VITE_FENLAB_API_URL') . 'projects/kpi';
+            $responseKPI = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $token,
+                'Accept' => 'application/json',
+            ])->get($url);
+
+            if (!$responseKPI->successful()) {
+                $this->errors[] = $responseKPI->json('message') ?? 'Error al obtener kpi de proyectos';
+                return [];
+            }
+
+            return $responseKPI->json('data') ?? (object) [];
+        } catch (\Exception $e) {
+            $this->errors[] = 'Error al obtener kpi de proyectos: ' . $e->getMessage();
             return [];
         }
     }

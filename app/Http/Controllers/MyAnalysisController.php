@@ -35,7 +35,7 @@ class MyAnalysisController extends Controller
                 'Authorization' => 'Bearer ' . $token,
                 'Accept' => 'application/json',
             ])->get($projectsKPIurl);
-            $projectsKPI = $responseKPI->json('data') ?? [];
+            $projectsKPI = $responseKPI->json('data') ?? (object) [];
         } catch (\Exception $e) {
             $this->errors[] = 'Error al obtener kpi de proyectos: ' . $e->getMessage();
             return [];
@@ -47,7 +47,7 @@ class MyAnalysisController extends Controller
                 'Authorization' => 'Bearer ' . $token,
                 'Accept' => 'application/json',
             ])->get($assetsKPIurl);
-            $assetsKPI = $responseAssetsKPI->json('data') ?? [];
+            $assetsKPI = $responseAssetsKPI->json('data') ?? (object) [];
         } catch (\Exception $e) {
             $this->errors[] = 'Error al obtener kpi de activos: ' . $e->getMessage();
             return [];

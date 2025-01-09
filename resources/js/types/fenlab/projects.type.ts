@@ -100,8 +100,16 @@ interface Seguridad {
     baja: number;
 }
 
+export interface KpiData {
+    analysis:  KPI;
+    published: KPI;
+    approved:  KPI;
+    signed:    KPI;
+}
+
 export interface KPI {
     currentMonth: number;
     lastMonth:    number;
     percentage:   number;
+    variation:    number;
 }
