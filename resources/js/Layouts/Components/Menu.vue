@@ -7,7 +7,6 @@ import { SidebarMenu } from 'vue-sidebar-menu'
 import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
 
 import ApplicationLogo from '@/Components/ApplicationLogo.vue'
-import { PinLeftIcon, PinRightIcon } from '@radix-icons/vue'
 import { HomeIcon, AssessmentIcon, HelpIcon, PersonIcon, PictureIcon } from '@/Components/icons'
 import { PageProps } from '@/types'
 import { Button } from '@/Components/ui'
@@ -123,18 +122,28 @@ const onToggleCollapse = (collapsed: boolean) => {
 </script>
 
 <template>
-    <sidebar-menu :menu="menu" @update:collapsed="onToggleCollapse" :collapsed="false" hideToggle
-        :link-component-name="Link" width-collapsed="100px" width="256px"
-        class="px-4 pt-6 !bg-white border-r border-border-primary">
+    <sidebar-menu
+        :menu="menu"
+        @update:collapsed="onToggleCollapse"
+        :collapsed="false"
+        hide-toggle
+        :link-component-name="Link"
+        width-collapsed="100px"
+        width="256px"
+        class="px-4 pt-6 !bg-white border-r border-border-primary"
+    >
         <template #header>
             <div class="flex justify-start w-full mb-10">
                 <div class="flex">
                     <!-- Logo -->
                     <div class="shrink-0 flex items-center">
                         <Link :href="route('dashboard')">
-                        <ApplicationLogo class="transition-all duration-300" :class="{
-                            'w-16': isCollapsed,
-                        }" />
+                            <ApplicationLogo
+                                class="transition-all duration-300"
+                                :class="{
+                                    'w-16': isCollapsed,
+                                }"
+                            />
                         </Link>
                     </div>
                 </div>
@@ -143,9 +152,17 @@ const onToggleCollapse = (collapsed: boolean) => {
 
         <template #footer>
             <div class="w-full flex items-center justify-center space-x-1 mt-auto mb-4">
-                <Button class="text-grey p-0" as-child variant="ghost" size="xs">
-                    <Link :href="route('logout')" method="post">
-                    Cerrar Sesión
+                <Button
+                    class="text-grey p-0"
+                    as-child
+                    variant="ghost"
+                    size="xs"
+                >
+                    <Link
+                        :href="route('logout')"
+                        method="post"
+                    >
+                        Cerrar Sesión
                     </Link>
                 </Button>
             </div>

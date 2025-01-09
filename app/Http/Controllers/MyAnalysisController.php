@@ -35,19 +35,19 @@ class MyAnalysisController extends Controller
                 'Authorization' => 'Bearer ' . $token,
                 'Accept' => 'application/json',
             ])->get($projectsKPIurl);
-            $projectsKPI = $responseKPI->json('data') ?? (object) [];
+            $projectsKPI = $responseKPI->json() ?? (object) [];
         } catch (\Exception $e) {
             $this->errors[] = 'Error al obtener kpi de proyectos: ' . $e->getMessage();
             return [];
         }
 
         try {
-            $assetsKPIurl = env('VITE_FENLAB_API_URL') . 'assets/kpi';
+            $assetsKPIurl = env('VITE_FENLAB_API_URL') . 'projects/assets/kpi';
             $responseAssetsKPI = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $token,
                 'Accept' => 'application/json',
             ])->get($assetsKPIurl);
-            $assetsKPI = $responseAssetsKPI->json('data') ?? (object) [];
+            $assetsKPI = $responseAssetsKPI->json() ?? (object) [];
         } catch (\Exception $e) {
             $this->errors[] = 'Error al obtener kpi de activos: ' . $e->getMessage();
             return [];

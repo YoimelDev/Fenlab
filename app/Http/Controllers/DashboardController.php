@@ -32,20 +32,12 @@ class DashboardController extends Controller
             'pendingNotary' => $this->getSalesforceData('pending-notary', $salesforceEmail),
         ];
 
-        $kpiData = [
-            'analysis' => $this->getAnalysisKPI($token, $apiUrl),
-            'published' => $this->getSalesforceData('published-kpi', $salesforceEmail),
-            'approved' => $this->getSalesforceData('approved-kpi', $salesforceEmail),
-            'signed' => $this->getSalesforceData('signed-kpi', $salesforceEmail),
-        ];
-
         if (!empty($this->errors)) {
             session()->flash('error', implode(' | ', $this->errors));
         }
 
         return Inertia::render('Dashboard/Dashboard', [
             'sections' => $sections,
-            'kpiData' => $kpiData,
         ]);
     }
 
@@ -66,27 +58,6 @@ class DashboardController extends Controller
             return $response->json('data') ?? [];
         } catch (\Exception $e) {
             $this->errors[] = 'Error al obtener análisis: ' . $e->getMessage();
-            return [];
-        }
-    }
-
-    private function getAnalysisKPI($token, $apiUrl)
-    {
-        try {
-            $url = env('VITE_FENLAB_API_URL') . 'projects/kpi';
-            $responseKPI = Http::withHeaders([
-                'Authorization' => 'Bearer ' . $token,
-                'Accept' => 'application/json',
-            ])->get($url);
-
-            if (!$responseKPI->successful()) {
-                $this->errors[] = $responseKPI->json('message') ?? 'Error al obtener kpi de proyectos';
-                return [];
-            }
-
-            return $responseKPI->json('data') ?? (object) [];
-        } catch (\Exception $e) {
-            $this->errors[] = 'Error al obtener kpi de proyectos: ' . $e->getMessage();
             return [];
         }
     }
@@ -126,9 +97,6 @@ class DashboardController extends Controller
                 'pending-approval' => $this->salesforceController->getPendingApproval($request),
                 'pending-pbc' => $this->salesforceController->getPendingPBC($request),
                 'pending-notary' => $this->salesforceController->getPendingNotary($request),
-                'published-kpi' => $this->salesforceController->getPublishedKPI($request),
-                'approved-kpi' => $this->salesforceController->getApprovedKPI($request),
-                'signed-kpi' => $this->salesforceController->getSignedKPI($request),
                 default => response()->json([])
             };
 
