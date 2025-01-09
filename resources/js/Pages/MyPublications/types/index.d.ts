@@ -91,6 +91,47 @@ export interface Meta {
     totalPages:  number;
 }
 
+export interface Published {
+    Auctions:            Auction[];
+    'Upcoming Auctions': UpcomingAuction[];
+}
+
+export interface Auction {
+    id:           string;
+    fenlabId:     null;
+    prestashopId: string;
+    name:         string;
+    companyId:    CompanyID;
+    stage:        Sta;
+    startDate:    Date;
+    endDate:      Date;
+    recordType:   DType;
+}
+
+export enum CompanyID {
+    The001J6000005Ty4WIAC = '001J6000005Ty4wIAC',
+}
+
+export enum DType {
+    AssetPurchase = 'Asset Purchase',
+}
+
+export enum Sta {
+    Open = 'Open',
+}
+
+export interface UpcomingAuction {
+    id:           string;
+    prestashopId: string;
+    name:         string;
+    companyId:    CompanyID;
+    status:       Sta;
+    startDate:    Date;
+    endDate:      Date;
+    allowedType:  DType;
+}
+
+
 export interface PendingApproval {
     rejectedDate: string | null;
     approvedDate: string | null;
