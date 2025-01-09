@@ -66,6 +66,8 @@ export const columns: ColumnDef<AssetData>[] = [
         header: () => '',
         accessorKey: 'id',
         cell: (row) => {
+            if (row.row.original.model.npl.credito.isPublishable === true) return
+             
             return h(AssetActions, {
                 asset: row.row.original,
             })

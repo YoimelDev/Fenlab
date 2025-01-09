@@ -1,17 +1,18 @@
 <script setup lang="ts">
-import { inject } from 'vue'
-import { Button } from '@/Components/ui'
+import { inject, ref } from 'vue'
+import { Button, Dialog } from '@/Components/ui'
 import { fenlabApi } from '@/api'
 import type { AssetData } from '../../types'
 import type { PluginApi } from 'vue-loading-overlay'
 import { toast } from '@/Components/ui'
-import { router } from '@inertiajs/vue3'
 import { IndividualAsset } from '@/Pages/MyAnalysis/types/individualAsset'
+import PostDialog from './PostDialog.vue'
 
 const props = defineProps<{
     asset: AssetData
 }>()
 
+const isDialogOpen = ref(false)
 const $loading = inject<PluginApi>('$loading')
 
 async function downloadAsset() {
@@ -39,30 +40,6 @@ async function downloadAsset() {
         loader?.hide()
     }
 }
-
-async function publishAsset() {
-    const loader = $loading?.show()
-    try {
-        await fenlabApi.post('', {
-            method: 'put',
-            path: `projects/${props.asset.projectId}/assets/${props.asset.id}/publish`,
-        })
-
-        toast({
-            variant: 'info',
-            title: 'Asset published successfully',
-        })
-        router.reload()
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-        toast({
-            variant: 'danger',
-            title: error.response.data.message.join('\n'),
-        })
-    } finally {
-        loader?.hide()
-    }
-}
 </script>
 
 <template>
@@ -74,12 +51,19 @@ async function publishAsset() {
         >
             Descargar
         </Button>
-        <Button
-            variant="ghost"
-            size="xs"
-            @click="publishAsset"
-        >
-            Publicar
-        </Button>
+        <Dialog v-model:open="isDialogOpen">
+            <Button
+                variant="ghost"
+                size="xs"
+                @click="isDialogOpen = true"
+            >
+                Publicar
+            </Button>
+
+            <PostDialog 
+                :asset="asset"
+                @updated="() => isDialogOpen = false"
+            />
+        </Dialog>
     </div>
 </template>

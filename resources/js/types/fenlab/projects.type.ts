@@ -46,6 +46,7 @@ export interface ProjectById {
     outputBBDD: FirstExcel;
     outputCF: FirstExcel;
     strats: FirstExcel;
+    assetsZip: FirstExcel;
     masterData: MasterData;
     createdAt: Date;
     updatedAt: Date;

@@ -22,7 +22,7 @@ import {
 } from '@/Components/ui'
 
 import { useDropZone } from '@vueuse/core'
-import { ArrowIcon, InfoIcon, XlsIcon, DownloadIcon, ArrowUpIcon, CircleIcon, UploadIcon } from '@/Components/icons'
+import { ArrowIcon, InfoIcon, XlsIcon, PdfIcon, DownloadIcon, ArrowUpIcon, CircleIcon, UploadIcon } from '@/Components/icons'
 import { UpdateIcon } from '@radix-icons/vue'
 import { Assets } from '@/Pages/MyAnalysis/Components/assets'
 import { ProjectById } from '@/types/fenlab'
@@ -475,6 +475,40 @@ async function uploadIdealistaFile() {
 
                 <div class="flex justify-center items-center">
                     <ArrowUpIcon v-if="project.outputBBDD && project.status !== 'Carga definitiva'" />
+                </div>
+
+                <div
+                    v-if="project.assetsZip"
+                    class="my-4"
+                >
+                    <div class="relative flex items-center gap-4 w-full p-4 bg-white ">
+                        <PdfIcon />
+
+                        <div>
+                            <p class="text-black text-lg font-bold">
+                                {{ project.assetsZip.title }}
+                            </p>
+                            <p class="text-grey text-sm">
+                                {{ project.assetsZip.description }}
+                            </p>
+                        </div>
+
+                        <Button
+                            v-if="project.assetsZip.url"
+                            variant="ghost"
+                            size="xs"
+                            as-child
+                        >
+                            <a
+                                class="absolute top-4 right-4"
+                                :href="project.assetsZip.url"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <DownloadIcon />
+                            </a>
+                        </Button>
+                    </div>
                 </div>
 
                 <div

@@ -19,6 +19,6 @@ defineProps({
     <DataTable
         :columns="columns"
         :data="assets"
-        column-filter="client_id"
+        column-filter="idCliente"
     />
 </template>
