@@ -41,7 +41,7 @@ const props = withDefaults(defineProps<Props>(), {
                     class="!text-[#50CD5E]"
                     :class="{ '!text-[#FF4D4F]': !props.isPositive }"
                 >
-                    {{ percentage }} <span class="text-white font-normal">vs mes anterior</span>
+                    {{ percentage }}% <span class="text-white font-normal">vs mes anterior</span>
                 </p>
             </div>
         </div>
