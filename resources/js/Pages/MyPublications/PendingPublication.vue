@@ -3,7 +3,6 @@ import { Head, Link } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 
 import { 
-    Kpi,
     Input, 
     Button, 
     DataTable,
@@ -23,9 +22,9 @@ import {
 import { AssessmentIcon, XlsIcon } from '@/Components/icons'
 import { PlusIcon } from '@radix-icons/vue'
 
-import { kpiOverview } from '@/data'
 import { columns } from './Components/pendingPublicationTable'
 import { type Publishable } from './types'
+import KpisSection from '@/Components/common/KpisSection.vue'
 
 defineProps<{
     projects: Publishable
@@ -266,15 +265,7 @@ defineProps<{
             </Dialog>
         </header>
 
-        <div class="flex flex-wrap gap-10">
-            <Kpi
-                v-for="(kpi, index) in kpiOverview"
-                :key="kpi.title"
-                :data="kpi"
-                :variant="index === 0 ? 'default' : 'primary'"
-                :is-positive="kpi.isPositive"
-            />
-        </div>
+        <KpisSection />
      
         <DataTable
             :columns="columns"

@@ -4,14 +4,13 @@ import { Head } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 
 import { 
-    Kpi,
     DataTable,
 } from '@/Components/ui'
 
 import { AssessmentIcon } from '@/Components/icons'
 
-import { kpiOverview } from '@/data'
 import { columns } from './Components/publishedTable'
+import KpisSection from '@/Components/common/KpisSection.vue'
 
 </script>
 
@@ -30,15 +29,7 @@ import { columns } from './Components/publishedTable'
             </h1>
         </header>
 
-        <div class="flex flex-wrap gap-10">
-            <Kpi
-                v-for="(kpi, index) in kpiOverview"
-                :key="kpi.title"
-                :data="kpi"
-                :variant="index === 0 ? 'default' : 'primary'"
-                :is-positive="kpi.isPositive"
-            />
-        </div>
+        <KpisSection />
      
         <DataTable
             :columns="columns"
