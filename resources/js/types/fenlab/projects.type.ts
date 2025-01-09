@@ -99,3 +99,9 @@ interface Seguridad {
     media: number;
     baja: number;
 }
+
+export interface KPI {
+    currentMonth: number;
+    lastMonth:    number;
+    percentage:   number;
+}
