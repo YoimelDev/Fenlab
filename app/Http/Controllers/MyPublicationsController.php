@@ -51,6 +51,25 @@ class MyPublicationsController extends Controller
 
     public function published(Request $request): Response
     {
+        $salesforceEmail = $request->session()->get('salesforceUser.email');
+        try {
+            $request->merge(['email' => $salesforceEmail]);
+            $response = $this->salesforceController->getPublishedOpportunities($request);
+            $data = $response->getData(true);
+
+            if (isset($data['error'])) {
+                $this->errors[] = $data['error'];
+                $data = [];
+            }
+        } catch (\Exception $e) {
+            $this->errors[] = 'Error al obtener publicaciones publicadas: ' . $e->getMessage();
+            $data = [];
+        }
+
+        if (!empty($this->errors)) {
+            session()->flash('error', implode(' | ', $this->errors));
+        }
+
         return Inertia::render('MyPublications/Published');
     }
 

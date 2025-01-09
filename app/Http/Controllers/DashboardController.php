@@ -26,7 +26,7 @@ class DashboardController extends Controller
         $sections = [
             'analysis' => $this->getAnalysis($token, $apiUrl),
             'pendingPublish' => $this->getPendingPublish($token, $apiUrl),
-            'published' => [], 
+            'published' => $this->getSalesforceData('published-opportunities', $salesforceEmail),
             'pendingApproval' => $this->getSalesforceData('pending-approval', $salesforceEmail),
             'pendingPBC' => $this->getSalesforceData('pending-pbc', $salesforceEmail),
             'pendingNotary' => $this->getSalesforceData('pending-notary', $salesforceEmail),
@@ -94,6 +94,7 @@ class DashboardController extends Controller
             $request->merge(['email' => $email]);
 
             $response = match ($endpoint) {
+                'published-opportunities' => $this->salesforceController->getPublishedOpportunities($request),
                 'pending-approval' => $this->salesforceController->getPendingApproval($request),
                 'pending-pbc' => $this->salesforceController->getPendingPBC($request),
                 'pending-notary' => $this->salesforceController->getPendingNotary($request),
