@@ -6,10 +6,11 @@ import type { PluginApi } from 'vue-loading-overlay'
 import { toast } from '@/Components/ui'
 import { IndividualAsset } from '@/Pages/MyAnalysis/types/individualAsset'
 import PostDialog from '@/Pages/MyAnalysis/Components/assets/PostDialog.vue'
-import { AssetData } from '@/Pages/MyAnalysis/types'
+// import { AssetData } from '@/Pages/MyAnalysis/types'
 
 const props = defineProps<{
-    publication: AssetData
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    publication: any
 }>()
 
 const isDialogOpen = ref(false)

@@ -44,7 +44,7 @@ const sections = ref<Section[]>([
         id: 'published',
         title: 'Publicados',
         icon: PictureIcon,
-        data: props.sections.published.Auctions,
+        data: props.sections.published,
         columns: publishedColumns as ColumnDef<Project, unknown>[],
         linkTo: 'my-publications.published',
     },

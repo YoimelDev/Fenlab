@@ -26,7 +26,7 @@ class DashboardController extends Controller
         $sections = [
             'analysis' => $this->getAnalysis($token, $apiUrl),
             'pendingPublish' => $this->getPendingPublish($token, $apiUrl),
-            'published' => $this->getSalesforceData('published-opportunities', $salesforceEmail),
+            'published' => $this->getSalesforceData('published-opportunities', $salesforceEmail)['Auctions'] ?? [],
             'pendingApproval' => $this->getSalesforceData('pending-approval', $salesforceEmail),
             'pendingPBC' => $this->getSalesforceData('pending-pbc', $salesforceEmail),
             'pendingNotary' => $this->getSalesforceData('pending-notary', $salesforceEmail),
