@@ -168,3 +168,9 @@ export interface ClosedAuctions {
     name:        string;
     id:          string;
 }
+
+export interface PostData {
+    postType: 'pendingApproval' | 'pendingPBC' | 'pendingNotary';
+    data: PendingApproval | PendingPBC | PendingNotary;
+    endpoint: string;
+}

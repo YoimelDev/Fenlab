@@ -1,0 +1,1 @@
+export { default as PostPubliDialog } from './PostPubliDialog.vue'

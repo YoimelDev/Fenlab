@@ -1,7 +1,8 @@
 import { h } from 'vue'
 import type { ColumnDef } from '@tanstack/vue-table'
-import type { PendingApproval } from '@/Pages/MyPublications/types'
+import type { PendingApproval, PostData } from '@/Pages/MyPublications/types'
 import { Badge } from '@/Components/ui/badge'
+import { PostAction } from '../PostAction'
 
 export const columns: ColumnDef<PendingApproval>[] = [
     {
@@ -26,5 +27,21 @@ export const columns: ColumnDef<PendingApproval>[] = [
     {
         header: 'ID EMPRESA',
         accessorKey: 'companyId',
+    },
+    {
+        id: 'actions',
+        header: () => '',
+        accessorKey: 'id',
+        cell: (row) => {         
+            const postData: PostData = {
+                postType: 'pendingApproval',
+                data: row.row.original,
+                endpoint: '/salesforce/approve-auction',
+            }
+            
+            return h(PostAction, {
+                postData,
+            })
+        },
     },
 ]
