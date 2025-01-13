@@ -65,8 +65,9 @@ class MyAnalysisController extends Controller
             return $this->formatAssetData($asset);
         }, $assets);
 
-        // Generate CSV file
-        $csvFileName = 'import.csv';
+        // Generate unique CSV filename with timestamp
+        $timestamp = date('Y-m-d_His');
+        $csvFileName = 'import_' . $timestamp . '.csv';
         $csvFilePath = storage_path('app/' . $csvFileName);
         $file = fopen($csvFilePath, 'w');
 
