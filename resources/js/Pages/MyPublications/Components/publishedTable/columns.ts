@@ -1,57 +1,50 @@
 import { h } from 'vue'
 import type { ColumnDef } from '@tanstack/vue-table'
-import { type publication } from '@/Pages/MyPublications/types'
 import { Badge, badgeMap, type BadgeMode } from '@/Components/ui/badge'
-import { DropdownAction } from '../dataTableDropdown'
+import { useDateFormat } from '@vueuse/core'
+import { Auction } from '@/Pages/MyPublications/types'
 
-export const columns: ColumnDef<publication>[] = [
+export const columns: ColumnDef<Auction>[] = [
     {
-        header: 'NOMBRE PROYECTO',
-        accessorKey: 'name',
-        cell: (row) => {
-            const name = row.getValue() as string
-            return h('p', { class: 'font-bold' }, name)
-        },
-        
+        header: 'ID',
+        accessorKey: 'id',
     },
     {
-        header: 'ID CLIENTE',
-        accessorKey: 'client_id',
-    },
-    {
-        header: 'ID FENCIA',
-        accessorKey: 'fencia_id',
+        header: 'DETALLE',
+        accessorKey: 'name', 
     },
     {
         header: 'ESTADO',
-        accessorKey: 'status',
+        accessorKey: 'stage',
         cell: (row) => {
-            const status = row.getValue() as BadgeMode
+            const stage = row.getValue() as BadgeMode
             return h(
                 'div',
                 { class: 'font-medium' },
-                h(Badge, { variant: badgeMap[status] }, status),
+                h(Badge, { variant: badgeMap[stage] }, stage),
             )
         },
     },
     {
-        header: 'REF. CATASTRAL',
-        accessorKey: 'cadastral_reference',
+        header: () => h('div', { class: 'w-[78px]' }, 'TIPO'),
+        accessorKey: 'recordType',
     },
     {
-        header: 'PRECIO MÍNIMO',
-        accessorKey: 'min_price',
+        header: 'PUBLICACIÓN',
+        accessorKey: 'startDate',
+        cell: (row) => {
+            const date = row.getValue() as string
+            const formatted = useDateFormat(date, 'DD/MM/YYYY')
+            return h('p', { class: 'text-grey' }, formatted.value)
+        },
     },
     {
-        header: 'VALOR DE REFERENCIA',
-        accessorKey: 'reference_value',
-    },
-    {
-        id: 'actions',
-        header: () => '',
-        accessorKey: 'id',
-        cell: () => {
-            return h('div', { class: 'relative' }, h(DropdownAction, {}))
+        header: 'FINALIZA',
+        accessorKey: 'endDate',
+        cell: (row) => {
+            const date = row.getValue() as string
+            const formatted = useDateFormat(date, 'DD/MM/YYYY')
+            return h('p', { class: 'text-grey' }, formatted.value)
         },
     },
 ]

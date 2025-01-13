@@ -33,7 +33,6 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-
         <Head title="Inicia sesión" />
 
         <h1 class="text-[#21272A] text-4xl font-bold lg:text-[42px] leading-[46px]">
@@ -44,44 +43,84 @@ const submit = () => {
             <div>
                 <Label for="email">Email</Label>
 
-                <Input id="email" type="email" placeholder="Email" class="mt-2" v-model="form.email" required autofocus
-                    autocomplete="username" />
+                <Input
+                    id="email"
+                    type="email"
+                    placeholder="Email"
+                    class="mt-2"
+                    v-model="form.email"
+                    required
+                    autofocus
+                    autocomplete="username"
+                />
 
-                <InputError class="mt-2 ml-4" :message="form.errors.email" />
+                <InputError
+                    class="mt-2 ml-4"
+                    :message="form.errors.email"
+                />
             </div>
 
             <div class="mt-4">
                 <Label for="password">Contraseña</Label>
 
                 <div class="relative w-full items-center">
-                    <Input id="password" :type="showPassword ? 'text' : 'password'" placeholder="Contraseña"
-                        class="mt-2" v-model="form.password" required autocomplete="current-password" />
+                    <Input
+                        id="password"
+                        :type="showPassword ? 'text' : 'password'"
+                        placeholder="Contraseña"
+                        class="mt-2"
+                        v-model="form.password"
+                        required
+                        autocomplete="current-password"
+                    />
 
-                    <button type="button" class="absolute end-0 inset-y-0 flex items-center justify-center px-2">
-                        <EyeOpenIcon v-if="showPassword" class="w-5 h-5 text-[#697077] cursor-pointer"
-                            @click="showPassword = false" />
+                    <button
+                        type="button"
+                        class="absolute end-0 inset-y-0 flex items-center justify-center px-2"
+                    >
+                        <EyeOpenIcon
+                            v-if="showPassword"
+                            class="w-5 h-5 text-[#697077] cursor-pointer"
+                            @click="showPassword = false"
+                        />
 
-                        <EyeClosedIcon v-else class="w-5 h-5 text-[#697077] cursor-pointer"
-                            @click="showPassword = true" />
+                        <EyeClosedIcon
+                            v-else
+                            class="w-5 h-5 text-[#697077] cursor-pointer"
+                            @click="showPassword = true"
+                        />
                     </button>
                 </div>
 
-                <InputError class="mt-2 ml-4" :message="form.errors.password" />
+                <InputError
+                    class="mt-2 ml-4"
+                    :message="form.errors.password"
+                />
             </div>
 
             <div class="flex justify-between mt-4">
                 <label class="flex items-center">
-                    <Checkbox name="remember" v-model:checked="form.remember" />
+                    <Checkbox
+                        name="remember"
+                        v-model:checked="form.remember"
+                    />
                     <span class="ms-2 text-sm text-[#21272A]">Recuérdame</span>
                 </label>
 
-                <Link v-if="canResetPassword" :href="route('password.request')"
-                    class="text-sm text-[#001D6C] hover:text-gray-900 leading-5 rounded-md hover:underline">
-                Has olvidado tu contraseña?
+                <Link
+                    v-if="canResetPassword"
+                    :href="route('password.request')"
+                    class="text-sm text-[#001D6C] hover:text-gray-900 leading-5 rounded-md hover:underline"
+                >
+                    Has olvidado tu contraseña?
                 </Link>
             </div>
 
-            <Button class="w-full mt-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+            <Button
+                class="w-full mt-4"
+                :class="{ 'opacity-25': form.processing }"
+                :disabled="form.processing"
+            >
                 Inicia sesión
             </Button>
         </form>
@@ -92,9 +131,12 @@ const submit = () => {
             No tienes una cuenta? Contacta con nosotros.
         </p>
 
-        <Button as-child variant="outline">
+        <Button
+            as-child
+            variant="outline"
+        >
             <Link :href="route('register')">
-            Contáctanos
+                Contáctanos
             </Link>
         </Button>
     </GuestLayout>

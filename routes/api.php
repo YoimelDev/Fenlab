@@ -32,6 +32,10 @@ Route::middleware([ApiKeyMiddleware::class])->group(function () {
     // Closed Auctions routes
     Route::get('/salesforce/closed-auctions', [SalesforceController::class, 'getClosedAuctions']);
 
+
+    // Published Opportunities routes
+    Route::get('/salesforce/published-opportunities', [SalesforceController::class, 'getPublishedOpportunities']);
+
     // KPI routes
     Route::get('/salesforce/published-kpi', [SalesforceController::class, 'getPublishedKPI']);
     Route::get('/salesforce/approved-kpi', [SalesforceController::class, 'getApprovedKPI']);

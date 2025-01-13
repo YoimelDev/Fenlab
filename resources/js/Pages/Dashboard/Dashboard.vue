@@ -2,13 +2,13 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
-import { Kpi } from '@/Components/ui/kpi'
 import { TableSection } from './Components/dataTable'
-import { kpiOverview } from '@/data'
+import { KpiData } from '@/types/fenlab'
+import KpisSection from '@/Components/common/KpisSection.vue'
 
 defineProps<{
     sections: Record<string, any[]>
-    kpiData: Record<string, any>
+    kpiData: KpiData
 }>()
 </script>
 
@@ -16,16 +16,7 @@ defineProps<{
     <Head title="Dashboard" />
 
     <AuthenticatedLayout>
-        <div class="flex flex-wrap gap-10">
-            <Kpi
-                v-for="(kpi, index) in kpiOverview"
-                :key="kpi.title"
-                :data="kpi"
-                :variant="index === 0 ? 'default' : 'primary'"
-                :is-positive="kpi.isPositive"
-            />
-            <!-- Add new KPIs here using the kpiData prop -->
-        </div>
+        <KpisSection />
 
         <TableSection :sections="sections" />
     </AuthenticatedLayout>

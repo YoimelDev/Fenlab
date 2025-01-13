@@ -1,7 +1,8 @@
 import { h } from 'vue'
 import type { ColumnDef } from '@tanstack/vue-table'
-import { type PendingNotary } from '@/Pages/MyPublications/types'
+import { PostData, type PendingNotary } from '@/Pages/MyPublications/types'
 import { Badge, badgeMap, type BadgeMode } from '@/Components/ui/badge'
+import { PostAction } from '../PostAction'
 
 export const columns: ColumnDef<PendingNotary>[] = [
     {
@@ -31,5 +32,21 @@ export const columns: ColumnDef<PendingNotary>[] = [
     {
         header: 'ID COMPAÑÍA',
         accessorKey: 'companyId',
+    },
+    {
+        id: 'actions',
+        header: () => '',
+        accessorKey: 'id',
+        cell: (row) => {         
+            const postData: PostData = {
+                postType: 'pendingNotary',
+                data: row.row.original,
+                endpoint: '/salesforce/accept-notary',
+            }
+                
+            return h(PostAction, {
+                postData,
+            })
+        },
     },
 ]

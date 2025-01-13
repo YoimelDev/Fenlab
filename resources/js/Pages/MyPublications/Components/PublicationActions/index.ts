@@ -1,0 +1,1 @@
+export { default as PublicationActions } from './PublicationActions.vue'

@@ -112,7 +112,7 @@ const sections = ref<Section[]>([
             <DataTable
                 :activate-pagination="false"
                 :columns="section.columns"
-                :data="section.data ?? []"
+                :data="(section.data ?? []).slice(0, 5)"
             />
         </section>
     </div>

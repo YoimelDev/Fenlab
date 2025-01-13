@@ -1,7 +1,8 @@
 import { h } from 'vue'
 import type { ColumnDef } from '@tanstack/vue-table'
 import { AssetData } from '@/Pages/MyAnalysis/types'
-import DropdownAction from './DataTableDropdown.vue'
+import { Badge, badgeMap, type BadgeMode } from '@/Components/ui/badge'
+import AssetActions from './AssetActions.vue'
 
 export const columns: ColumnDef<AssetData>[] = [
     {
@@ -49,15 +50,27 @@ export const columns: ColumnDef<AssetData>[] = [
         },
     },
     {
+        header: 'ESTADO',
+        accessorKey: 'status',
+        cell: (row) => {
+            const status = row.getValue() as BadgeMode
+            return h(
+                'div',
+                { class: 'font-medium' },
+                h(Badge, { variant: badgeMap[status] }, status || '-'),
+            )
+        },
+    },
+    {
         id: 'actions',
         header: () => '',
         accessorKey: 'id',
         cell: (row) => {
-            if (row.row.original.model.npl.credito.isPublishable === false) return
-
-            return h('div', { class: 'relative' }, h(DropdownAction, {
+            if (row.row.original.model.npl.credito.isPublishable === true) return
+             
+            return h(AssetActions, {
                 asset: row.row.original,
-            }))
+            })
         },
     },
 ]

@@ -197,4 +197,13 @@ class SalesforceController extends Controller
             'get'
         );
     }
+
+    public function getPublishedOpportunities(Request $request): JsonResponse
+    {
+        return $this->makeApiRequest(
+            '/services/apexrest/opportunity/fenlab/opened',
+            ['email' => $request->email],
+            'get'
+        );
+    }
 }

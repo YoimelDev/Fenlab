@@ -1,17 +1,20 @@
 
 <script setup lang="ts">
-import { Head } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
+import { Head } from '@inertiajs/vue3'
 
-import { 
-    Kpi,
+import {
     DataTable,
 } from '@/Components/ui'
 
 import { AssessmentIcon } from '@/Components/icons'
 
-import { kpiOverview } from '@/data'
 import { columns } from './Components/publishedTable'
+import { Published } from './types'
+
+defineProps<{
+    published: Published
+}>()
 
 </script>
 
@@ -29,20 +32,10 @@ import { columns } from './Components/publishedTable'
                 Mis Publicaciones | Publicadas
             </h1>
         </header>
-
-        <div class="flex flex-wrap gap-10">
-            <Kpi
-                v-for="(kpi, index) in kpiOverview"
-                :key="kpi.title"
-                :data="kpi"
-                :variant="index === 0 ? 'default' : 'primary'"
-                :is-positive="kpi.isPositive"
-            />
-        </div>
      
         <DataTable
             :columns="columns"
-            :data="[]"
+            :data="published.Auctions"
         />
     </AuthenticatedLayout>
 </template>

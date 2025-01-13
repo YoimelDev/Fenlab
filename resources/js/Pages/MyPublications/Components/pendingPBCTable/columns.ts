@@ -1,7 +1,8 @@
 import { h } from 'vue'
 import type { ColumnDef } from '@tanstack/vue-table'
-import { type PendingPBC } from '@/Pages/MyPublications/types'
+import { PostData, type PendingPBC } from '@/Pages/MyPublications/types'
 import { Badge, badgeMap, type BadgeMode } from '@/Components/ui/badge'
+import { PostAction } from '../PostAction'
 
 export const columns: ColumnDef<PendingPBC>[] = [
     {
@@ -46,6 +47,22 @@ export const columns: ColumnDef<PendingPBC>[] = [
         cell: (row) => {
             const date = row.getValue()
             return date ? date : '-'
+        },
+    },
+    {
+        id: 'actions',
+        header: () => '',
+        accessorKey: 'id',
+        cell: (row) => {         
+            const postData: PostData = {
+                postType: 'pendingPBC',
+                data: row.row.original,
+                endpoint: '/salesforce/approve-pbc',
+            }
+            
+            return h(PostAction, {
+                postData,
+            })
         },
     },
 ]

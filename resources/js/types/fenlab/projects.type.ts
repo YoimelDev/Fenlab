@@ -46,6 +46,7 @@ export interface ProjectById {
     outputBBDD: FirstExcel;
     outputCF: FirstExcel;
     strats: FirstExcel;
+    assetsZip: FirstExcel;
     masterData: MasterData;
     createdAt: Date;
     updatedAt: Date;
@@ -98,4 +99,18 @@ interface Seguridad {
     alta: number;
     media: number;
     baja: number;
+}
+
+export interface KpiData {
+    analysis:  KPI;
+    published: KPI;
+    approved:  KPI;
+    signed:    KPI;
+}
+
+export interface KPI {
+    currentMonth: number;
+    lastMonth:    number;
+    percentage:   number;
+    variation:    number;
 }

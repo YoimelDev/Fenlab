@@ -1,33 +1,61 @@
 
 import { h } from 'vue'
 import type { ColumnDef } from '@tanstack/vue-table'
-import { Avatar, AvatarFallback, AvatarImage } from '@/Components/ui'
+import { Badge, badgeMap, type BadgeMode } from '@/Components/ui/badge'
+import { useDateFormat } from '@vueuse/core'
+import { Auction } from '@/Pages/MyPublications/types'
 
-export const publishedColumns: ColumnDef<any>[] = [
+export const publishedColumns: ColumnDef<Auction>[] = [
     {
-        header: () => h('div', { class: 'w-[78px]' }),
-        accessorKey: 'image',
+        header: () => h('div', { class: 'w-[78px]' }, 'ID'),
+        accessorKey: 'id',
+        meta: '!w-[78px]',
         cell: (row) => {
-            const image = row.getValue() as string
-            return h(Avatar, {}, {
-                default: () => [
-                    h(AvatarImage, { src: image, alt: 'Client logo' }),
-                    h(AvatarFallback, {}, 'FL'),
-                ],
-            })
+            const id = row.getValue() as string
+            return h('p', { class: 'w-[78px] truncate' }, id)
         },
     },
     {
-        header: 'NOMBRE PROYECTO',
-        accessorKey: 'project',
+        header: () => h('div', { class: 'w-[78px]' }, 'DETALLE'),
+        accessorKey: 'name',
+        meta: '!w-[78px]',
+        cell: (row) => {
+            const name = row.getValue() as string
+            return h('p', { class: 'w-[78px] truncate' }, name)
+        },      
     },
     {
-        header: 'ID FENLAB',
-        accessorKey: 'client_id',
+        header: 'ESTADO',
+        accessorKey: 'stage',
+        cell: (row) => {
+            const stage = row.getValue() as BadgeMode
+            return h(
+                'div',
+                { class: 'font-medium' },
+                h(Badge, { variant: badgeMap[stage] }, stage),
+            )
+        },
     },
     {
-        header: () => h('div', { class: 'text-right' }, 'PRECIO MÍNIMO'),
-        accessorKey: 'min_price',
-        cell: (row) => h('div', { class: 'text-right' }, row.getValue() as string),
+        header: () => h('div', { class: 'w-[78px]' }, 'TIPO'),
+        accessorKey: 'recordType',
+    },
+    {
+        header: 'PUBLICACIÓN',
+        accessorKey: 'startDate',
+        cell: (row) => {
+            const date = row.getValue() as string
+            const formatted = useDateFormat(date, 'DD/MM/YYYY')
+            return h('p', { class: 'text-grey text-right' }, formatted.value)
+        },
+    },
+    {
+        header: 'FINALIZA',
+        accessorKey: 'endDate',
+        cell: (row) => {
+            const date = row.getValue() as string
+            const formatted = useDateFormat(date, 'DD/MM/YYYY')
+            return h('p', { class: 'text-grey text-right' }, formatted.value)
+        },
     },
 ]
