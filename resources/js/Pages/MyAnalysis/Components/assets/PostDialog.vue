@@ -20,9 +20,15 @@ const props = defineProps<{
     asset: AssetData
 }>()
 
+interface modalities {
+    subasta: string
+    credito: string
+    remate: string
+}
+
 const $loading = inject<PluginApi>('$loading')
 const formData = ref({ ...props.asset })
-const selectedModality = ref('Subasta')
+const selectedModality = ref<keyof modalities>('subasta')
 
 const emits = defineEmits(['updated'])
 
@@ -38,7 +44,8 @@ const postData = async () => {
                 opcionesDePublicacion: [
                     {
                         opcion: selectedModality.value,
-                        publicable: true,      
+                        publicable: formData.value.model.npl[selectedModality.value].isPublishable,
+                        precioMinimo: formData.value.model.npl[selectedModality.value].precioMinimo, 
                     },
                 ],
             },
