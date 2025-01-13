@@ -15,6 +15,7 @@ import {
 } from '@/Components/ui'
 import type { AssetData } from '@/Pages/MyAnalysis/types'
 import type { PluginApi } from 'vue-loading-overlay'
+import type { PublishData } from '@/types/fenlab'
 
 const props = defineProps<{
     asset: AssetData
@@ -36,7 +37,7 @@ const postData = async () => {
     const loader = $loading?.show()
     
     try {
-        await fenlabApi.post('', {
+        const { data } = await fenlabApi.post<PublishData>('', {
             method: 'put',
             path: `projects/${formData.value.projectId}/assets/${formData.value.id}/publish`,
             body: {
@@ -51,6 +52,8 @@ const postData = async () => {
             },
         })
 
+        await fenlabApi.post('/import', data)
+
         toast({
             variant: 'info',
             title: 'Datos guardados correctamente',
@@ -60,7 +63,9 @@ const postData = async () => {
         toast({
             variant: 'danger',
             title: '¡Ups! Algo salió mal.',
-            description: error.response.data.message.join('\n'),
+            description: Array.isArray(error.response.data.message) 
+                ? error.response.data.message.join('\n')
+                : error.response.data.message,
         })
     } finally {
         loader?.hide()
