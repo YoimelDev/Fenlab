@@ -33,8 +33,7 @@ const postData = async () => {
         await fenlabApi.post('', {
             method: 'put',
             path: `projects/${formData.value.projectId}/assets/${formData.value.id}/publish`,
-            body: { 
-                ...formData.value,
+            body: {
                 precioReferencia: formData.value.model.npl.precioReferencia,
                 opcionesDePublicacion: [
                     {
