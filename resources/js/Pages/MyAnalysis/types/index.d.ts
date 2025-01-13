@@ -100,9 +100,10 @@ export interface Meta {
     totalPages:  number;
 }
 
-export interface ApiErrorResponse {
+export interface ExcelResponse {
     success: boolean;
     errors: ApiErrors;
+    prestashopData: PrestashopDatum[];
 }
 
 export interface ApiErrors {
@@ -114,4 +115,81 @@ export interface ErrorItem {
     rowId: string;
     header: string;
     error: string;
+}
+
+export interface PrestashopDatum {
+    titulo:                        string;
+    referencia:                    string;
+    marca:                         string;
+    resumen:                       string;
+    descripcion:                   string;
+    precioImpuestoIncluido:        string;
+    proveedores:                   string;
+    comunidadAutonoma:             string;
+    provincia:                     string;
+    municipio:                     string;
+    codigoPostal:                  string;
+    metrosConstruidos:             string;
+    metrosSuelo:                   string;
+    vpo:                           string;
+    habitaciones:                  string;
+    banos:                         string;
+    anoConstruccion:               number;
+    referenciaCatastral:           string;
+    estadoOcupado:                 string;
+    compraDeCredito:               string;
+    compraDeCreditoDeposito:       string;
+    posturaEnSubasta:              string;
+    cesionRemate:                  string;
+    cesionRemateDeposito:          string;
+    compraVentaDeInmueble:         string;
+    compraVentaDeInmuebleDeposito: string;
+    persona:                       string;
+    titularidad:                   string;
+    comision:                      string;
+    titulares:                     string;
+    contacto:                      string;
+    colabora:                      string;
+    avalistas:                     string;
+    cargasAnteriores:              string;
+    cargasPosteriores:             string;
+    cargasPreferentes:             string;
+    referenciaPrestamo1:           string;
+    rango1:                        string;
+    fechaFormalizacion1:           string;
+    fechaVencimiento1:             string;
+    principalDispuesto1:           string;
+    deudaActual1:                  string;
+    vencimientoAnticipado1:        string;
+    responsabilidadHipotecaria1:   string;
+    referenciaPrestamo2:           string;
+    rango2:                        string;
+    fechaFormalizacion2:           string;
+    fechaVencimiento2:             string;
+    principalDispuesto2:           string;
+    deudaActual2:                  string;
+    vencimientoAnticipado2:        string;
+    responsabilidadHipotecaria2:   string;
+    referenciaPrestamo3:           string;
+    rango3:                        string;
+    fechaFormalizacion3:           string;
+    fechaVencimiento3:             string;
+    principalDispuesto3:           string;
+    deudaActual3:                  string;
+    vencimientoAnticipado3:        string;
+    responsabilidadHipotecaria3:   string;
+    judicializado:                 string;
+    tipoProcedimientoJudicial:     string;
+    juzgadoCompetente:             string;
+    autos:                         string;
+    rangoJudicializado:            string;
+    cantidadReclamada:             string;
+    tasacionEfectosSubasta:        string;
+    viviendaHabitual:              string;
+    faseJudicialActual:            string;
+    fechaFaseJudicialActual:       string;
+    activo:                        string;
+    encuesta:                      string;
+    categoria:                     string;
+    productoVirtual:               string;
 }

@@ -22,11 +22,11 @@ import {
 } from '@/Components/ui'
 
 import { useDropZone } from '@vueuse/core'
-import { ArrowIcon, InfoIcon, XlsIcon, PdfIcon, DownloadIcon, ArrowUpIcon, CircleIcon, UploadIcon } from '@/Components/icons'
+import { ArrowIcon, InfoIcon, XlsIcon, ZipIcon, DownloadIcon, ArrowUpIcon, CircleIcon, UploadIcon } from '@/Components/icons'
 import { UpdateIcon } from '@radix-icons/vue'
 import { Assets } from '@/Pages/MyAnalysis/Components/assets'
 import { ProjectById } from '@/types/fenlab'
-import { ProjectsAssets, ApiErrorResponse } from './types'
+import { ProjectsAssets, ExcelResponse } from './types'
 import { PluginApi } from 'vue-loading-overlay'
 import { fenlabApi } from '@/api'
 import { useDateFormat } from '@vueuse/core'
@@ -153,12 +153,17 @@ async function uploadFile() {
     formData.append('file', filesData.value[0].file)
 
     try {
-        const response = await fenlabApi.post<ApiErrorResponse>('', formData)
+        const response = await fenlabApi.post<ExcelResponse>('', formData)
         if (!response.data.success) {
             const errorMessages = response.data.errors.list.map((err) => `${err.header}: ${err.error}`).join('\n')
             fileError.value = errorMessages
             return
         }
+
+        if (excelType.value === 'second-excel') {
+            await fenlabApi.post('/import', response.data.prestashopData)
+        }
+
         toast({
             variant: 'info',
             title: 'Archivo subido correctamente',
@@ -189,7 +194,7 @@ async function uploadIdealistaFile() {
     formData.append('file', filesData.value[0].file)
 
     try {
-        const response = await fenlabApi.post<ApiErrorResponse>('', formData)
+        const response = await fenlabApi.post<ExcelResponse>('', formData)
         if (!response.data.success) {
             const errorMessages = response.data.errors.list.map((err) => `${err.header}: ${err.error}`).join('\n')
             fileError.value = errorMessages
@@ -197,7 +202,7 @@ async function uploadIdealistaFile() {
         }
 
         // Call model API after successful idealista upload
-        const modelResponse = await fenlabApi.post<ApiErrorResponse>('', {
+        const modelResponse = await fenlabApi.post<ExcelResponse>('', {
             method: 'post',
             path: `projects/${props.project.id}/${props.project.modelType}/model`,
         })
@@ -482,7 +487,7 @@ async function uploadIdealistaFile() {
                     class="my-4"
                 >
                     <div class="relative flex items-center gap-4 w-full p-4 bg-white ">
-                        <PdfIcon />
+                        <ZipIcon />
 
                         <div>
                             <p class="text-black text-lg font-bold">

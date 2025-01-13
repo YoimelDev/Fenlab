@@ -39,21 +39,21 @@ defineProps<{
 
         <div class="flex flex-wrap gap-10">
             <Kpi
-                v-if="Object.keys(projectsKPI).length"
+                v-if="projectsKPI && Object.keys(projectsKPI ?? {}).length"
                 variant="default"
                 :is-positive="true"
                 title="Volumen de análisis hechos mes actual vs mes anterior."
-                :value="projectsKPI.currentMonth"
-                :percentage="projectsKPI.percentage"
+                :value="projectsKPI?.currentMonth"
+                :percentage="projectsKPI?.percentage"
             />
 
             <Kpi
-                v-if="Object.keys(assetsKPI).length"
+                v-if="assetsKPI && Object.keys(assetsKPI ?? {}).length"
                 variant="primary"
                 :is-positive="true"
                 title="Volumen activos modelados mes actual vs mes anterior."
-                :value="assetsKPI.currentMonth"
-                :percentage="assetsKPI.percentage"
+                :value="assetsKPI?.currentMonth"
+                :percentage="assetsKPI?.percentage"
             />
         </div>
      
