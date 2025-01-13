@@ -17,7 +17,6 @@ class ApiKeyMiddleware
     {
         // Obtener la API Key desde los headers de la solicitud
         $apiKey = $request->header('API_KEY');
-
         // Verificar si la API Key existe en la base de datos
         if (!$apiKey || $apiKey !== env('VITE_API_KEY')) {
             return response()->json(['message' => 'Unauthorized'], 401);

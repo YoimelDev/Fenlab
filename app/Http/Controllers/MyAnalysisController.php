@@ -8,8 +8,6 @@ use Illuminate\Support\Facades\Http;
 
 class MyAnalysisController extends Controller
 {
-    private array $errors = [];
-
     /**
      * Show the analysis view.
      */
@@ -18,49 +16,15 @@ class MyAnalysisController extends Controller
         $token = $request->session()->get('loginToken');
         $url = env('VITE_FENLAB_API_URL') . 'projects?sortBy=id&reverse=true&perPage=100';
 
-        try {
-            $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . $token,
-                'Accept' => 'application/json',
-            ])->get($url);
-            $analysis = $response->json('data') ?? [];
-        } catch (\Exception $e) {
-            $this->errors[] = 'Error al obtener análisis: ' . $e->getMessage();
-            return [];
-        }
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+            'Accept' => 'application/json',
+        ])->get($url);
 
-        try {
-            $projectsKPIurl = env('VITE_FENLAB_API_URL') . 'projects/kpi';
-            $responseKPI = Http::withHeaders([
-                'Authorization' => 'Bearer ' . $token,
-                'Accept' => 'application/json',
-            ])->get($projectsKPIurl);
-            $projectsKPI = $responseKPI->json() ?? (object) [];
-        } catch (\Exception $e) {
-            $this->errors[] = 'Error al obtener kpi de proyectos: ' . $e->getMessage();
-            return [];
-        }
-
-        try {
-            $assetsKPIurl = env('VITE_FENLAB_API_URL') . 'projects/assets/kpi';
-            $responseAssetsKPI = Http::withHeaders([
-                'Authorization' => 'Bearer ' . $token,
-                'Accept' => 'application/json',
-            ])->get($assetsKPIurl);
-            $assetsKPI = $responseAssetsKPI->json() ?? (object) [];
-        } catch (\Exception $e) {
-            $this->errors[] = 'Error al obtener kpi de activos: ' . $e->getMessage();
-            return [];
-        }
-
-        if (!empty($this->errors)) {
-            session()->flash('error', implode(' | ', $this->errors));
-        }
+        $analysis = $response->json('data') ?? [];
 
         return Inertia::render('MyAnalysis/Analysis', [
             'analysis' => $analysis,
-            'projectsKPI' => $projectsKPI,
-            'assetsKPI' => $assetsKPI,
         ]);
     }
 
@@ -92,10 +56,143 @@ class MyAnalysisController extends Controller
 
     public function publishAsset(Request $request)
     {
-        // Retrieve data from the request
-        $data = $request->all();
+        // Retrieve and normalize data
+        $assetData = $request->all();
+        $assets = isset($assetData[0]) ? $assetData : [$assetData];
 
-        $headers = [
+        // Format each asset
+        $formattedRows = array_map(function ($asset) {
+            return $this->formatAssetData($asset);
+        }, $assets);
+
+        // Generate CSV file
+        $csvFileName = 'import.csv';
+        $csvFilePath = storage_path('app/' . $csvFileName);
+        $file = fopen($csvFilePath, 'w');
+
+        // Configure CSV output
+        $delimiter = ',';
+        $enclosure = '"';
+        $eol = "\n"; // Add explicit end of line character
+
+        // Write headers and data with custom EOL
+        fwrite($file, implode($delimiter, array_map(function ($value) use ($enclosure) {
+            return $enclosure . str_replace($enclosure, $enclosure . $enclosure, $value) . $enclosure;
+        }, $this->getCsvHeaders())) . $eol);
+
+        foreach ($formattedRows as $row) {
+            fwrite($file, implode($delimiter, array_map(function ($value) use ($enclosure) {
+                return $enclosure . str_replace($enclosure, $enclosure . $enclosure, $value) . $enclosure;
+            }, $row)) . $eol);
+        }
+        fclose($file);
+        // dd(file_get_contents($csvFilePath), $csvFileName);
+        // Send to API
+        $response = Http::attach(
+            'datatape',
+            file_get_contents($csvFilePath),
+            $csvFileName
+        )->post('https://dev.fencia.es/module/fenciaimporter/import?ajax=1&action=import&delimiter=,');
+
+        // Handle response
+        if ($response->successful()) {
+            return response()->json(['message' => 'File uploaded successfully'], 200);
+        } else {
+            return response()->json(['message' => 'File upload failed'], $response->status());
+        }
+    }
+
+    private function formatAssetData($assetData)
+    {
+        $formattedData = [
+            $assetData['titulo'] ?? '',
+            $assetData['referencia'] ?? '',
+            $assetData['marca'] ?? '',
+            $assetData['resumen'] ?? '',
+            $assetData['descripcion'] ?? '',
+            $assetData['precioImpuestoIncluido'] . ' €',
+            $assetData['proveedores'] ?? '',
+            $assetData['comunidadAutonoma'] ?? '',
+            $assetData['provincia'] ?? '',
+            $assetData['municipio'] ?? '',
+            $assetData['codigoPostal'] ?? '',
+            $assetData['metrosConstruidos'] ?? '',
+            $assetData['metrosSuelo'] ?? '',
+            $assetData['vpo'] ?? 'NO',
+            $assetData['habitaciones'] ?? '',
+            $assetData['banos'] ?? '',
+            $assetData['anoConstruccion'] ?? '',
+            $assetData['referenciaCatastral'] ?? '',
+            $assetData['estadoOcupado'] ?? '',
+            $assetData['compraDeCredito'] ?? '',
+            $assetData['compraDeCreditoDeposito'] ?? '',
+            $assetData['posturaEnSubasta'] ?? '',
+            $assetData['cesionRemate'] ?? '',
+            $assetData['cesionRemateDeposito'] ?? '',
+            $assetData['compraVentaDeInmueble'] ?? '',
+            $assetData['compraVentaDeInmuebleDeposito'] ?? '',
+            $assetData['persona'] ?? '',
+            $assetData['titularidad'] ?? '',
+            $assetData['comision'] ?? '',
+            $assetData['titulares'] ?? '',
+            $assetData['contacto'] ?? '',
+            $assetData['colabora'] ?? '',
+            $assetData['avalistas'] ?? '',
+            $assetData['cargasAnteriores'] ?? '',
+            $assetData['cargasPosteriores'] ?? '',
+            $assetData['cargasPreferentes'] ?? '',
+            $assetData['referenciaPrestamo1'] ?? '',
+            $assetData['rango1'] ?? '',
+            $assetData['fechaFormalizacion1'] ?? '',
+            $assetData['fechaVencimiento1'] ?? '',
+            $assetData['principalDispuesto1'] ?? '',
+            $assetData['deudaActual1'] ?? '',
+            $assetData['vencimientoAnticipado1'] ?? '',
+            $assetData['responsabilidadHipotecaria1'] ?? '',
+            $assetData['referenciaPrestamo2'] ?? '',
+            $assetData['rango2'] ?? '',
+            $assetData['fechaFormalizacion2'] ?? '',
+            $assetData['fechaVencimiento2'] ?? '',
+            $assetData['principalDispuesto2'] ?? '',
+            $assetData['deudaActual2'] ?? '',
+            $assetData['vencimientoAnticipado2'] ?? '',
+            $assetData['responsabilidadHipotecaria2'] ?? '',
+            $assetData['referenciaPrestamo3'] ?? '',
+            $assetData['rango3'] ?? '',
+            $assetData['fechaFormalizacion3'] ?? '',
+            $assetData['fechaVencimiento3'] ?? '',
+            $assetData['principalDispuesto3'] ?? '',
+            $assetData['deudaActual3'] ?? '',
+            $assetData['vencimientoAnticipado3'] ?? '',
+            $assetData['responsabilidadHipotecaria3'] ?? '',
+            $assetData['judicializado'] ?? '',
+            $assetData['tipoProcedimientoJudicial'] ?? '',
+            $assetData['juzgadoCompetente'] ?? '',
+            $assetData['autos'] ?? '',
+            $assetData['rangoJudicializado'] ?? '',
+            $assetData['cantidadReclamada'] ?? '',
+            $assetData['tasacionEfectosSubasta'] ?? '',
+            $assetData['viviendaHabitual'] ?? '',
+            $assetData['faseJudicialActual'] ?? '',
+            $assetData['fechaFaseJudicialActual'] ?? '',
+            $assetData['activo'] ?? 'SI',
+            $assetData['encuesta'] ?? 'SI',
+            $assetData['categoria'] ?? 'Próximas Subastas',
+            $assetData['productoVirtual'] ?? 'SI'
+        ];
+
+        // Remove empty values from end of array
+        $formattedData = array_reverse(array_filter(array_reverse($formattedData), function ($value) {
+            return $value !== '';
+        }));
+
+        // Pad array to match header count
+        return array_pad($formattedData, count($this->getCsvHeaders()), '');
+    }
+
+    private function getCsvHeaders()
+    {
+        return [
             'Título',
             'Referencia',
             'Marca',
@@ -171,34 +268,5 @@ class MyAnalysisController extends Controller
             'CATEGORÍA',
             'PRODUCTO VIRTUAL'
         ];
-
-        // Generate CSV file
-        $csvFileName = 'import.csv';
-        $csvFilePath = storage_path('app/' . $csvFileName);
-        $file = fopen($csvFilePath, 'w');
-        // Add headers to the CSV
-        fputcsv($file, $headers);
-        // Add data to the CSV
-        foreach ($data as $row) {
-            fputcsv($file, $row);
-        }
-        fclose($file);
-        // Send the CSV file to the API endpoint
-        $response = Http::asForm()->attach(
-            'datatape',
-            file_get_contents($csvFilePath),
-            $csvFileName
-        )->post('https://dev.fencia.es/module/fenciaimporter/import', [
-            'delimiter' => ',',
-            'action' => 'import',
-            'ajax' => '1'
-        ]);
-
-        // Handle the response
-        if ($response->successful()) {
-            return response()->json(['message' => 'File uploaded successfully'], 200);
-        } else {
-            return response()->json(['message' => 'File upload failed'], $response->status());
-        }
     }
 }
