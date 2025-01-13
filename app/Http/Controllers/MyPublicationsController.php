@@ -17,7 +17,7 @@ class MyPublicationsController extends Controller
         $this->salesforceController = $salesforceController;
     }
 
-    public function pending(Request $request): Response 
+    public function pending(Request $request): Response
     {
         try {
             $url = env('VITE_FENLAB_API_URL') . 'projects/assets/publishable';
