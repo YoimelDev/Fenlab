@@ -43,7 +43,7 @@ const postData = async () => {
             body: {
                 precioReferencia: formData.value.model.npl.precioReferencia,
                 opcion: selectedModality.value,
-                precioMinimo: formData.value.model.npl[selectedModality.value].precioMinimo,
+                precioMinimo: formData.value.model.npl.credito.precioMinimo,
             },
         })
 
