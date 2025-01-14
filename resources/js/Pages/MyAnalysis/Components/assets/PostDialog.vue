@@ -43,7 +43,7 @@ const postData = async () => {
             body: {
                 precioReferencia: formData.value.model.npl.precioReferencia,
                 opcion: selectedModality.value,
-                precioMinimo: formData.value.model.npl.credito.precioMinimo,
+                precioMinimo: Number(formData.value.model.npl.credito.precioMinimo),
             },
         })
 
@@ -136,7 +136,7 @@ const postData = async () => {
                     <Label for="reference_value">Valor de referencia (€)</Label>
                     <Input
                         id="reference_value"
-                        type="text"
+                        type="number"
                         placeholder="Valor de referencia"
                         disabled
                         class="mt-2"
