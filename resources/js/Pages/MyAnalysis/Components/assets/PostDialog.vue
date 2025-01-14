@@ -42,13 +42,8 @@ const postData = async () => {
             path: `projects/${formData.value.projectId}/assets/${formData.value.id}/publish`,
             body: {
                 precioReferencia: formData.value.model.npl.precioReferencia,
-                opcionesDePublicacion: [
-                    {
-                        opcion: selectedModality.value,
-                        publicable: formData.value.model.npl[selectedModality.value].isPublishable,
-                        precioMinimo: formData.value.model.npl[selectedModality.value].precioMinimo, 
-                    },
-                ],
+                opcion: selectedModality.value,
+                precioMinimo: formData.value.model.npl[selectedModality.value].precioMinimo,
             },
         })
 
