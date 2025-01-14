@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head, Link } from '@inertiajs/vue3'
+import { Head } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 
 import {
@@ -24,12 +24,12 @@ import { HelpIcon } from '@/Components/icons'
                         Cómo funciona
                     </h2>
 
-                    <Link
+                    <!-- <Link
                         href="#"
                         class="text-blue font-medium"
                     >
                         Contacta con nosotros
-                    </Link>
+                    </Link> -->
                 </div>
 
                 <p class="mt-4 text-sm">

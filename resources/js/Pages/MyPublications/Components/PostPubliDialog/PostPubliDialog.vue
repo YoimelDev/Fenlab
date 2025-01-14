@@ -139,7 +139,7 @@ const postSalesforce = async () => {
             </div>
 
             <div
-                v-if="formData.status === 'rejected'"
+                v-if="formData.status === 'rejected' || formData.status === 'pending'"
                 class="space-y-2"
             >
                 <Label for="comments">Comentarios</Label>

@@ -1,16 +1,18 @@
 <script setup lang="ts">
+import { DownloadIcon, PdfIcon } from '@/Components/icons'
 import {
     Accordion, 
     AccordionContent, 
     AccordionItem, 
     AccordionTrigger,
+    Button,
 } from '@/Components/ui'
 </script>
 
 <template>
     <section class="[&>div]:pl-5">
         <header class="mt-10">
-            <h3 class="text-xl">
+            <h3 class="text-xl font-medium">
                 Modelo de cashflow para préstamos Performing &amp; Re-performing secured &amp; unsecured
             </h3>
         </header>
@@ -150,29 +152,73 @@ import {
         </Accordion>
 
         <div class="mt-10">
-            <h3 class="text-xl">
+            <h3 class="text-xl font-medium">
                 Muestras para descargar
             </h3>
         </div>
 
         <div class="mt-5">
-            <ul class="list-disc pl-5">
+            <ul class="">
                 <li class="mb-1">
-                    <a
-                        href="#"
-                        class="text-blue"
+                    <div
+                        class="my-4"
                     >
-                        Modelo de flujo de caja (mensual y anual).
-                    </a>
+                        <div class="relative flex items-center gap-4 w-full p-4 bg-white ">
+                            <PdfIcon />
+
+                            <div>
+                                <p class="text-black text-lg">
+                                    Modelo de flujo de caja (mensual y anual).
+                                </p>
+                            </div>
+
+                            <Button
+                                variant="ghost"
+                                size="xs"
+                                as-child
+                            >
+                                <a
+                                    class="absolute top-4 right-4"
+                                    href="#"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <DownloadIcon />
+                                </a>
+                            </Button>
+                        </div>
+                    </div>
                 </li>
 
                 <li class="mb-1">
-                    <a
-                        href="#"
-                        class="text-blue"
+                    <div
+                        class="my-4"
                     >
-                        Modelo de balance (mensual y anual).
-                    </a>
+                        <div class="relative flex items-center gap-4 w-full p-4 bg-white ">
+                            <PdfIcon />
+
+                            <div>
+                                <p class="text-black text-lg">
+                                    Modelo de balance (mensual y anual).
+                                </p>
+                            </div>
+
+                            <Button
+                                variant="ghost"
+                                size="xs"
+                                as-child
+                            >
+                                <a
+                                    class="absolute top-4 right-4"
+                                    href="#"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <DownloadIcon />
+                                </a>
+                            </Button>
+                        </div>
+                    </div>
                 </li>
             </ul>
         </div>
