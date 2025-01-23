@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted, inject } from 'vue'
+import { ref, onMounted, inject } from 'vue'
+import { useForm } from 'vee-validate'
+import { toTypedSchema } from '@vee-validate/zod'
+import * as z from 'zod'
 
 import {
     useToast,
@@ -34,21 +37,65 @@ const step = ref(1)
 const isDialogOpen = ref(false)
 const $loading = inject<PluginApi>('$loading')
 
-const initialAnalysis = () => ({
-    name: '',
-    description: '',
-    modelType: '',
+interface Step4 {
     masterData: {
-        wacc: '',
-        managementFee: '',
-        costeLanzamientoAbogado: '',
-        costeLanzamientoProcurador: '',
-    },
-})
+        wacc: number
+        managementFee: number
+        costeLanzamientoAbogado: number
+        costeLanzamientoProcurador: number
+    }
+}
 
 const masterData = ref<CompanyMasterData>()
-const newAnalysis = reactive(initialAnalysis())
+const modelType = ref('pl/spl s')
 const activeSelection = ref('buy')
+
+onMounted(() => {
+    getCompanyMasterData()
+})
+
+const step1Schema = z.object({
+    name: z.string().nonempty({
+        message: 'El nombre del proyecto es requerido',
+    }),
+    description: z.string().nonempty({
+        message: 'La descripción del proyecto es requerida',
+    }),
+})
+
+const step4Schema = z.object({
+    masterData: z.object({
+        wacc: z.number().min(0, 'WACC debe ser mayor o igual a 0'),
+        managementFee: z.number().min(0, 'Management fee debe ser mayor o igual a 0'),
+        costeLanzamientoAbogado: z.number().min(0, 'Coste de abogado debe ser mayor o igual a 0'),
+        costeLanzamientoProcurador: z.number().min(0, 'Coste de procurador debe ser mayor o igual a 0'),
+    }),
+})
+
+const { handleSubmit: handleStep1, errors: step1Errors, defineField  } = useForm({
+    validationSchema: toTypedSchema(step1Schema),
+})
+
+const [ name ] = defineField('name')
+const [ description ] = defineField('description')
+
+const { handleSubmit: handleStep4, errors: step4Errors, defineField: fieldStep4, setFieldValue } = useForm<Step4>({
+    validationSchema: toTypedSchema(step4Schema),
+})
+
+const [ masterDataProps ] = fieldStep4('masterData')
+
+const handleNextStep = () => {
+    const steps = {
+        1: () => handleStep1(() => step.value++)(),
+        2: () => step.value++,
+        3: () => step.value++,
+        4: () => handleStep4(submitAnalysis)(),
+    }
+
+    const currentStepHandler = steps[step.value as keyof typeof steps]
+    currentStepHandler()
+}
 
 const getCompanyMasterData = async () => {
     try {
@@ -58,6 +105,10 @@ const getCompanyMasterData = async () => {
         })
 
         masterData.value = response
+        setFieldValue('masterData.wacc', response.WACC)
+        setFieldValue('masterData.managementFee', response.managementFee)
+        setFieldValue('masterData.costeLanzamientoAbogado', response.costeLanzamientoAbogado)
+        setFieldValue('masterData.costeLanzamientoProcurador', response.costeLanzamientoProcurador)
     } catch {
         toast({
             variant: 'danger',
@@ -73,7 +124,13 @@ const submitAnalysis = async () => {
         const { data }: { data: ProjectById } = await fenlabApi.post('', {
             method: 'post',
             path: 'projects',
-            body: { ...newAnalysis },
+            body: {
+                name: name.value,
+                description: description.value,
+                modelPosition: activeSelection.value,
+                modelType: modelType.value,
+                masterData: masterDataProps.value,
+            },
         })
 
         toast({
@@ -94,10 +151,6 @@ const submitAnalysis = async () => {
         isDialogOpen.value = false
     }
 }
-
-onMounted(() => {
-    getCompanyMasterData()
-})
 
 </script>
 
@@ -137,11 +190,16 @@ onMounted(() => {
                             type="text"
                             placeholder="Nombre proyecto"
                             class="mt-2"
-                            v-model="newAnalysis.name"
+                            v-model="name"
+                            :class="{ 'border-red-500': step1Errors.name }"
                             required
                             autofocus
                             autocomplete="name"
                         />
+                        <span
+                            v-if="step1Errors.name"
+                            class="text-red-500 text-sm"
+                        >{{ step1Errors.name }}</span>
                     </div>
 
                     <div class="space-y-2">
@@ -150,8 +208,13 @@ onMounted(() => {
                             id="description"
                             class="resize-none h-[112px]"
                             placeholder="Descripción"
-                            v-model="newAnalysis.description"
+                            v-model="description"
+                            :class="{ 'border-red-500': step1Errors.description }"
                         />
+                        <span
+                            v-if="step1Errors.description"
+                            class="text-red-500 text-sm"
+                        >{{ step1Errors.description }}</span>
                     </div>
                 </div>
 
@@ -205,8 +268,8 @@ onMounted(() => {
                     <div
                         role="button"
                         class="flex items-center gap-4 p-3 bg-white rounded-sm"
-                        :class="{ 'text-electric-green [&>div]:text-electric-green bg-blue-sky border border-electric-green': newAnalysis.modelType === 'pl/spl s' }"
-                        @click="newAnalysis.modelType = 'pl/spl s'"
+                        :class="{ 'text-electric-green [&>div]:text-electric-green bg-blue-sky border border-electric-green': modelType === 'pl/spl s' }"
+                        @click="modelType = 'pl/spl s'"
                     >
                         <Badge variant="secondary">
                             PL/SPL S
@@ -226,8 +289,8 @@ onMounted(() => {
                     <div
                         role="button"
                         class="flex items-center gap-4 p-3 bg-white rounded-sm"
-                        :class="{ 'text-electric-green [&_div]:text-electric-green bg-blue-sky border border-electric-green': newAnalysis.modelType === 'pl/spl u' }"
-                        @click="newAnalysis.modelType = 'pl/spl u'"
+                        :class="{ 'text-electric-green [&_div]:text-electric-green bg-blue-sky border border-electric-green': modelType === 'pl/spl u' }"
+                        @click="modelType = 'pl/spl u'"
                     >
                         <Badge
                             class="bg-[#EBE0F1]"
@@ -250,8 +313,8 @@ onMounted(() => {
                     <div
                         role="button"
                         class="flex items-center gap-4 p-3 bg-white rounded-sm"
-                        :class="{ 'text-electric-green [&_div]:text-electric-green bg-blue-sky border border-electric-green': newAnalysis.modelType === 'NPL' }"
-                        @click="newAnalysis.modelType = 'NPL'"
+                        :class="{ 'text-electric-green [&_div]:text-electric-green bg-blue-sky border border-electric-green': modelType === 'NPL' }"
+                        @click="modelType = 'NPL'"
                     >
                         <Badge variant="primary">
                             NPL
@@ -271,8 +334,8 @@ onMounted(() => {
                     <div
                         role="button"
                         class="flex items-center gap-4 p-3 bg-white rounded-sm"
-                        :class="{ 'text-electric-green [&_div]:text-electric-green bg-blue-sky border border-electric-green': newAnalysis.modelType === 'REO' }"
-                        @click="newAnalysis.modelType = 'REO'"
+                        :class="{ 'text-electric-green [&_div]:text-electric-green bg-blue-sky border border-electric-green': modelType === 'REO' }"
+                        @click="modelType = 'REO'"
                     >
                         <Badge variant="default">
                             REO
@@ -327,28 +390,42 @@ onMounted(() => {
                         <Label for="wacc">WACC - Coste de Capital (%)</Label>
                         <Input
                             id="wacc"
-                            type="text"
+                            type="number"
                             placeholder="5"
                             class="mt-2"
-                            v-model="newAnalysis.masterData.wacc"
+                            v-model="masterDataProps.wacc"
+                            :class="{ 'border-red-500': step4Errors['masterData.wacc'] }"
                             required
                             autofocus
                             autocomplete="wacc"
                         />
+                        <span
+                            v-if="step4Errors['masterData.wacc']"
+                            class="text-red-500 text-sm"
+                        >
+                            {{ step4Errors['masterData.wacc'] }}
+                        </span>
                     </div>
 
                     <div class="space-y-2">
                         <Label for="managementFee">Management fee (%)</Label>
                         <Input
                             id="managementFee"
-                            type="text"
+                            type="number"
                             placeholder="5"
                             class="mt-2"
-                            v-model="newAnalysis.masterData.managementFee"
+                            v-model="masterDataProps.managementFee"
+                            :class="{ 'border-red-500': step4Errors['masterData.managementFee'] }"
                             required
                             autofocus
                             autocomplete="managementFee"
                         />
+                        <span
+                            v-if="step4Errors['masterData.managementFee']"
+                            class="text-red-500 text-sm"
+                        >
+                            {{ step4Errors['masterData.managementFee'] }}
+                        </span>
                     </div>
 
                     <Label>Coste de lanzamiento</Label>
@@ -357,28 +434,42 @@ onMounted(() => {
                             <Label for="costeLanzamientoAbogado">Abogado</Label>
                             <Input
                                 id="costeLanzamientoAbogado"
-                                type="text"
+                                type="number"
                                 placeholder="500"
                                 class="mt-2"
-                                v-model="newAnalysis.masterData.costeLanzamientoAbogado"
+                                v-model="masterDataProps.costeLanzamientoAbogado"
+                                :class="{ 'border-red-500': step4Errors['masterData.costeLanzamientoAbogado'] }"
                                 required
                                 autofocus
                                 autocomplete="costeLanzamientoAbogado"
                             />
+                            <span
+                                v-if="step4Errors['masterData.costeLanzamientoAbogado']"
+                                class="text-red-500 text-sm"
+                            >
+                                {{ step4Errors['masterData.costeLanzamientoAbogado'] }}
+                            </span>
                         </div>
 
                         <div class="space-y-2 w-full">
                             <Label for="costeLanzamientoProcurador">Procurador</Label>
                             <Input
                                 id="costeLanzamientoProcurador"
-                                type="text"
+                                type="number"
                                 placeholder="500"
                                 class="mt-2"
-                                v-model="newAnalysis.masterData.costeLanzamientoProcurador"
+                                v-model="masterDataProps.costeLanzamientoProcurador"
+                                :class="{ 'border-red-500': step4Errors['masterData.costeLanzamientoProcurador'] }"
                                 required
                                 autofocus
                                 autocomplete="costeLanzamientoProcurador"
                             />
+                            <span
+                                v-if="step4Errors['masterData.costeLanzamientoProcurador']"
+                                class="text-red-500 text-sm"
+                            >
+                                {{ step4Errors['masterData.costeLanzamientoProcurador'] }}
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -405,7 +496,7 @@ onMounted(() => {
                 <Button
                     class="w-full"
                     size="sm"
-                    @click="step < 4 ? step++ : submitAnalysis()"
+                    @click="handleNextStep"
                 >
                     <span class="hidden sm:inline">
                         {{ step < 4 ? 'Siguiente' : 'Finalizar' }} </span>

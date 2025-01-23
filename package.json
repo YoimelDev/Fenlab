@@ -34,6 +34,7 @@
     "dependencies": {
         "@radix-icons/vue": "^1.0.0",
         "@tanstack/vue-table": "^8.20.4",
+        "@vee-validate/zod": "^4.15.0",
         "@vueuse/core": "^11.0.1",
         "class-variance-authority": "^0.7.0",
         "clsx": "^2.1.1",
@@ -43,7 +44,9 @@
         "tailwind-merge": "^2.5.2",
         "tailwindcss-animate": "^1.0.7",
         "tailwindcss-text-scale": "^0.3.1",
+        "vee-validate": "^4.15.0",
         "vue-loading-overlay": "^6.0",
-        "vue-sidebar-menu": "^5.4.1"
+        "vue-sidebar-menu": "^5.4.1",
+        "zod": "^3.24.1"
     }
 }

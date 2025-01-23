@@ -8,6 +8,7 @@ import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
 
 import ApplicationLogo from '@/Components/ApplicationLogo.vue'
 import { HomeIcon, AssessmentIcon, HelpIcon, PersonIcon, PictureIcon } from '@/Components/icons'
+import { ExitIcon } from '@radix-icons/vue'
 import { PageProps } from '@/types'
 import { Button } from '@/Components/ui'
 
@@ -151,27 +152,21 @@ const onToggleCollapse = (collapsed: boolean) => {
         </template>
 
         <template #footer>
-            <div class="w-full flex items-center justify-center space-x-1 mt-auto mb-4">
-                <Button
-                    class="text-grey p-0"
-                    as-child
-                    variant="ghost"
-                    size="xs"
+            <Button
+                class="text-grey p-0 mb-2"
+                as-child
+                variant="ghost"
+                size="xs"
+            >
+                <Link
+                    :href="route('logout')"
+                    method="post"
                 >
-                    <Link
-                        :href="route('logout')"
-                        method="post"
-                    >
-                        Cerrar Sesión
-                    </Link>
-                </Button>
-            </div>
+                    <ExitIcon class="w-4 h-4 mr-2" />
+
+                    Cerrar Sesión
+                </Link>
+            </Button>
         </template>
-
-        <!-- <template #toggle-icon>
-            <PinRightIcon v-if="isCollapsed" class="w-6 h-6 text-electric-green" />
-
-            <PinLeftIcon v-else class="w-6 h-6 text-electric-green" />
-        </template> -->
     </sidebar-menu>
 </template>

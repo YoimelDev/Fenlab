@@ -479,112 +479,6 @@ async function uploadIdealistaFile() {
                 </div>
 
                 <div class="flex justify-center items-center">
-                    <ArrowUpIcon v-if="project.outputBBDD && project.status !== 'Carga definitiva'" />
-                </div>
-
-                <div
-                    v-if="project.assetsZip"
-                    class="my-4"
-                >
-                    <div class="relative flex items-center gap-4 w-full p-4 bg-white ">
-                        <ZipIcon />
-
-                        <div>
-                            <p class="text-black text-lg font-bold">
-                                {{ project.assetsZip.title }}
-                            </p>
-                            <p class="text-grey text-sm">
-                                {{ project.assetsZip.description }}
-                            </p>
-                        </div>
-
-                        <Button
-                            v-if="project.assetsZip.url"
-                            variant="ghost"
-                            size="xs"
-                            as-child
-                        >
-                            <a
-                                class="absolute top-4 right-4"
-                                :href="project.assetsZip.url"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                <DownloadIcon />
-                            </a>
-                        </Button>
-                    </div>
-                </div>
-
-                <div
-                    v-if="project.outputBBDD"
-                    class="my-4"
-                >
-                    <div class="relative flex items-center gap-4 w-full p-4 bg-white ">
-                        <XlsIcon v-if="project.outputBBDD.extension == 'xlsx'" />
-
-                        <div>
-                            <p class="text-black text-lg font-bold">
-                                {{ project.outputBBDD.title }}
-                            </p>
-                            <p class="text-grey text-sm">
-                                {{ project.outputBBDD.description }}
-                            </p>
-                        </div>
-
-                        <Button
-                            v-if="project.outputBBDD.url"
-                            variant="ghost"
-                            size="xs"
-                            as-child
-                        >
-                            <a
-                                class="absolute top-4 right-4"
-                                :href="project.outputBBDD.url"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                <DownloadIcon />
-                            </a>
-                        </Button>
-                    </div>
-                </div>
-
-                <div
-                    v-if="project.strats"
-                    class="my-4"
-                >
-                    <div class="relative flex items-center gap-4 w-full p-4 bg-white ">
-                        <XlsIcon v-if="project.strats.extension == 'xlsx'" />
-
-                        <div>
-                            <p class="text-black text-lg font-bold">
-                                {{ project.strats.title }}
-                            </p>
-                            <p class="text-grey text-sm">
-                                {{ project.strats.description }}
-                            </p>
-                        </div>
-
-                        <Button
-                            v-if="project.strats.url"
-                            variant="ghost"
-                            size="xs"
-                            as-child
-                        >
-                            <a
-                                class="absolute top-4 right-4"
-                                :href="project.strats.url"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                <DownloadIcon />
-                            </a>
-                        </Button>
-                    </div>
-                </div>
-
-                <div class="flex justify-center items-center">
                     <ArrowUpIcon v-if="project.secondExcel" />
                 </div>
 
@@ -621,6 +515,115 @@ async function uploadIdealistaFile() {
                         </Button>
                     </div>
                 </div>
+
+                <div class="flex justify-center items-center">
+                    <ArrowUpIcon v-if="project.secondExcel" />
+                </div>
+
+                <section
+                    v-if="project.assetsZip || project.outputBBDD || project.strats"
+                    class="my-4 bg-white"
+                >
+                    <h3 class="px-4 pt-4 text-lg font-bold">
+                        Resultados del análisis
+                    </h3>
+
+                    <div
+                        v-if="project.assetsZip"
+                        class="relative flex items-center gap-4 w-full p-4"
+                    >
+                        <ZipIcon />
+
+                        <div>
+                            <p class="text-black text-lg font-bold">
+                                {{ project.assetsZip.title }}
+                            </p>
+                            <p class="text-grey text-sm">
+                                {{ project.assetsZip.description }}
+                            </p>
+                        </div>
+
+                        <Button
+                            v-if="project.assetsZip.url"
+                            variant="ghost"
+                            size="xs"
+                            as-child
+                        >
+                            <a
+                                class="absolute top-4 right-4"
+                                :href="project.assetsZip.url"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <DownloadIcon />
+                            </a>
+                        </Button>
+                    </div>
+
+                    <div 
+                        v-if="project.outputBBDD"
+                        class="relative flex items-center gap-4 w-full p-4"
+                    >
+                        <XlsIcon v-if="project.outputBBDD.extension == 'xlsx'" />
+
+                        <div>
+                            <p class="text-black text-lg font-bold">
+                                {{ project.outputBBDD.title }}
+                            </p>
+                            <p class="text-grey text-sm">
+                                {{ project.outputBBDD.description }}
+                            </p>
+                        </div>
+
+                        <Button
+                            v-if="project.outputBBDD.url"
+                            variant="ghost"
+                            size="xs"
+                            as-child
+                        >
+                            <a
+                                class="absolute top-4 right-4"
+                                :href="project.outputBBDD.url"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <DownloadIcon />
+                            </a>
+                        </Button>
+                    </div>
+
+                    <div 
+                        v-if="project.strats"
+                        class="relative flex items-center gap-4 w-full p-4"
+                    >
+                        <XlsIcon v-if="project.strats.extension == 'xlsx'" />
+
+                        <div>
+                            <p class="text-black text-lg font-bold">
+                                {{ project.strats.title }}
+                            </p>
+                            <p class="text-grey text-sm">
+                                {{ project.strats.description }}
+                            </p>
+                        </div>
+
+                        <Button
+                            v-if="project.strats.url"
+                            variant="ghost"
+                            size="xs"
+                            as-child
+                        >
+                            <a
+                                class="absolute top-4 right-4"
+                                :href="project.strats.url"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <DownloadIcon />
+                            </a>
+                        </Button>
+                    </div>
+                </section>
 
                 <div class="flex justify-center items-center">
                     <ArrowUpIcon v-if="project.firstExcel" />
