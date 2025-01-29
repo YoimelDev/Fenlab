@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { PdfIcon, DownloadIcon } from '@/Components/icons'
+import { DownloadIcon, PdfIcon, BulbIcon, WorksIcon, DelivarableIcon } from '@/Components/icons'
 import {
     Accordion, 
     AccordionContent, 
     AccordionItem, 
     AccordionTrigger,
+    Badge,
     Button,
 } from '@/Components/ui'
 </script>
@@ -12,8 +13,14 @@ import {
 <template>
     <section class="[&>div]:pl-5">
         <header class="mt-10">
-            <h3 class="text-xl font-medium">
+            <h3 class="flex items-center gap-2 text-xl font-medium">
                 Modelo de recuperación Non performing loans secured
+                <Badge
+                    variant="primary"
+                    class="text-xs"
+                >
+                    NPL
+                </Badge>
             </h3>
         </header>
 
@@ -23,7 +30,11 @@ import {
             collapsible
         >
             <AccordionItem value="item-1">
-                <AccordionTrigger>¿Para quién puede ser útil?</AccordionTrigger>
+                <AccordionTrigger>
+                    <p class="flex items-center gap-2">
+                        <BulbIcon /> ¿Para quién puede ser útil?
+                    </p>
+                </AccordionTrigger>
                 <AccordionContent>
                     <ul class="list-disc pl-5">
                         <li class="mb-1">
@@ -61,7 +72,11 @@ import {
             </AccordionItem>
 
             <AccordionItem value="item-2">
-                <AccordionTrigger>¿Cómo funciona?</AccordionTrigger>
+                <AccordionTrigger>
+                    <p class="flex items-center gap-2">
+                        <WorksIcon /> ¿Cómo funciona?
+                    </p>                    
+                </AccordionTrigger>
                 <AccordionContent>
                     <ul class="list-disc pl-5">
                         <li class="mb-1">
@@ -146,7 +161,11 @@ import {
             </AccordionItem>
 
             <AccordionItem value="item-3">
-                <AccordionTrigger>¿Qué entregables recibe el Cliente?</AccordionTrigger>
+                <AccordionTrigger>
+                    <p class="flex items-center gap-2">
+                        <DelivarableIcon /> ¿Qué entregables recibe el Cliente?
+                    </p>                   
+                </AccordionTrigger>
                 <AccordionContent>
                     <ul class="list-disc pl-5">
                         <li class="mb-1">
