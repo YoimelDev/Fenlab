@@ -22,7 +22,7 @@ defineProps<{
                     variant="black"
                     class="text-black w-8 h-8"
                 />
-                Mis Publicaciones | Aprobación PBC
+                Mis Publicaciones | Aprobación PBC ( {{ projects.length }})
             </h1>
         </header>
      

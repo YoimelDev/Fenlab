@@ -22,7 +22,7 @@ defineProps<{
                     variant="black"
                     class="text-black w-8 h-8"
                 />
-                Mis Publicaciones | Operaciones Cerradas
+                Mis Publicaciones | Operaciones Cerradas ( {{ projects.length }})
             </h1>
         </header>
      

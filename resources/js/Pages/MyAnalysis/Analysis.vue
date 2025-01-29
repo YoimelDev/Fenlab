@@ -31,7 +31,7 @@ defineProps<{
                     class="text-black w-8 h-8"
                 />
 
-                Mis Análisis
+                Mis Análisis ( {{ analysis.length }} )
             </h1>
 
             <NewAnalysis />

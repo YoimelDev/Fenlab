@@ -22,7 +22,7 @@ defineProps<{
                     variant="black"
                     class="text-black w-8 h-8"
                 />
-                Mis Publicaciones | Pendientes de Firma
+                Mis Publicaciones | Pendientes de Firma ( {{ projects.length }})
             </h1>
         </header>
      

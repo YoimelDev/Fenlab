@@ -29,7 +29,7 @@ defineProps<{
                     class="text-black w-8 h-8"
                 />
 
-                Mis Publicaciones | Publicadas
+                Mis Publicaciones | Publicadas ( {{ published.Auctions.length }})
             </h1>
         </header>
      
