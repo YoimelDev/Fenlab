@@ -29,6 +29,7 @@ defineProps<{
         <DataTable
             :columns="columns"
             :data="projects"
+            column-filter="fenlabId"
         />
     </AuthenticatedLayout>
 </template>

@@ -32,6 +32,7 @@ defineProps<{
         <DataTable
             :columns="columns"
             :data="projects.data"
+            column-filter="idCliente"
         />
     </AuthenticatedLayout>
 </template>

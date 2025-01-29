@@ -36,6 +36,7 @@ defineProps<{
         <DataTable
             :columns="columns"
             :data="published.Auctions"
+            column-filter="id"
         />
     </AuthenticatedLayout>
 </template>
