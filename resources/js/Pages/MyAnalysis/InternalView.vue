@@ -156,7 +156,10 @@ async function uploadFile() {
         const response = await fenlabApi.post<ExcelResponse>('', formData)
         if (!response.data.success) {
             const errorMessages = response.data.errors.list.map((err) => `${err.header}: ${err.error}`).join('\n')
-            fileError.value = errorMessages
+            fileError.value = `Error en el archivo "${filesData.value[0].name}":\n${errorMessages}`
+            // Reset file data after error
+            filesData.value = []
+            if (fileInput.value) fileInput.value.value = ''
             return
         }
 
@@ -170,9 +173,12 @@ async function uploadFile() {
         })
         filesData.value = []
         if (fileInput.value) fileInput.value.value = ''
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-        fileError.value = error.response?.data?.message?.join('\n') || 'Error al subir el archivo'
+        fileError.value = `Error al subir el archivo "${filesData.value[0].name}": ${error.response?.data?.message?.join('\n') || 'Error desconocido'}`
+        // Reset file data after error
+        filesData.value = []
+        if (fileInput.value) fileInput.value.value = ''
     } finally {
         loader?.hide()
         router.reload()
@@ -197,7 +203,10 @@ async function uploadIdealistaFile() {
         const response = await fenlabApi.post<ExcelResponse>('', formData)
         if (!response.data.success) {
             const errorMessages = response.data.errors.list.map((err) => `${err.header}: ${err.error}`).join('\n')
-            fileError.value = errorMessages
+            fileError.value = `Error en el archivo "${filesData.value[0].name}":\n${errorMessages}`
+            // Reset file data after error
+            filesData.value = []
+            if (fileInput.value) fileInput.value.value = ''
             return
         }
 
@@ -209,6 +218,9 @@ async function uploadIdealistaFile() {
 
         if (!modelResponse.data.success) {
             fileError.value = 'Error al procesar el modelo'
+            // Reset file data after error
+            filesData.value = []
+            if (fileInput.value) fileInput.value.value = ''
             return
         }
 
@@ -219,9 +231,12 @@ async function uploadIdealistaFile() {
         filesData.value = []
         if (fileInput.value) fileInput.value.value = ''
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-        fileError.value = error.response?.data?.message?.join('\n') || 'Error al procesar el archivo'
+        fileError.value = `Error al procesar el archivo "${filesData.value[0].name}": ${error.response?.data?.message?.join('\n') || 'Error desconocido'}`
+        // Reset file data after error
+        filesData.value = []
+        if (fileInput.value) fileInput.value.value = ''
     } finally {
         loader?.hide()
         router.reload()
