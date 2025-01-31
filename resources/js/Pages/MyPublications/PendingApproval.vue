@@ -22,13 +22,14 @@ defineProps<{
                     variant="black"
                     class="text-black w-8 h-8"
                 />
-                Mis Publicaciones | Pendientes de Aprobación ( {{ projects.length }})
+                Mis Publicaciones | Pendientes de Aprobación ( {{ projects.length }} )
             </h1>
         </header>
      
         <DataTable
             :columns="columns"
             :data="projects"
+            column-filter="name"
         />
     </AuthenticatedLayout>
 </template>

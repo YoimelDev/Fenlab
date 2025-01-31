@@ -10,11 +10,14 @@ import {
 import { AssessmentIcon } from '@/Components/icons'
 
 import { columns } from './Components/publishedTable'
-import { Published } from './types'
+import { Published, Auction } from './types'
+import { ref } from 'vue'
 
-defineProps<{
+const props = defineProps<{
     published: Published
 }>()
+
+const published = ref<Auction[]>(props.published?.Auctions ?? [])
 
 </script>
 
@@ -29,13 +32,13 @@ defineProps<{
                     class="text-black w-8 h-8"
                 />
 
-                Mis Publicaciones | Publicadas ( {{ published.Auctions.length }})
+                Mis Publicaciones | Publicadas ( {{ published?.length }} )
             </h1>
         </header>
      
         <DataTable
             :columns="columns"
-            :data="published.Auctions"
+            :data="published"
             column-filter="id"
         />
     </AuthenticatedLayout>

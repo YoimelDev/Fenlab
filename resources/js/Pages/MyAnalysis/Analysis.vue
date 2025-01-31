@@ -61,6 +61,7 @@ defineProps<{
             :key="analysis.length"
             :columns="columns"
             :data="analysis"
+            column-filter="name"
         />
     </AuthenticatedLayout>
 </template>

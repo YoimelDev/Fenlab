@@ -23,7 +23,7 @@ defineProps<{
                     class="text-black w-8 h-8"
                 />
 
-                Mis Publicaciones | Pendientes de Publicar ( {{ projects.data.length }})
+                Mis Publicaciones | Pendientes de Publicar ( {{ projects.data.length }} )
             </h1>
 
             <!-- <NewPublicationDialog /> -->
