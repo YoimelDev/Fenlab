@@ -43,6 +43,9 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        $emails = explode(',', env('CONTACT_EMAILS'));
+        $emails[] = $user->email;
         
         Mail::to($user->email)->send(new UserRegisteredMail([
             'name' => $user->name,
