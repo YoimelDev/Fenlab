@@ -6,7 +6,7 @@ import AssetActions from './AssetActions.vue'
 
 export const columns: ColumnDef<AssetData>[] = [
     {
-        header: () => h('div', { class: 'w-[78px]' }, 'ID cliente'),
+        header: 'ID cliente',
         accessorKey: 'idCliente',
         meta: '!w-[78px]',
         cell: (row) => {
