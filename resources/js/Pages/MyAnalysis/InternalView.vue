@@ -537,7 +537,7 @@ async function uploadIdealistaFile() {
 
                 <section
                     v-if="project.assetsZip || project.outputBBDD || project.strats"
-                    class="my-4 bg-white"
+                    class="my-4 bg-white border-2 border-[#e3d9a3] rounded-[5px]"
                 >
                     <h3 class="px-4 pt-4 text-lg font-bold">
                         Resultados del análisis

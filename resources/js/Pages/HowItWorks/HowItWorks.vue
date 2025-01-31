@@ -42,12 +42,12 @@ import { HelpIcon } from '@/Components/icons'
             </div>
         </section>
 
-        <section class="mt-16">
+        <section class="mt-16 [&_header>h3]:underline [&_h4]:underline">
             <header>
                 <div class="flex justify-between">
-                    <h2 class="flex items-center gap-4 text-xl font-bold leading-5">
+                    <h1 class="flex items-center gap-4 text-2xl font-bold leading-5">
                         Explicación técnica modelos
-                    </h2>
+                    </h1>
                 </div>
             </header>
 

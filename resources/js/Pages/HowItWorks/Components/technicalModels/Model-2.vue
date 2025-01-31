@@ -185,9 +185,9 @@ import {
         </Accordion>
 
         <div class="mt-10">
-            <h3 class="text-xl font-medium">
+            <h4 class="text-xl font-medium">
                 Muestras para descargar
-            </h3>
+            </h4>
         </div>
 
         <div class="mt-5">
