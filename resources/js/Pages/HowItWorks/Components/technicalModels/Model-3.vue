@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { DownloadIcon, PdfIcon, BulbIcon, WorksIcon, DelivarableIcon } from '@/Components/icons'
+import { PdfIcon, BulbIcon, WorksIcon, DelivarableIcon } from '@/Components/icons'
 import {
     Accordion, 
     AccordionContent, 
     AccordionItem, 
     AccordionTrigger,
-    Button,
     Badge,
 } from '@/Components/ui'
 </script>
@@ -151,7 +150,12 @@ import {
                     <div
                         class="my-4"
                     >
-                        <div class="relative flex items-center gap-4 w-full p-4 bg-white ">
+                        <a 
+                            class="relative flex items-center gap-4 w-full p-4 bg-white transition-colors hover:bg-[#004DF21A]"
+                            href="#"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
                             <PdfIcon />
 
                             <div>
@@ -159,22 +163,7 @@ import {
                                     Análisis consolidado de toda la cartera activo por activo.
                                 </p>
                             </div>
-
-                            <Button
-                                variant="ghost"
-                                size="xs"
-                                as-child
-                            >
-                                <a
-                                    class="absolute top-4 right-4"
-                                    href="#"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    <DownloadIcon />
-                                </a>
-                            </Button>
-                        </div>
+                        </a>
                     </div>
                 </li>
 
@@ -182,7 +171,12 @@ import {
                     <div
                         class="my-4"
                     >
-                        <div class="relative flex items-center gap-4 w-full p-4 bg-white ">
+                        <a
+                            class="relative flex items-center gap-4 w-full p-4 bg-white transition-colors hover:bg-[#004DF21A]"
+                            href="#"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
                             <PdfIcon />
 
                             <div>
@@ -190,22 +184,7 @@ import {
                                     Salida individual.
                                 </p>
                             </div>
-
-                            <Button
-                                variant="ghost"
-                                size="xs"
-                                as-child
-                            >
-                                <a
-                                    class="absolute top-4 right-4"
-                                    href="#"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    <DownloadIcon />
-                                </a>
-                            </Button>
-                        </div>
+                        </a>
                     </div>
                 </li>
             </ul>
