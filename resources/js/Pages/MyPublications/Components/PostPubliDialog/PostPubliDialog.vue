@@ -18,13 +18,17 @@ import {
 import type { PluginApi } from 'vue-loading-overlay'
 import type { PageProps } from '@/types'
 import { PostData } from '../../types/index'
+import PostInformation from './PostInformation.vue'
 
 type bodyData = {
-    fenlabId: string
-    email: string
-    status: string
+    salesforceId: string
     isApproved: boolean
+    isAccepted?: boolean
+    isRejected?: boolean
+    changeDate?: boolean
     comments?: string
+    approverRequesterOrRejectorEmail?: string
+    interactingUserEmail?: string
 }
 
 const props = defineProps<{
@@ -35,7 +39,7 @@ const $loading = inject<PluginApi>('$loading')
 const page = usePage<PageProps>()
 const salesforceEmail = page.props?.auth?.salesforceUser?.email
 const formData = ref({
-    fenlabId: props.postData.data.id,
+    fenlabId: props.postData.data.fenlabId,
     email: salesforceEmail,
     isApproved: false,
     status: '',
@@ -49,13 +53,16 @@ const postSalesforce = async () => {
     
     try {
         const bodyData: bodyData = {
-            fenlabId: formData.value.fenlabId,
-            email: formData.value.email,
-            status: formData.value.status,
+            salesforceId: props.postData.data.salesforceId,
             isApproved: formData.value.status === 'approved',
+            isAccepted: formData.value.status === 'approved',
+            isRejected: formData.value.status === 'rejected',
+            changeDate: formData.value.status === 'date_change',
+            approverRequesterOrRejectorEmail: formData.value.email,
+            interactingUserEmail: formData.value.email,
         }
 
-        if (formData.value.status === 'rejected') {
+        if (formData.value.status === 'rejected' || formData.value.status === 'pending') {
             bodyData.comments = formData.value.comments
         }
 
@@ -65,9 +72,7 @@ const postSalesforce = async () => {
             variant: 'info',
             title: 'Datos guardados correctamente',
         })
-    } catch (error: any) {
-        console.log(error.response.data.error)
-        
+    } catch (error: any) {        
         toast({
             variant: 'danger',
             title: '¡Ups! Algo salió mal.',
@@ -87,6 +92,11 @@ const postSalesforce = async () => {
                 Detalles de la publicación
             </DialogTitle>
         </DialogHeader>
+
+        <PostInformation 
+            :information="postData.data"
+            :post-type="postData.postType"
+        />
 
         <div class="space-y-4 my-4 p-4 bg-white/100 rounded-sm border border-[#E5E7EB] shadow-sm">
             <div class="space-y-2">

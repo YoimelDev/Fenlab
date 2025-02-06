@@ -128,7 +128,7 @@ class SalesforceController extends Controller
     public function getClosedAuctions(Request $request): JsonResponse
     {
         return $this->makeApiRequest(
-            '/services/apexrest/company/fenlab/closedWonAuctions',
+            '/services/apexrest/company/fenlab/closedAuctions',
             ['email' => $request->email],
             'get'
         );

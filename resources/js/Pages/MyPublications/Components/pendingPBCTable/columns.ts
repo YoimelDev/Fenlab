@@ -19,7 +19,7 @@ export const columns: ColumnDef<PendingPBC>[] = [
     },
     {
         header: 'TIPO DE REGISTRO',
-        accessorKey: 'recordType',
+        accessorKey: 'auctionRecordType',
     },
     {
         header: 'ETAPA',

@@ -133,32 +133,70 @@ export interface UpcomingAuction {
 
 
 export interface PendingApproval {
-    rejectedDate: string | null;
-    approvedDate: string | null;
-    stage: string;
-    companyName: string;
-    companyId: string;
-    name: string;
-    id: string;
+    PBCstatus:         string;
+    publicLinks:       string[];
+    referencePrice:    number;
+    offerValue:        null;
+    minimumPrice:      null;
+    rejectedDate:      null;
+    approvedDate:      null;
+    offerDate:         null;
+    startDate:         Date;
+    stage:             string;
+    auctionRecordType: string;
+    titular:           string;
+    name:              string;
+    clientId:          string;
+    fenlabId:          string;
+    fenciaId:          null;
+    salesforceId:      string;
 }
 
 export interface PendingPBC {
-    PBCtype: string;
-    recordType: string;
-    approvedPBC2Date: string | null;
-    approvedPBCDate: string | null;
-    stage: string;
-    companyId: string;
-    name: string;
-    id: string;
+    PBCtype:           string;
+    publicLinks:       string[];
+    auctionRecordType: string;
+    offerValue:        null;
+    approvedPBC2Date:  null;
+    approvedPBCDate:   null;
+    stage:             string;
+    titular:           string;
+    companyId:         string;
+    name:              string;
+    fenlabId:          string;
+    prestashopId:      null;
+    salesforceId:      string;
 }
 
 export interface PendingNotary {
-    fenlabId: string;
-    stage: string;
-    companyId: string;
-    name: string;
-    id: string;
+    publicLinks:         string[];
+    notaryAddress:       NotaryAddress;
+    notary:              null;
+    scheduledDateNotary: null;
+    signStatus:          string;
+    recordType:          string;
+    offerValue:          null;
+    startDate:           Date;
+    stage:               string;
+    titular:             string;
+    companyId:           string;
+    name:                string;
+    fenlabId:            string;
+    prestashopId:        null;
+    salesforceId:        string;
+}
+
+export interface NotaryAddress {
+    city:            string;
+    country:         string;
+    countryCode:     string;
+    geocodeAccuracy: null;
+    latitude:        null;
+    longitude:       null;
+    postalCode:      string;
+    state:           null;
+    stateCode:       null;
+    street:          string;
 }
 
 export interface ClosedAuctions {

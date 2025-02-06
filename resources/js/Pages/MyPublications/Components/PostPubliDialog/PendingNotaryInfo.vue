@@ -1,0 +1,237 @@
+<script setup lang="ts">
+import { Input, Label } from '@/Components/ui'
+import type { PendingNotary } from '../../types'
+
+defineProps<{
+    information: PendingNotary;
+}>()
+</script>
+
+<template>
+    <div class="grid grid-cols-2 gap-4">
+        <div
+            v-if="information.salesforceId"
+            class="space-y-2"
+        >
+            <Label>ID de Salesforce</Label>
+            <Input
+                :default-value="information.salesforceId"
+                disabled
+            />
+        </div>
+        <div
+            v-if="information.fenlabId"
+            class="space-y-2"
+        >
+            <Label>ID de Fenlab</Label>
+            <Input
+                :default-value="information.fenlabId"
+                disabled
+            />
+        </div>
+        <div
+            v-if="information.name"
+            class="space-y-2"
+        >
+            <Label>Nombre</Label>
+            <Input
+                :default-value="information.name"
+                disabled
+            />
+        </div>
+        <div
+            v-if="information.titular"
+            class="space-y-2"
+        >
+            <Label>Titular</Label>
+            <Input
+                :default-value="information.titular"
+                disabled
+            />
+        </div>
+        <div
+            v-if="information.stage"
+            class="space-y-2"
+        >
+            <Label>Etapa</Label>
+            <Input
+                :default-value="information.stage"
+                disabled
+            />
+        </div>
+        <div
+            v-if="information.startDate"
+            class="space-y-2"
+        >
+            <Label>Fecha de Inicio</Label>
+            <Input
+                :default-value="information.startDate.toString()"
+                disabled
+            />
+        </div>
+        <div
+            v-if="information.scheduledDateNotary"
+            class="space-y-2"
+        >
+            <Label>Fecha Programada Notaría</Label>
+            <Input
+                :default-value="information.scheduledDateNotary"
+                disabled
+            />
+        </div>
+        <div
+            v-if="information.signStatus"
+            class="space-y-2"
+        >
+            <Label>Estado de Firma</Label>
+            <Input
+                :default-value="information.signStatus"
+                disabled
+            />
+        </div>
+        <div
+            v-if="information.recordType"
+            class="space-y-2"
+        >
+            <Label>Tipo de Registro</Label>
+            <Input
+                :default-value="information.recordType"
+                disabled
+            />
+        </div>
+        <div
+            v-if="information.notaryAddress"
+            class="space-y-2"
+        >
+            <Label>Dirección</Label>
+            <Input
+                :default-value="information.notaryAddress.street"
+                disabled
+            />
+        </div>
+        <div
+            v-if="information.notaryAddress"
+            class="space-y-2"
+        >
+            <Label>Ciudad</Label>
+            <Input
+                :default-value="information.notaryAddress.city"
+                disabled
+            />
+        </div>
+        <div
+            v-if="information.notaryAddress"
+            class="space-y-2"
+        >
+            <Label>País</Label>
+            <Input
+                :default-value="information.notaryAddress.country"
+                disabled
+            />
+        </div>
+        <div
+            v-if="information.notaryAddress"
+            class="space-y-2"
+        >
+            <Label>Código Postal</Label>
+            <Input
+                :default-value="information.notaryAddress.postalCode"
+                disabled
+            />
+        </div>
+        <div
+            v-if="information.prestashopId"
+            class="space-y-2"
+        >
+            <Label>ID de Prestashop</Label>
+            <Input
+                :default-value="information.prestashopId"
+                disabled
+            />
+        </div>
+        <div
+            v-if="information.companyId"
+            class="space-y-2"
+        >
+            <Label>ID de Compañía</Label>
+            <Input
+                :default-value="information.companyId"
+                disabled
+            />
+        </div>
+        <div
+            v-if="information.offerValue"
+            class="space-y-2"
+        >
+            <Label>Valor de Oferta</Label>
+            <Input
+                :default-value="information.offerValue"
+                disabled
+            />
+        </div>
+        <div
+            v-if="information.notary"
+            class="space-y-2"
+        >
+            <Label>Notario</Label>
+            <Input
+                :default-value="information.notary"
+                disabled
+            />
+        </div>
+        <div
+            v-if="information.notaryAddress?.stateCode"
+            class="space-y-2"
+        >
+            <Label>Estado</Label>
+            <Input
+                :default-value="information.notaryAddress.stateCode"
+                disabled
+            />
+        </div>
+        <div
+            v-if="information.notaryAddress?.countryCode"
+            class="space-y-2"
+        >
+            <Label>Código de País</Label>
+            <Input
+                :default-value="information.notaryAddress.countryCode"
+                disabled
+            />
+        </div>
+        <div
+            v-if="information.notaryAddress?.latitude"
+            class="space-y-2"
+        >
+            <Label>Latitud</Label>
+            <Input
+                :default-value="information.notaryAddress.latitude"
+                disabled
+            />
+        </div>
+        <div
+            v-if="information.notaryAddress?.longitude"
+            class="space-y-2"
+        >
+            <Label>Longitud</Label>
+            <Input
+                :default-value="information.notaryAddress.longitude"
+                disabled
+            />
+        </div>
+        <div
+            v-if="information.publicLinks?.length"
+            class="col-span-2 space-y-2"
+        >
+            <Label>Enlaces Públicos</Label>
+            <div class="space-y-2">
+                <Input
+                    v-for="(link, index) in information.publicLinks"
+                    :key="index"
+                    :default-value="link"
+                    disabled
+                />
+            </div>
+        </div>
+    </div>
+</template>
