@@ -144,7 +144,9 @@ const submitAnalysis = async () => {
         toast({
             variant: 'danger',
             title: '¡Ups! Algo salió mal.',
-            description: error.response.data.message.join('\n'),
+            description: Array.isArray(error.response.data.message) ?
+                error.response.data.message.join('\n') :
+                error.response.data.message,
         })
     } finally {
         loader?.hide()
