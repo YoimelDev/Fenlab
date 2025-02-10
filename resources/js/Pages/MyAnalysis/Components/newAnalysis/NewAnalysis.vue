@@ -83,7 +83,10 @@ const { handleSubmit: handleStep4, errors: step4Errors, defineField: fieldStep4,
     validationSchema: toTypedSchema(step4Schema),
 })
 
-const [ masterDataProps ] = fieldStep4('masterData')
+const [ wacc ] = fieldStep4('masterData.wacc')
+const [ managementFee ] = fieldStep4('masterData.managementFee')
+const [ costeLanzamientoAbogado ] = fieldStep4('masterData.costeLanzamientoAbogado')
+const [ costeLanzamientoProcurador ] = fieldStep4('masterData.costeLanzamientoProcurador')
 
 const handleNextStep = () => {
     const steps = {
@@ -129,7 +132,12 @@ const submitAnalysis = async () => {
                 description: description.value,
                 modelPosition: activeSelection.value,
                 modelType: modelType.value,
-                masterData: masterDataProps.value,
+                masterData: {
+                    wacc: wacc.value,
+                    managementFee: managementFee.value,
+                    costeLanzamientoAbogado: costeLanzamientoAbogado.value,
+                    costeLanzamientoProcurador: costeLanzamientoProcurador.value,
+                },
             },
         })
 
@@ -395,7 +403,7 @@ const submitAnalysis = async () => {
                             type="number"
                             placeholder="5"
                             class="mt-2"
-                            v-model.number="masterDataProps.wacc"
+                            v-model.number="wacc"
                             :class="{ 'border-red-500': step4Errors['masterData.wacc'] }"
                             required
                             autofocus
@@ -417,7 +425,7 @@ const submitAnalysis = async () => {
                             type="number"
                             placeholder="5"
                             class="mt-2"
-                            v-model.number="masterDataProps.managementFee"
+                            v-model.number="managementFee"
                             :class="{ 'border-red-500': step4Errors['masterData.managementFee'] }"
                             required
                             autofocus
@@ -441,7 +449,7 @@ const submitAnalysis = async () => {
                                 type="number"
                                 placeholder="500"
                                 class="mt-2"
-                                v-model.number="masterDataProps.costeLanzamientoAbogado"
+                                v-model.number="costeLanzamientoAbogado"
                                 :class="{ 'border-red-500': step4Errors['masterData.costeLanzamientoAbogado'] }"
                                 required
                                 autofocus
@@ -463,7 +471,7 @@ const submitAnalysis = async () => {
                                 type="number"
                                 placeholder="500"
                                 class="mt-2"
-                                v-model.number="masterDataProps.costeLanzamientoProcurador"
+                                v-model.number="costeLanzamientoProcurador"
                                 :class="{ 'border-red-500': step4Errors['masterData.costeLanzamientoProcurador'] }"
                                 required
                                 autofocus
