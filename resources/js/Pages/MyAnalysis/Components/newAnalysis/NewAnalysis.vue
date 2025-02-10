@@ -393,11 +393,12 @@ const submitAnalysis = async () => {
                             type="number"
                             placeholder="5"
                             class="mt-2"
-                            v-model="masterDataProps.wacc"
+                            v-model.number="masterDataProps.wacc"
                             :class="{ 'border-red-500': step4Errors['masterData.wacc'] }"
                             required
                             autofocus
                             autocomplete="wacc"
+                            min="0"
                         />
                         <span
                             v-if="step4Errors['masterData.wacc']"
@@ -414,11 +415,12 @@ const submitAnalysis = async () => {
                             type="number"
                             placeholder="5"
                             class="mt-2"
-                            v-model="masterDataProps.managementFee"
+                            v-model.number="masterDataProps.managementFee"
                             :class="{ 'border-red-500': step4Errors['masterData.managementFee'] }"
                             required
                             autofocus
                             autocomplete="managementFee"
+                            min="0"
                         />
                         <span
                             v-if="step4Errors['masterData.managementFee']"
@@ -437,11 +439,12 @@ const submitAnalysis = async () => {
                                 type="number"
                                 placeholder="500"
                                 class="mt-2"
-                                v-model="masterDataProps.costeLanzamientoAbogado"
+                                v-model.number="masterDataProps.costeLanzamientoAbogado"
                                 :class="{ 'border-red-500': step4Errors['masterData.costeLanzamientoAbogado'] }"
                                 required
                                 autofocus
                                 autocomplete="costeLanzamientoAbogado"
+                                min="0"
                             />
                             <span
                                 v-if="step4Errors['masterData.costeLanzamientoAbogado']"
@@ -458,11 +461,12 @@ const submitAnalysis = async () => {
                                 type="number"
                                 placeholder="500"
                                 class="mt-2"
-                                v-model="masterDataProps.costeLanzamientoProcurador"
+                                v-model.number="masterDataProps.costeLanzamientoProcurador"
                                 :class="{ 'border-red-500': step4Errors['masterData.costeLanzamientoProcurador'] }"
                                 required
                                 autofocus
                                 autocomplete="costeLanzamientoProcurador"
+                                min="0"
                             />
                             <span
                                 v-if="step4Errors['masterData.costeLanzamientoProcurador']"
