@@ -3,6 +3,7 @@ import type { ColumnDef } from '@tanstack/vue-table'
 import { Badge, badgeMap, type BadgeMode } from '@/Components/ui/badge'
 import { useDateFormat } from '@vueuse/core'
 import { Auction } from '@/Pages/MyPublications/types'
+import { RecordType, recordTypeLabels } from '@/constants/recordTypes'
 
 export const columns: ColumnDef<Auction>[] = [
     {
@@ -11,7 +12,7 @@ export const columns: ColumnDef<Auction>[] = [
     },
     {
         header: 'DETALLE',
-        accessorKey: 'name', 
+        accessorKey: 'name',
     },
     {
         header: 'ESTADO',
@@ -28,6 +29,10 @@ export const columns: ColumnDef<Auction>[] = [
     {
         header: () => h('div', { class: 'w-[78px]' }, 'TIPO'),
         accessorKey: 'recordType',
+        cell: (row) => {
+            const type = row.getValue() as RecordType
+            return h('p', { class: 'text-grey' }, recordTypeLabels[type] || type)
+        },
     },
     {
         header: 'PUBLICACIÓN',

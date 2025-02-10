@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Input, Label } from '@/Components/ui'
 import type { PendingPBC } from '../../types'
+import { recordTypeLabels } from '@/constants/recordTypes'
 
 defineProps<{
     information: PendingPBC;
@@ -115,7 +116,7 @@ defineProps<{
         >
             <Label>Tipo de Registro</Label>
             <Input
-                :default-value="information.auctionRecordType"
+                :default-value="recordTypeLabels[information.auctionRecordType]"
                 disabled
             />
         </div>

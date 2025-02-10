@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Input, Label } from '@/Components/ui'
 import type { PendingNotary } from '../../types'
+import { recordTypeLabels } from '@/constants/recordTypes'
 
 defineProps<{
     information: PendingNotary;
@@ -95,7 +96,7 @@ defineProps<{
         >
             <Label>Tipo de Registro</Label>
             <Input
-                :default-value="information.recordType"
+                :default-value="recordTypeLabels[information.recordType]"
                 disabled
             />
         </div>

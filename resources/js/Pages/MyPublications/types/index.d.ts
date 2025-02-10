@@ -1,3 +1,5 @@
+import { RecordType } from '@/constants/recordTypes'
+
 export interface publication {
     id: number
     name: string
@@ -143,7 +145,7 @@ export interface PendingApproval {
     offerDate:         null;
     startDate:         Date;
     stage:             string;
-    auctionRecordType: string;
+    auctionRecordType: RecordType;
     titular:           string;
     name:              string;
     clientId:          string;
@@ -155,7 +157,7 @@ export interface PendingApproval {
 export interface PendingPBC {
     PBCtype:           string;
     publicLinks:       string[];
-    auctionRecordType: string;
+    auctionRecordType: RecordType;
     offerValue:        null;
     approvedPBC2Date:  null;
     approvedPBCDate:   null;
@@ -174,7 +176,7 @@ export interface PendingNotary {
     notary:              null;
     scheduledDateNotary: null;
     signStatus:          string;
-    recordType:          string;
+    recordType:          RecordType;
     offerValue:          null;
     startDate:           Date;
     stage:               string;

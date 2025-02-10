@@ -3,6 +3,7 @@ import type { ColumnDef } from '@tanstack/vue-table'
 import { PostData, type PendingPBC } from '@/Pages/MyPublications/types'
 import { Badge, badgeMap, type BadgeMode } from '@/Components/ui/badge'
 import { PostAction } from '../PostAction'
+import { RecordType, recordTypeLabels } from '@/constants/recordTypes'
 
 export const columns: ColumnDef<PendingPBC>[] = [
     {
@@ -20,6 +21,10 @@ export const columns: ColumnDef<PendingPBC>[] = [
     {
         header: 'TIPO DE REGISTRO',
         accessorKey: 'auctionRecordType',
+        cell: (row) => {
+            const type = row.getValue() as RecordType
+            return h('p', { class: 'text-grey' }, recordTypeLabels[type] || type)
+        },
     },
     {
         header: 'ETAPA',
@@ -53,13 +58,13 @@ export const columns: ColumnDef<PendingPBC>[] = [
         id: 'actions',
         header: () => '',
         accessorKey: 'id',
-        cell: (row) => {         
+        cell: (row) => {
             const postData: PostData = {
                 postType: 'pendingPBC',
                 data: row.row.original,
                 endpoint: '/salesforce/approve-pbc',
             }
-            
+
             return h(PostAction, {
                 postData,
             })
