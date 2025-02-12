@@ -130,7 +130,7 @@ const submitAnalysis = async () => {
             body: {
                 name: name.value,
                 description: description.value,
-                // modelPosition: activeSelection.value,
+                modelPosition: activeSelection.value,
                 modelType: modelType.value,
                 masterData: {
                     wacc: wacc.value,
@@ -254,8 +254,8 @@ const submitAnalysis = async () => {
                     <div
                         role="button"
                         class="flex items-center gap-4 p-3 bg-white rounded-sm"
-                        :class="{ 'text-electric-green [&_div]:text-electric-green bg-blue-sky border border-electric-green': activeSelection === 'sell' }"
-                        @click="activeSelection = 'sell'"
+                        :class="{ 'text-electric-green [&_div]:text-electric-green bg-blue-sky border border-electric-green': activeSelection === 'sale' }"
+                        @click="activeSelection = 'sale'"
                     >
                         <SellIcon />
 
