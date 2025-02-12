@@ -494,6 +494,44 @@ async function uploadIdealistaFile() {
                 </div>
 
                 <div class="flex justify-center items-center">
+                    <ArrowUpIcon v-if="project.cfConso" />
+                </div>
+
+                <div
+                    v-if="project.cfConso"
+                    class="my-4"
+                >
+                    <div class="relative flex items-center gap-4 w-full p-4 bg-white ">
+                        <XlsIcon v-if="project.cfConso.extension == 'xlsx'" />
+
+                        <div>
+                            <p class="text-black text-lg font-bold">
+                                {{ project.cfConso.title }}
+                            </p>
+                            <p class="text-grey text-sm">
+                                {{ project.cfConso.description }}
+                            </p>
+                        </div>
+
+                        <Button
+                            v-if="project.cfConso.url"
+                            variant="ghost"
+                            size="xs"
+                            as-child
+                        >
+                            <a
+                                class="absolute top-4 right-4"
+                                :href="project.cfConso.url"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <DownloadIcon />
+                            </a>
+                        </Button>
+                    </div>
+                </div>
+
+                <div class="flex justify-center items-center">
                     <ArrowUpIcon v-if="project.secondExcel" />
                 </div>
 
@@ -575,7 +613,7 @@ async function uploadIdealistaFile() {
                         </Button>
                     </div>
 
-                    <div 
+                    <div
                         v-if="project.outputBBDD"
                         class="relative flex items-center gap-4 w-full p-4"
                     >
@@ -607,7 +645,7 @@ async function uploadIdealistaFile() {
                         </Button>
                     </div>
 
-                    <div 
+                    <div
                         v-if="project.strats"
                         class="relative flex items-center gap-4 w-full p-4"
                     >

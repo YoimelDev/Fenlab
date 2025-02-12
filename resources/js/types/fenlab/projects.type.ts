@@ -47,6 +47,7 @@ export interface ProjectById {
     outputCF: FirstExcel;
     strats: FirstExcel;
     assetsZip: FirstExcel;
+    cfConso : FirstExcel;
     masterData: MasterData;
     createdAt: Date;
     updatedAt: Date;
