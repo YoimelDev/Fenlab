@@ -11,6 +11,14 @@ export const columns: ColumnDef<PendingApproval>[] = [
         cell: (row) => h('div', { class: 'font-bold' }, row.getValue() as string),
     },
     {
+        header: 'PRECIO MINIMO',
+        accessorKey: 'minimumPrice',
+    },
+    {
+        header: 'PRECIO DE REFERENCIA',
+        accessorKey: 'referencePrice',
+    },
+    {
         header: 'EMPRESA',
         accessorKey: 'companyName',
     },
@@ -32,13 +40,13 @@ export const columns: ColumnDef<PendingApproval>[] = [
         id: 'actions',
         header: () => '',
         accessorKey: 'id',
-        cell: (row) => {         
+        cell: (row) => {
             const postData: PostData = {
                 postType: 'pendingApproval',
                 data: row.row.original,
                 endpoint: '/salesforce/approve-auction',
             }
-            
+
             return h(PostAction, {
                 postData,
             })

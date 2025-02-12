@@ -19,7 +19,7 @@ export const columns: ColumnDef<PendingPBC>[] = [
         accessorKey: 'PBCtype',
     },
     {
-        header: 'TIPO DE REGISTRO',
+        header: 'MODALIDAD',
         accessorKey: 'auctionRecordType',
         cell: (row) => {
             const type = row.getValue() as RecordType

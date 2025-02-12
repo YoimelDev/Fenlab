@@ -50,7 +50,7 @@ const sections = ref<Section[]>([
     },
     {
         id: 'pending-approval',
-        title: 'Pendientes Aprobación',
+        title: 'Ofertas pendientes aprobación',
         icon: PictureIcon,
         data: props.sections.pendingApproval,
         columns: pendingApprovalColumns as ColumnDef<Project, unknown>[],

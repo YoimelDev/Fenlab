@@ -3,6 +3,7 @@ import type { ColumnDef } from '@tanstack/vue-table'
 import { PostData, type PendingNotary } from '@/Pages/MyPublications/types'
 import { Badge, badgeMap, type BadgeMode } from '@/Components/ui/badge'
 import { PostAction } from '../PostAction'
+import { RecordType, recordTypeLabels } from '@/constants/recordTypes'
 
 export const columns: ColumnDef<PendingNotary>[] = [
     {
@@ -16,6 +17,18 @@ export const columns: ColumnDef<PendingNotary>[] = [
     {
         header: 'ID FENLAB',
         accessorKey: 'fenlabId',
+    },
+    {
+        header: 'MODALIDAD',
+        accessorKey: 'recordType',
+        cell: (row) => {
+            const type = row.getValue() as RecordType
+            return h('p', { class: 'text-grey' }, recordTypeLabels[type] || type)
+        },
+    },
+    {
+        header: 'NOTARIA',
+        accessorKey: 'notary',
     },
     {
         header: 'ETAPA',
@@ -37,13 +50,13 @@ export const columns: ColumnDef<PendingNotary>[] = [
         id: 'actions',
         header: () => '',
         accessorKey: 'id',
-        cell: (row) => {         
+        cell: (row) => {
             const postData: PostData = {
                 postType: 'pendingNotary',
                 data: row.row.original,
                 endpoint: '/salesforce/accept-notary',
             }
-                
+
             return h(PostAction, {
                 postData,
             })
