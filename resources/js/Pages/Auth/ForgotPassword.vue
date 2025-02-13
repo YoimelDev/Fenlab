@@ -6,6 +6,7 @@ import { Head, useForm } from '@inertiajs/vue3'
 import { Input } from '@/Components/ui/input'
 import { Label } from '@/Components/ui/label'
 import { Button } from '@/Components/ui/button'
+import BackButton from '@/Components/common/BackButton.vue'
 
 defineProps<{
     status?: string
@@ -22,11 +23,12 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Forgot Password" />
+        <Head title="¿Olvidaste tu contraseña?" />
+
+        <BackButton />
 
         <div class="mb-4 text-sm text-gray-600">
-            Forgot your password? No problem. Just let us know your email address and we will email
-            you a password reset link that will allow you to choose a new one.
+            ¿Olvidaste tu contraseña? No hay problema. Solo indícanos tu correo electrónico y te enviaremos un enlace para restablecer la contraseña que te permitirá elegir una nueva.
         </div>
 
         <div
@@ -59,10 +61,11 @@ const submit = () => {
 
             <div class="flex items-center justify-end mt-4">
                 <Button
+                    size="sm"
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >
-                    Email Password Reset Link
+                    Enviar enlace para restablecer la contraseña
                 </Button>
             </div>
         </form>
