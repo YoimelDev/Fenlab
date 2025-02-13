@@ -47,8 +47,8 @@ interface Step4 {
 }
 
 const masterData = ref<CompanyMasterData>()
-const modelType = ref('pl/spl s')
-const activeSelection = ref('buy')
+const modelType = ref('NPL')
+const activeSelection = ref('sale')
 
 onMounted(() => {
     getCompanyMasterData()
@@ -234,9 +234,7 @@ const submitAnalysis = async () => {
                 >
                     <div
                         role="button"
-                        class="flex items-center gap-4 p-3 bg-white rounded-sm"
-                        :class="{ 'text-electric-green [&_div]:text-electric-green bg-blue-sky border border-electric-green': activeSelection === 'buy' }"
-                        @click="activeSelection = 'buy'"
+                        class="flex items-center gap-4 p-3 bg-white rounded-sm opacity-50 cursor-not-allowed"
                     >
                         <ShoppingBagIcon />
 
@@ -277,9 +275,7 @@ const submitAnalysis = async () => {
                 >
                     <div
                         role="button"
-                        class="flex items-center gap-4 p-3 bg-white rounded-sm"
-                        :class="{ 'text-electric-green [&>div]:text-electric-green bg-blue-sky border border-electric-green': modelType === 'pl/spl s' }"
-                        @click="modelType = 'pl/spl s'"
+                        class="flex items-center gap-4 p-3 bg-white rounded-sm opacity-50 cursor-not-allowed"
                     >
                         <Badge variant="secondary">
                             PL/SPL S
@@ -298,9 +294,7 @@ const submitAnalysis = async () => {
 
                     <div
                         role="button"
-                        class="flex items-center gap-4 p-3 bg-white rounded-sm"
-                        :class="{ 'text-electric-green [&_div]:text-electric-green bg-blue-sky border border-electric-green': modelType === 'pl/spl u' }"
-                        @click="modelType = 'pl/spl u'"
+                        class="flex items-center gap-4 p-3 bg-white rounded-sm opacity-50 cursor-not-allowed"
                     >
                         <Badge
                             class="bg-[#EBE0F1]"

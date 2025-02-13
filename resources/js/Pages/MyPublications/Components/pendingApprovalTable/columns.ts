@@ -24,7 +24,7 @@ export const columns: ColumnDef<PendingApproval>[] = [
     },
     {
         header: 'ETAPA',
-        accessorKey: 'stage',
+        accessorKey: 'PBCstatus',
         cell: (row) => {
             const stage = row.getValue() as string
             return h('div', { class: 'font-medium' },
