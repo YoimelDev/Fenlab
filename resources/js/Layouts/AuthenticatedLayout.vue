@@ -1,17 +1,22 @@
 <script setup lang="ts">
 import { useLocalStorage } from '@vueuse/core'
-import { usePage } from '@inertiajs/vue3'
+import { usePage, router } from '@inertiajs/vue3'
 import { onMounted } from 'vue'
 import { type PageProps } from '@/types'
 import Menu from '@/Layouts/Components/Menu.vue'
-import { Toaster, toast } from '@/Components/ui'
+import { Toaster, toast, useToast } from '@/Components/ui'
 
 const isCollapsed = useLocalStorage<boolean>('collapse', false)
 const page = usePage<PageProps>()
+const { dismiss } = useToast()
+
+router.on('start', () => {
+    dismiss()
+})
 
 onMounted(() => {
     const flash = page.props.flash
-    
+
     if (flash.error) {
         const errors = flash.error.split(' | ')
         errors.forEach((error: string) => {

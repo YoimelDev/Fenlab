@@ -10,7 +10,6 @@ import ApplicationLogo from '@/Components/ApplicationLogo.vue'
 import { HomeIcon, AssessmentIcon, HelpIcon, PersonIcon, PictureIcon } from '@/Components/icons'
 import { ExitIcon } from '@radix-icons/vue'
 import { PageProps } from '@/types'
-import { Button, useToast } from '@/Components/ui'
 
 type collapse = boolean | string;
 
@@ -21,7 +20,6 @@ const separator = h('hr', {
 })
 
 const page = usePage<PageProps>()
-const { dismiss } = useToast()
 
 const menu = [
     {
@@ -122,17 +120,12 @@ const onToggleCollapse = (collapsed: boolean) => {
     isCollapsed.value = collapsed
 }
 
-const onItemClick = () => {
-    dismiss()
-}
-
 </script>
 
 <template>
     <sidebar-menu
         :menu="menu"
         @update:collapsed="onToggleCollapse"
-        @item-click="onItemClick"
         :collapsed="false"
         hide-toggle
         :link-component-name="Link"
