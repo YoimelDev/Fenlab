@@ -48,6 +48,9 @@ Route::middleware('auth')->group(function () {
     })->name('how-it-works');
 });
 
+Route::get('/terms', function () {
+    return Inertia::render('Terms');
+})->name('terms');
 
 Route::resource('Contact', ContactController::class)->names([
     'store' => 'contact.store',

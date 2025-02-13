@@ -152,7 +152,7 @@ const submit = async (e: { preventDefault: () => void }) => {
                 <Label for="terms">
                     Acepto los
                     <Link
-                        href="#"
+                        :href="route('terms')"
                         class="text-[#001D6C] hover:text-gray-900 leading-5 rounded-md hover:underline"
                     >
                         términos y condiciones
