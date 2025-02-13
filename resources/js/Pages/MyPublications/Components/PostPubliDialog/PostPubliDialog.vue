@@ -50,7 +50,7 @@ const emits = defineEmits(['updated'])
 
 const postSalesforce = async () => {
     const loader = $loading?.show()
-    
+
     try {
         const bodyData: bodyData = {
             salesforceId: props.postData.data.salesforceId,
@@ -72,7 +72,7 @@ const postSalesforce = async () => {
             variant: 'info',
             title: 'Datos guardados correctamente',
         })
-    } catch (error: any) {        
+    } catch (error: any) {
         toast({
             variant: 'danger',
             title: '¡Ups! Algo salió mal.',
@@ -93,7 +93,7 @@ const postSalesforce = async () => {
             </DialogTitle>
         </DialogHeader>
 
-        <PostInformation 
+        <PostInformation
             :information="postData.data"
             :post-type="postData.postType"
         />
@@ -164,7 +164,9 @@ const postSalesforce = async () => {
 
         <DialogFooter>
             <Button
+                class="w-full"
                 variant="green"
+                size="sm"
                 @click="postSalesforce"
             >
                 Enviar datos
