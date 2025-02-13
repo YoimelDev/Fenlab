@@ -10,6 +10,7 @@ import ApplicationLogo from '@/Components/ApplicationLogo.vue'
 import { HomeIcon, AssessmentIcon, HelpIcon, PersonIcon, PictureIcon } from '@/Components/icons'
 import { ExitIcon } from '@radix-icons/vue'
 import { PageProps } from '@/types'
+import { Button } from '@/Components/ui'
 
 type collapse = boolean | string;
 

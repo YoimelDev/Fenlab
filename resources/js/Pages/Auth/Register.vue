@@ -5,6 +5,7 @@ import InputError from '@/Components/InputError.vue'
 import { Head, Link, useForm } from '@inertiajs/vue3'
 
 import { Input, Label, Button, Checkbox, useToast, Toaster } from '@/Components/ui'
+import BackButton from '@/Components/common/BackButton.vue'
 
 const { toast } = useToast()
 
@@ -48,6 +49,8 @@ const submit = async (e: { preventDefault: () => void }) => {
     <Toaster />
 
     <GuestLayout>
+        <BackButton />
+
         <Head title="Register" />
 
         <header>
