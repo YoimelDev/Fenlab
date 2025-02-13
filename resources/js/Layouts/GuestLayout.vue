@@ -34,7 +34,7 @@ const isTerms = !!slots.terms
 
         <div
             class="flex flex-col justify-center gap-12 max-w-[720px] w-full mx-auto"
-            :class="isTerms ? 'px-6 ' : 'px-4 lg:px-20'"
+            :class="isTerms ? 'px-6 max-w-[1100px]' : 'px-4 lg:px-20'"
         >
             <slot />
 
