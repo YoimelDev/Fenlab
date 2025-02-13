@@ -21,11 +21,11 @@ async function downloadAsset() {
         const { data } = await fenlabApi.post<IndividualAsset>('', {
             method: 'get',
             path: `projects/${props.asset.projectId}/assets/${props.asset.id}`,
-        })     
+        })
         const pdfURL = data.assetPdf.url
 
         window.open(pdfURL, '_blank', 'noopener')
-        
+
         toast({
             variant: 'info',
             title: 'Asset downloaded successfully',
@@ -57,10 +57,10 @@ async function downloadAsset() {
                 size="xs"
                 @click="isDialogOpen = true"
             >
-                Publicar
+                Solicitar publicación
             </Button>
 
-            <PostDialog 
+            <PostDialog
                 :asset="asset"
                 @updated="() => isDialogOpen = false"
             />
