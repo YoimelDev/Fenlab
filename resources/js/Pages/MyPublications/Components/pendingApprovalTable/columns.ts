@@ -11,6 +11,10 @@ export const columns: ColumnDef<PendingApproval>[] = [
         cell: (row) => h('div', { class: 'font-bold' }, row.getValue() as string),
     },
     {
+        header: 'ID FENLAB',
+        accessorKey: 'fenlabId',
+    },
+    {
         header: 'PRECIO MINIMO',
         accessorKey: 'minimumPrice',
     },

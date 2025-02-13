@@ -13,6 +13,10 @@ export const columns: ColumnDef<ClosedAuctions>[] = [
         },
     },
     {
+        header: 'ID FENLAB',
+        accessorKey: 'fenlabId',
+    },
+    {
         header: 'NOMBRE COMPAÑÍA',
         accessorKey: 'companyName',
     },

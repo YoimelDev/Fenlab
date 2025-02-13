@@ -15,6 +15,10 @@ export const columns: ColumnDef<PendingPBC>[] = [
         },
     },
     {
+        header: 'ID FENLAB',
+        accessorKey: 'fenlabId',
+    },
+    {
         header: 'TIPO PBC',
         accessorKey: 'PBCtype',
     },
