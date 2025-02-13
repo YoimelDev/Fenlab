@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { fenlabApi } from '@/api'
-import {    
+import {
     Input,
-    Button, 
+    Button,
+    ScrollArea,
     Dialog,
     DialogContent,
     DialogFooter,
@@ -44,7 +45,7 @@ const postData = async () => {
         toast({
             variant: 'info',
             title: 'Datos guardados correctamente',
-        }) 
+        })
         emits('updated')
     } catch {
         toast({
@@ -80,44 +81,96 @@ const postData = async () => {
                 <div
                     class="flex flex-col gap-4"
                 >
-                    <Table>
-                        <TableHeader>
-                            <TableRow class="[&_th]:px-3 [&_th]:bg-white">
-                                <TableHead class="!bg-[#ECECEC] w-[140px] z-50 relative">
-                                    <Label>AÑO</Label>
-                                </TableHead>
-                                <TableHead>
-                                    <Label>IPC (%)</Label>
-                                </TableHead>
-                                <TableHead>
-                                    <Label>HPA (%)</Label>
-                                </TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            <TableRow
-                                class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]"
-                                v-for="data in localMasterData.macro"
-                                :key="data.ano"
-                            >
-                                <TableCell class="!bg-[#ECECEC] font-bold w-[140px]">
-                                    {{ data.ano }}
-                                </TableCell>
-                                <TableCell>
-                                    <input
-                                        v-model="data.IPC"
-                                        class="w-full h-full outline-none hover:bg-gray-100"
+                    <ScrollArea
+                        class="h-96 space-y-4 my-4 p-4 bg-white/100 rounded-sm border border-[#E5E7EB] shadow-sm"
+                    >
+                        <Table>
+                            <TableHeader>
+                                <TableRow class="[&_th]:px-3 [&_th]:bg-white">
+                                    <TableHead class="!bg-[#ECECEC] w-[140px] z-50 relative">
+                                        <Label>AÑO</Label>
+                                    </TableHead>
+                                    <TableHead>
+                                        <Label>IPC (%)</Label>
+                                    </TableHead>
+                                    <TableHead>
+                                        <Label>HPA (%)</Label>
+                                    </TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                <TableRow
+                                    class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]"
+                                    v-for="data in localMasterData.macro"
+                                    :key="data.ano"
+                                >
+                                    <TableCell class="!bg-[#ECECEC] font-bold w-[140px]">
+                                        {{ data.ano }}
+                                    </TableCell>
+                                    <TableCell>
+                                        <input
+                                            v-model="data.IPC"
+                                            class="w-full h-full outline-none hover:bg-gray-100"
+                                        >
+                                    </TableCell>
+                                    <TableCell>
+                                        <input
+                                            v-model="data.HPA"
+                                            class="w-full h-full outline-none"
+                                        >
+                                    </TableCell>
+                                </TableRow>
+                            </TableBody>
+                        </Table>
+
+                        <div
+                            v-if="localMasterData.brokerFee?.gestion"
+                            class="mt-6"
+                        >
+                            <Label>Broker Fee - Gestión</Label>
+                            <Table class="mt-2">
+                                <TableHeader>
+                                    <TableRow class="[&_th]:px-3 [&_th]:bg-white">
+                                        <TableHead class="!bg-[#ECECEC] z-50 relative">
+                                            Tramo
+                                        </TableHead>
+                                        <TableHead>Fee (%)</TableHead>
+                                        <TableHead>Cap</TableHead>
+                                        <TableHead>Hurdle</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    <TableRow
+                                        class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]"
+                                        v-for="data in localMasterData.brokerFee.gestion"
+                                        :key="data.tramo"
                                     >
-                                </TableCell>
-                                <TableCell>
-                                    <input
-                                        v-model="data.HPA"
-                                        class="w-full h-full outline-none"
-                                    >
-                                </TableCell>
-                            </TableRow>
-                        </TableBody>
-                    </Table>
+                                        <TableCell class="!bg-[#ECECEC] font-bold">
+                                            {{ data.tramo }}
+                                        </TableCell>
+                                        <TableCell>
+                                            <input
+                                                v-model.number="data.fee"
+                                                class="w-full h-full outline-none hover:bg-gray-100"
+                                            >
+                                        </TableCell>
+                                        <TableCell>
+                                            <input
+                                                v-model.number="data.cap"
+                                                class="w-full h-full outline-none hover:bg-gray-100"
+                                            >
+                                        </TableCell>
+                                        <TableCell>
+                                            <input
+                                                v-model.number="data.hurdle"
+                                                class="w-full h-full outline-none hover:bg-gray-100"
+                                            >
+                                        </TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
+                        </div>
+                    </ScrollArea>
 
                     <div class="space-y-2">
                         <Label for="wacc">WACC - Coste de Capital</Label>
@@ -134,9 +187,9 @@ const postData = async () => {
                     </div>
                 </div>
             </div>
-    
+
             <DialogFooter class="flex justify-between mt-10">
-                <Button 
+                <Button
                     class="gap-1 w-full"
                     variant="green"
                     size="sm"

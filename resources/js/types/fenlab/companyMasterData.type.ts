@@ -1,10 +1,9 @@
-
 export interface CompanyMasterData {
     macro:                            Macro[];
     WACC:                             number;
     managementFee:                    number;
     brokerFeeMinimo:                  number;
-    brokerFee:                        BrokerFee[];
+    brokerFee:                        BrokerFee;
     seguridad:                        Seguridad;
     mesesVentaEstadoActual:           number;
     marketingAnualSobreValorInmueble: number;
@@ -16,9 +15,20 @@ export interface CompanyMasterData {
     costeLanzamientoOtros:            number;
     deducibilidadIVA:                 number;
     incentivoPorDefecto:              number;
+    ajusteProindivisoTiempoVenta:     number;
+    successFee:                       null;
 }
 
 export interface BrokerFee {
+    gestion:        CesionRemate[];
+    ventaAsIs:      CesionRemate[];
+    judicial:       CesionRemate[];
+    ventaCredito:   CesionRemate[];
+    posturaSubasta: CesionRemate[];
+    cesionRemate:   CesionRemate[];
+}
+
+export interface CesionRemate {
     tramo:   string;
     fee:     number;
     cap:     number;

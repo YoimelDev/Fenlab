@@ -40,7 +40,7 @@ const getCompanyMasterData = async () => {
 }
 
 onMounted(() => {
-    getCompanyMasterData()    
+    getCompanyMasterData()
 })
 </script>
 
@@ -50,21 +50,21 @@ onMounted(() => {
     <AuthenticatedLayout>
         <section>
             <div class="space-y-4">
-                <p 
+                <p
                     v-if="props.auth.salesforceUser.name"
                     class="text-xl font-bold"
                 >
                     {{ props.auth.salesforceUser.name }}
                 </p>
 
-                <p 
+                <p
                     v-if="props.auth.salesforceUser.email"
                     class="text-grey text-xl font-light"
                 >
                     {{ props.auth.salesforceUser.email }}
                 </p>
 
-                <p 
+                <p
                     v-if="props.auth.salesforceUser.companyCommercialName"
                     class="text-grey text-xl font-light"
                 >
@@ -84,7 +84,7 @@ onMounted(() => {
 
                     <EditMasterData
                         :key="masterData?.WACC"
-                        :master-data="masterData" 
+                        :master-data="masterData"
                         @updated="getCompanyMasterData"
                     />
                 </div>
@@ -122,6 +122,72 @@ onMounted(() => {
                             </TableCell>
                             <TableCell>{{ data.IPC }}</TableCell>
                             <TableCell>{{ data.HPA }}</TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            </div>
+
+            <div class="mt-10">
+                <h3 class="text-grey my-4">
+                    Broker Fee - Gestión
+                </h3>
+
+                <Table class="max-w-[520px]">
+                    <TableHeader>
+                        <TableRow class="[&_th]:px-3 [&_th]:bg-white">
+                            <TableHead class="!bg-[#ECECEC] z-50 relative">
+                                Tramo
+                            </TableHead>
+                            <TableHead>Fee (%)</TableHead>
+                            <TableHead>Cap</TableHead>
+                            <TableHead>Hurdle</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        <TableRow
+                            class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]"
+                            v-for="data in masterData?.brokerFee.gestion"
+                            :key="data.tramo"
+                        >
+                            <TableCell class="!bg-[#ECECEC] font-bold">
+                                {{ data.tramo }}
+                            </TableCell>
+                            <TableCell>{{ data.fee }}</TableCell>
+                            <TableCell>{{ data.cap }}</TableCell>
+                            <TableCell>{{ data.hurdle }}</TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            </div>
+
+            <div class="mt-10">
+                <h3 class="text-grey my-4">
+                    Broker Fee - Venta Crédito
+                </h3>
+
+                <Table class="max-w-[520px]">
+                    <TableHeader>
+                        <TableRow class="[&_th]:px-3 [&_th]:bg-white">
+                            <TableHead class="!bg-[#ECECEC] z-50 relative">
+                                Tramo
+                            </TableHead>
+                            <TableHead>Fee (%)</TableHead>
+                            <TableHead>Cap</TableHead>
+                            <TableHead>Hurdle</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        <TableRow
+                            class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]"
+                            v-for="data in masterData?.brokerFee.ventaCredito"
+                            :key="data.tramo"
+                        >
+                            <TableCell class="!bg-[#ECECEC] font-bold">
+                                {{ data.tramo }}
+                            </TableCell>
+                            <TableCell>{{ data.fee }}</TableCell>
+                            <TableCell>{{ data.cap }}</TableCell>
+                            <TableCell>{{ data.hurdle }}</TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
