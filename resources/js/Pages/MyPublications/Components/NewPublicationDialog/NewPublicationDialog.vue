@@ -15,7 +15,7 @@ import {
     TabsTrigger,
     toast,
 } from '@/Components/ui'
-import { XlsIcon, UploadIcon } from '@/Components/icons'
+import { XlsIcon, UploadIcon, PdfIcon } from '@/Components/icons'
 import { fenlabApi } from '@/api'
 import type { PluginApi } from 'vue-loading-overlay'
 import type { PublishData } from '@/types/fenlab'
@@ -252,7 +252,15 @@ const postData = async () => {
                                         class="flex justify-between p-2 bg-gray-50 rounded mb-2"
                                     >
                                         <div class="flex items-center gap-2">
-                                            <XlsIcon class="w-5 h-5" />
+                                            <PdfIcon
+                                                v-if="file.name.endsWith('.pdf')"
+                                                class="w-5 h-5"
+                                            />
+                                            <XlsIcon
+                                                v-else
+                                                class="w-5 h-5"
+                                            />
+
                                             <span class="text-sm font-medium">{{ file.name }}</span>
                                         </div>
                                     </div>
