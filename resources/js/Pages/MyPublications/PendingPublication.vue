@@ -5,7 +5,6 @@ import { DataTable } from '@/Components/ui'
 import { AssessmentIcon } from '@/Components/icons'
 import { columns } from './Components/pendingPublicationTable'
 import { type Publishable } from './types'
-// import { NewPublicationDialog } from './Components/NewPublicationDialog'
 
 defineProps<{
     projects: Publishable
@@ -25,10 +24,8 @@ defineProps<{
 
                 Mis Publicaciones | Pendientes de Publicar ( {{ projects.data.length }} )
             </h1>
-
-            <!-- <NewPublicationDialog /> -->
         </header>
-     
+
         <DataTable
             :columns="columns"
             :data="projects.data"

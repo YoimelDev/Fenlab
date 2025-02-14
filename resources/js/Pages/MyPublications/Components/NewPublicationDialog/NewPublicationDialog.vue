@@ -1,148 +1,241 @@
+<!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3'
+import { ref, onBeforeUnmount, inject } from 'vue'
 import {
     Button,
-    Dialog,
     DialogContent,
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
     Input,
     Label,
     Tabs,
     TabsContent,
     TabsList,
     TabsTrigger,
+    toast,
 } from '@/Components/ui'
-import { XlsIcon } from '@/Components/icons'
-import { PlusIcon } from '@radix-icons/vue'
+import { XlsIcon, UploadIcon } from '@/Components/icons'
+import { fenlabApi } from '@/api'
+import type { PluginApi } from 'vue-loading-overlay'
+import type { PublishData } from '@/types/fenlab'
+import { AssetData } from '@/Pages/MyAnalysis/types'
+
+const props = defineProps<{
+    asset: AssetData
+}>()
+const emits = defineEmits(['updated'])
+const $loading = inject<PluginApi>('$loading')
+
+const docFiles = ref<File[]>([])
+const imageFiles = ref<File[]>([])
+const docFileInput = ref<HTMLInputElement | null>(null)
+const imageFileInput = ref<HTMLInputElement | null>(null)
+
+const docBinaries = ref<string[]>([])
+const imageBinaries = ref<string[]>([])
+
+function fileToBase64(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = () => resolve(reader.result as string)
+        reader.onerror = error => reject(error)
+    })
+}
+
+function openDocFileDialog() { docFileInput.value?.click() }
+async function handleDocFileChange(event: Event) {
+    const target = event.target as HTMLInputElement
+    if (target.files && target.files.length > 0) {
+        docFiles.value = Array.from(target.files)
+        docBinaries.value = await Promise.all(docFiles.value.map(file => fileToBase64(file)))
+    }
+}
+function openImageFileDialog() { imageFileInput.value?.click() }
+async function handleImageFileChange(event: Event) {
+    const target = event.target as HTMLInputElement
+    if (target.files && target.files.length > 0) {
+        imageFiles.value.forEach(file => {
+            const preview = (file as any).preview
+            if (preview) URL.revokeObjectURL(preview)
+        })
+        const files = Array.from(target.files)
+        imageFiles.value = files.map(file => {
+            (file as any).preview = URL.createObjectURL(file)
+            return file
+        })
+        imageBinaries.value = await Promise.all(files.map(file => fileToBase64(file)))
+    }
+}
+onBeforeUnmount(() => {
+    imageFiles.value.forEach(file => {
+        const preview = (file as any).preview
+        if (preview) URL.revokeObjectURL(preview)
+    })
+})
+
+const formData = ref({ ...props.asset })
+const selectedModality = ref('subasta')
+
+const postData = async () => {
+    const loader = $loading?.show()
+    try {
+        const payload = {
+            precioReferencia: formData.value.model.npl.precioReferencia,
+            opcion: selectedModality.value,
+            precioMinimo: Number(formData.value.model.npl.credito.precioMinimo),
+            documentos: docBinaries.value,
+            imagenes: imageBinaries.value,
+        }
+        const { data } = await fenlabApi.post<PublishData>('', {
+            method: 'put',
+            path: `projects/${formData.value.projectId}/assets/${formData.value.id}/publish`,
+            body: payload,
+        })
+        await fenlabApi.post('/import', data)
+        toast({
+            variant: 'info',
+            title: 'Datos guardados correctamente',
+        })
+    } catch (error: any) {
+        toast({
+            variant: 'danger',
+            title: '¡Ups! Algo salió mal.',
+            description: Array.isArray(error.response.data.message)
+                ? error.response.data.message.join('\n')
+                : error.response.data.message,
+        })
+    } finally {
+        loader?.hide()
+        emits('updated')
+    }
+}
 </script>
 
 <template>
-    <Dialog>
-        <DialogTrigger as-child>
-            <Button 
-                class="gap-1"
-                variant="green"
-                size="sm"
-            >
-                <PlusIcon
-                    class="w-4 h-4"
-                />
+    <DialogContent>
+        <DialogHeader>
+            <DialogTitle>
+                ID cliente
+            </DialogTitle>
+        </DialogHeader>
 
-                Nueva Publicación
-            </Button>
-        </DialogTrigger>
+        <div class="content mt-10">
+            <Tabs default-value="images">
+                <TabsList class="grid w-[422px] grid-cols-3">
+                    <TabsTrigger value="activeData">
+                        Datos activo
+                    </TabsTrigger>
+                    <TabsTrigger value="documents">
+                        Documentos
+                    </TabsTrigger>
+                    <TabsTrigger value="images">
+                        Imágenes
+                    </TabsTrigger>
+                </TabsList>
 
-        <DialogContent>
-            <DialogHeader>
-                <DialogTitle>
-                    Título
-                </DialogTitle>
-            </DialogHeader>
-
-            <div class="content mt-10">
-                <Tabs
-                    default-value="images"
-                >
-                    <TabsList class="grid w-[422px] grid-cols-3">
-                        <TabsTrigger value="activeData">
-                            Datos activo
-                        </TabsTrigger>
-                        <TabsTrigger value="documents">
-                            Documentos
-                        </TabsTrigger>
-                        <TabsTrigger value="images">
-                            Imágenes
-                        </tabstrigger>
-                    </TabsList>
-                    <TabsContent value="activeData">
-                        <div
-                            class="flex flex-col gap-4"
-                        >
-                            <div class="space-y-2">
-                                <Label for="client_id">ID cliente</Label>
-                                <Input
-                                    id="client_id"
-                                    type="text"
-                                    placeholder="ID cliente"
-                                    class="mt-2"
-                                    required
-                                    autofocus
-                                    autocomplete="client_id"
-                                />
+                <TabsContent value="activeData">
+                    <div class="flex flex-col gap-4">
+                        <div class="space-y-2">
+                            <Label for="client_id">ID cliente</Label>
+                            <Input
+                                id="client_id"
+                                type="text"
+                                placeholder="ID cliente"
+                                class="mt-2"
+                                required
+                                autofocus
+                                v-model="formData.idCliente"
+                            />
+                        </div>
+                        <div class="space-y-2">
+                            <Label for="fenlab_id">ID fenlab</Label>
+                            <Input
+                                id="fenlab_id"
+                                type="text"
+                                placeholder="ID fenlab"
+                                class="mt-2"
+                                required
+                                autofocus
+                                v-model="formData.idFencia"
+                            />
+                        </div>
+                        <div class="space-y-2">
+                            <Label for="cadastral_reference">Referencia catastral</Label>
+                            <Input
+                                id="cadastral_reference"
+                                type="text"
+                                placeholder="Referencia catastral"
+                                class="mt-2"
+                                required
+                                autofocus
+                                v-model="formData.model.referenciaCatastral"
+                            />
+                        </div>
+                        <div class="space-y-2">
+                            <Label for="min_price">Precio mínimo</Label>
+                            <Input
+                                id="min_price"
+                                type="text"
+                                placeholder="Precio mínimo"
+                                class="mt-2"
+                                required
+                                v-model="formData.model.npl.credito.precioMinimo"
+                            />
+                        </div>
+                        <div class="space-y-2">
+                            <Label for="reference_value">Valor de referencia</Label>
+                            <Input
+                                id="reference_value"
+                                type="number"
+                                placeholder="Valor de referencia"
+                                class="mt-2"
+                                disabled
+                                required
+                                v-model.number="formData.model.npl.precioReferencia"
+                            />
+                        </div>
+                        <div class="space-y-2">
+                            <Label for="transaction_modality">Modalidad de transacción</Label>
+                            <div class="flex items-center space-x-2">
+                                <input
+                                    type="radio"
+                                    id="r1"
+                                    value="subasta"
+                                    v-model="selectedModality"
+                                >
+                                <Label for="r1">Subasta</Label>
                             </div>
-            
-                            <div class="space-y-2">
-                                <Label for="fenlab_id">ID fenlab</Label>
-                                <Input
-                                    id="fenlab_id"
-                                    type="text"
-                                    placeholder="ID fenlab"
-                                    class="mt-2"
-                                    required
-                                    autofocus
-                                    autocomplete="fenlab_id"
-                                />
+                            <div class="flex items-center space-x-2">
+                                <input
+                                    type="radio"
+                                    id="r2"
+                                    value="crédito"
+                                    v-model="selectedModality"
+                                >
+                                <Label for="r2">Crédito</Label>
                             </div>
-            
-                            <div class="space-y-2">
-                                <Label for="cadastral_reference">Referencia catastral</Label>
-                                <Input
-                                    id="cadastral_reference"
-                                    type="text"
-                                    placeholder="Referencia catastral"
-                                    class="mt-2"
-                                    required
-                                    autofocus
-                                    autocomplete="cadastral_reference"
-                                />
-                            </div>
-            
-                            <div class="space-y-2">
-                                <Label for="min_price">Precio mínimo</Label>
-                                <Input
-                                    id="min_price"
-                                    type="text"
-                                    placeholder="Precio mínimo"
-                                    class="mt-2"
-                                    required
-                                    autofocus
-                                    autocomplete="min_price"
-                                />
-                            </div>
-            
-                            <div class="space-y-2">
-                                <Label for="reference_value">Valor de referencia</Label>
-                                <Input
-                                    id="reference_value"
-                                    type="text"
-                                    placeholder="Valor de referencia"
-                                    class="mt-2"
-                                    required
-                                    autofocus
-                                    autocomplete="reference_value"
-                                />
-                            </div>
-            
-                            <div class="space-y-2">
-                                <Label for="transaction_modality">Modalidad de transacción</Label>
-                                <Input
-                                    id="transaction_modality"
-                                    type="text"
-                                    placeholder="Modalidad de transacción"
-                                    class="mt-2"
-                                    required
-                                    autofocus
-                                    autocomplete="transaction_modality"
-                                />
+                            <div class="flex items-center space-x-2">
+                                <input
+                                    type="radio"
+                                    id="r3"
+                                    value="remate"
+                                    v-model="selectedModality"
+                                >
+                                <Label for="r3">Remate</Label>
                             </div>
                         </div>
-                    </TabsContent>
-                    <TabsContent value="documents">
-                        <div class="my-4 p-2 bg-white">
-                            <div class="grid place-items-center p-5 border-2 border-dashed border-[#C1C1C1] rounded-sm">
+                    </div>
+                </TabsContent>
+
+                <TabsContent value="documents">
+                    <div class="my-4 p-2 bg-white">
+                        <div
+                            class="grid place-items-center p-5 border-2 border-dashed border-[#C1C1C1] rounded-sm cursor-pointer"
+                            @click="openDocFileDialog"
+                        >
+                            <template v-if="docFiles.length === 0">
                                 <Button
                                     variant="green"
                                     size="xs"
@@ -150,42 +243,39 @@ import { PlusIcon } from '@radix-icons/vue'
                                     <UploadIcon class="mr-2" />
                                     Cargar documento
                                 </Button>
-                            </div>                                  
+                            </template>
+                            <template v-else>
+                                <div class="w-full">
+                                    <div
+                                        v-for="file in docFiles"
+                                        :key="file.name"
+                                        class="flex justify-between p-2 bg-gray-50 rounded mb-2"
+                                    >
+                                        <div class="flex items-center gap-2">
+                                            <XlsIcon class="w-5 h-5" />
+                                            <span class="text-sm font-medium">{{ file.name }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
                         </div>
+                        <input
+                            type="file"
+                            ref="docFileInput"
+                            @change="handleDocFileChange"
+                            class="hidden"
+                            accept=".xlsx,.xls,.pdf"
+                        >
+                    </div>
+                </TabsContent>
 
-                        <div class="relative flex items-center gap-4 w-full p-4 mb-4 bg-white ">
-                            <XlsIcon />
-        
-                            <div>
-                                <p class="text-black text-lg font-bold">
-                                    NombreArchivo_Nombre.xls
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="relative flex items-center gap-4 w-full p-4 mb-4 bg-white ">
-                            <XlsIcon />
-        
-                            <div>
-                                <p class="text-black text-lg font-bold">
-                                    NombreArchivo_Nombre.xls
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="relative flex items-center gap-4 w-full p-4 mb-4 bg-white ">
-                            <XlsIcon />
-        
-                            <div>
-                                <p class="text-black text-lg font-bold">
-                                    NombreArchivo_Nombre.xls
-                                </p>
-                            </div>
-                        </div>
-                    </TabsContent>
-                    <TabsContent value="images">
-                        <div class="my-4 p-2 bg-white">
-                            <div class="grid place-items-center p-5 border-2 border-dashed border-[#C1C1C1] rounded-sm">
+                <TabsContent value="images">
+                    <div class="my-4 p-2 bg-white">
+                        <div
+                            class="grid place-items-center p-5 border-2 border-dashed border-[#C1C1C1] rounded-sm cursor-pointer"
+                            @click="openImageFileDialog"
+                        >
+                            <template v-if="imageFiles.length === 0">
                                 <Button
                                     variant="green"
                                     size="xs"
@@ -193,48 +283,45 @@ import { PlusIcon } from '@radix-icons/vue'
                                     <UploadIcon class="mr-2" />
                                     Cargar imágenes
                                 </Button>
-                            </div>
+                            </template>
+                            <template v-else>
+                                <div class="flex flex-wrap justify-center gap-4">
+                                    <div
+                                        v-for="file in imageFiles"
+                                        :key="file.name"
+                                        class="w-24 h-24 border rounded overflow-hidden"
+                                    >
+                                        <img
+                                            :src="(file as any).preview"
+                                            alt="Preview"
+                                            class="object-cover w-full h-full"
+                                        >
+                                    </div>
+                                </div>
+                            </template>
                         </div>
+                        <input
+                            type="file"
+                            ref="imageFileInput"
+                            @change="handleImageFileChange"
+                            class="hidden"
+                            accept="image/*"
+                            multiple
+                        >
+                    </div>
+                </TabsContent>
+            </Tabs>
+        </div>
 
-                        <div class="flex flex-wrap justify-center gap-4">
-                            <img
-                                src="https://via.placeholder.com/200"
-                                alt="Placeholder"
-                            >
-
-                            <img
-                                src="https://via.placeholder.com/200"
-                                alt="Placeholder"
-                            >
-
-                            <img
-                                src="https://via.placeholder.com/200"
-                                alt="Placeholder"
-                            >
-
-                            <img
-                                src="https://via.placeholder.com/200"
-                                alt="Placeholder"
-                            >
-                        </div>
-                    </TabsContent>
-                </Tabs>
-            </div>
-    
-            <DialogFooter class="flex justify-between mt-10">
-                <p>
-                    Haz                            
-
-                    <Link
-                        href="#"
-                        class="text-blue font-bold"
-                    >
-                        click aquí
-                    </Link>
-
-                    si prefieres que subamos la documentación por ti
-                </p>
-            </DialogFooter>
-        </DialogContent>
-    </Dialog>
+        <DialogFooter class="flex justify-between mt-10">
+            <Button
+                class="gap-1 w-full"
+                variant="green"
+                size="sm"
+                @click="postData"
+            >
+                Publicar
+            </Button>
+        </DialogFooter>
+    </DialogContent>
 </template>

@@ -5,8 +5,7 @@ import { fenlabApi } from '@/api'
 import type { PluginApi } from 'vue-loading-overlay'
 import { toast } from '@/Components/ui'
 import { IndividualAsset } from '@/Pages/MyAnalysis/types/individualAsset'
-import PostDialog from '@/Pages/MyAnalysis/Components/assets/PostDialog.vue'
-// import { AssetData } from '@/Pages/MyAnalysis/types'
+import NewPublicationDialog from '@/Pages/MyPublications/Components/NewPublicationDialog/NewPublicationDialog.vue'
 
 const props = defineProps<{
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -22,11 +21,11 @@ async function downloadPublication() {
         const { data } = await fenlabApi.post<IndividualAsset>('', {
             method: 'get',
             path: `projects/${props.publication.projectId}/assets/${props.publication.id}`,
-        })     
+        })
         const pdfURL = data.assetPdf.url
 
         window.open(pdfURL, '_blank', 'noopener')
-        
+
         toast({
             variant: 'info',
             title: 'Publicación descargada exitosamente',
@@ -61,7 +60,7 @@ async function downloadPublication() {
                 Publicar
             </Button>
 
-            <PostDialog 
+            <NewPublicationDialog
                 :asset="publication"
                 @updated="() => isDialogOpen = false"
             />
