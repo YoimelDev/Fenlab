@@ -24,6 +24,10 @@ import {
     TableHeader,
     TableRow,
     Label,
+    Tabs,
+    TabsContent,
+    TabsList,
+    TabsTrigger,
 } from '@/Components/ui'
 import { PluginApi } from 'vue-loading-overlay'
 import { ArrowIcon, ShoppingBagIcon, SellIcon } from '@/Components/icons'
@@ -362,35 +366,103 @@ const submitAnalysis = async () => {
                     v-show="step === 4"
                     class="flex flex-col gap-2 max-h-[600px] overflow-y-auto"
                 >
-                    <div class="space-y-2">
-                        <Label>Datos macroeconómicos</Label>
-                        <Table>
-                            <TableHeader>
-                                <TableRow class="[&_th]:px-3 [&_th]:bg-white">
-                                    <TableHead class="!bg-[#ECECEC] z-50 relative">
-                                        AÑO
-                                    </TableHead>
-                                    <TableHead>IPC (%)</TableHead>
-                                    <TableHead>HPA (%)</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                <TableRow
-                                    class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]"
-                                    v-for="data in masterData?.macro"
-                                    :key="data.ano"
-                                >
-                                    <TableCell class="!bg-[#ECECEC] font-bold">
-                                        Año {{ data.ano }}
-                                    </TableCell>
-                                    <TableCell>{{ data.IPC }}</TableCell>
-                                    <TableCell>{{ data.HPA }}</TableCell>
-                                </TableRow>
-                            </TableBody>
-                        </Table>
-                    </div>
+                    <Tabs default-value="macro">
+                        <TabsList class="grid grid-cols-3">
+                            <TabsTrigger value="macro">
+                                Macro
+                            </TabsTrigger>
+                            <TabsTrigger value="brokerGestion">
+                                Gestión
+                            </TabsTrigger>
+                            <TabsTrigger value="brokerVenta">
+                                Venta Crédito
+                            </TabsTrigger>
+                        </TabsList>
+                        <TabsContent value="macro">
+                            <Table>
+                                <TableHeader>
+                                    <TableRow class="[&_th]:px-3 [&_th]:bg-white">
+                                        <TableHead class="!bg-[#ECECEC] z-50 relative">
+                                            AÑO
+                                        </TableHead>
+                                        <TableHead>IPC (%)</TableHead>
+                                        <TableHead>HPA (%)</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    <TableRow
+                                        class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]"
+                                        v-for="data in masterData?.macro"
+                                        :key="data.ano"
+                                    >
+                                        <TableCell class="!bg-[#ECECEC] font-bold">
+                                            Año {{ data.ano }}
+                                        </TableCell>
+                                        <TableCell>{{ data.IPC }}</TableCell>
+                                        <TableCell>{{ data.HPA }}</TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
+                        </TabsContent>
+                        <TabsContent value="brokerGestion">
+                            <Table class="max-w-[520px]">
+                                <TableHeader>
+                                    <TableRow class="[&_th]:px-3 [&_th]:bg-white">
+                                        <TableHead class="!bg-[#ECECEC] z-50 relative">
+                                            Tramo
+                                        </TableHead>
+                                        <TableHead>Fee (%)</TableHead>
+                                        <TableHead>Cap</TableHead>
+                                        <TableHead>Hurdle</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    <TableRow
+                                        class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]"
+                                        v-for="data in masterData?.brokerFee.gestion"
+                                        :key="data.tramo"
+                                    >
+                                        <TableCell class="!bg-[#ECECEC] font-bold">
+                                            {{ data.tramo }}
+                                        </TableCell>
+                                        <TableCell>{{ data.fee }}</TableCell>
+                                        <TableCell>{{ data.cap }}</TableCell>
+                                        <TableCell>{{ data.hurdle }}</TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
+                        </TabsContent>
+                        <TabsContent value="brokerVenta">
+                            <Table class="max-w-[520px]">
+                                <TableHeader>
+                                    <TableRow class="[&_th]:px-3 [&_th]:bg-white">
+                                        <TableHead class="!bg-[#ECECEC] z-50 relative">
+                                            Tramo
+                                        </TableHead>
+                                        <TableHead>Fee (%)</TableHead>
+                                        <TableHead>Cap</TableHead>
+                                        <TableHead>Hurdle</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    <TableRow
+                                        class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]"
+                                        v-for="data in masterData?.brokerFee.ventaCredito"
+                                        :key="data.tramo"
+                                    >
+                                        <TableCell class="!bg-[#ECECEC] font-bold">
+                                            {{ data.tramo }}
+                                        </TableCell>
+                                        <TableCell>{{ data.fee }}</TableCell>
+                                        <TableCell>{{ data.cap }}</TableCell>
+                                        <TableCell>{{ data.hurdle }}</TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
+                        </TabsContent>
+                    </Tabs>
 
-                    <div class="space-y-2">
+                    <div class="space-y-2 mt-4">
                         <Label for="wacc">WACC - Coste de Capital (%)</Label>
                         <Input
                             id="wacc"
