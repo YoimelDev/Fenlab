@@ -35,6 +35,7 @@ import { PlusIcon } from '@radix-icons/vue'
 
 import { fenlabApi } from '@/api/fenlab.api'
 import { CompanyMasterData, ProjectById } from '@/types/fenlab'
+import { formatPercentage } from '@/lib/utils'
 
 const { toast } = useToast()
 const step = ref(1)
@@ -398,8 +399,8 @@ const submitAnalysis = async () => {
                                         <TableCell class="!bg-[#ECECEC] font-bold">
                                             Año {{ data.ano }}
                                         </TableCell>
-                                        <TableCell>{{ data.IPC }}</TableCell>
-                                        <TableCell>{{ data.HPA }}</TableCell>
+                                        <TableCell>{{ formatPercentage(data.IPC) }}</TableCell>
+                                        <TableCell>{{ formatPercentage(data.HPA) }}</TableCell>
                                     </TableRow>
                                 </TableBody>
                             </Table>
@@ -425,7 +426,7 @@ const submitAnalysis = async () => {
                                         <TableCell class="!bg-[#ECECEC] font-bold">
                                             {{ data.tramo }}
                                         </TableCell>
-                                        <TableCell>{{ data.fee }}</TableCell>
+                                        <TableCell>{{ formatPercentage(data.fee) }}</TableCell>
                                         <TableCell>{{ data.cap }}</TableCell>
                                         <TableCell>{{ data.hurdle }}</TableCell>
                                     </TableRow>
@@ -453,7 +454,7 @@ const submitAnalysis = async () => {
                                         <TableCell class="!bg-[#ECECEC] font-bold">
                                             {{ data.tramo }}
                                         </TableCell>
-                                        <TableCell>{{ data.fee }}</TableCell>
+                                        <TableCell>{{ formatPercentage(data.fee) }}</TableCell>
                                         <TableCell>{{ data.cap }}</TableCell>
                                         <TableCell>{{ data.hurdle }}</TableCell>
                                     </TableRow>
