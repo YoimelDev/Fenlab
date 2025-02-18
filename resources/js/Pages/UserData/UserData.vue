@@ -129,7 +129,7 @@ onMounted(() => {
 
             <div class="mt-10">
                 <h3 class="text-grey my-4">
-                    Broker Fee - Gestión
+                    BrokerFee
                 </h3>
 
                 <Table class="max-w-[520px]">
@@ -162,7 +162,7 @@ onMounted(() => {
 
             <div class="mt-10">
                 <h3 class="text-grey my-4">
-                    Broker Fee - Venta Crédito
+                    FenciaFee
                 </h3>
 
                 <Table class="max-w-[520px]">

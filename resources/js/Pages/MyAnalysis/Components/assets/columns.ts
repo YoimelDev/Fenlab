@@ -2,7 +2,8 @@ import { h } from 'vue'
 import type { ColumnDef } from '@tanstack/vue-table'
 import { AssetData } from '@/Pages/MyAnalysis/types'
 import { Badge, badgeMap, type BadgeMode } from '@/Components/ui/badge'
-import AssetActions from './AssetActions.vue'
+import { AssetActions } from '@/Pages/MyAnalysis/Components/assets/'
+import { formatCurrency } from '@/lib/utils'
 
 export const columns: ColumnDef<AssetData>[] = [
     {
@@ -26,16 +27,24 @@ export const columns: ColumnDef<AssetData>[] = [
         header: 'Precio mínimo',
         accessorKey: 'model.npl.credito.precioMinimo',
         cell: (row) => {
-            const value = row.getValue() as string | number | null
-            return value ?? '-'
+            const price = row.getValue() as number
+
+            if (price) {
+                return h('p', { class: 'font-medium' }, formatCurrency(price))
+            }
+            return h('p', { class: 'font-medium' }, '-')
         },
     },
     {
         header: 'Valor de referencia',
         accessorKey: 'model.npl.precioReferencia',
         cell: (row) => {
-            const value = row.getValue() as string | number | null
-            return value ?? '-'
+            const price = row.getValue() as number
+
+            if (price) {
+                return h('p', { class: 'font-medium' }, formatCurrency(price))
+            }
+            return h('p', { class: 'font-medium' }, '-')
         },
     },
     {
@@ -67,7 +76,7 @@ export const columns: ColumnDef<AssetData>[] = [
         accessorKey: 'id',
         cell: (row) => {
             if (row.row.original.model.npl.credito.isPublishable === true) return
-             
+
             return h(AssetActions, {
                 asset: row.row.original,
             })

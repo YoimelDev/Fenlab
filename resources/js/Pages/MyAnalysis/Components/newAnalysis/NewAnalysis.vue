@@ -372,10 +372,10 @@ const submitAnalysis = async () => {
                                 Macro
                             </TabsTrigger>
                             <TabsTrigger value="brokerGestion">
-                                Gestión
+                                BrokerFee
                             </TabsTrigger>
                             <TabsTrigger value="brokerVenta">
-                                Venta Crédito
+                                FenciaFee
                             </TabsTrigger>
                         </TabsList>
                         <TabsContent value="macro">

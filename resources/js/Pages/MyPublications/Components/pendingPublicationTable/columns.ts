@@ -3,6 +3,7 @@ import type { ColumnDef } from '@tanstack/vue-table'
 import { type PublishableProject } from '@/Pages/MyPublications/types'
 import { Badge, badgeMap, type BadgeMode } from '@/Components/ui/badge'
 import { PublicationActions } from '../PublicationActions'
+import { formatCurrency } from '@/lib/utils'
 
 export const columns: ColumnDef<PublishableProject>[] = [
     {
@@ -32,10 +33,26 @@ export const columns: ColumnDef<PublishableProject>[] = [
     {
         header: 'PRECIO MÍNIMO',
         accessorKey: 'model.npl.credito.precioMinimo',
+        cell: (row) => {
+            const price = row.getValue() as number
+
+            if (price) {
+                return h('p', { class: 'font-medium' }, formatCurrency(price))
+            }
+            return h('p', { class: 'font-medium' }, '-')
+        },
     },
     {
         header: 'VALOR DE REFERENCIA',
         accessorKey: 'model.npl.precioReferencia',
+        cell: (row) => {
+            const price = row.getValue() as number
+
+            if (price) {
+                return h('p', { class: 'font-medium' }, formatCurrency(price))
+            }
+            return h('p', { class: 'font-medium' }, '-')
+        },
     },
     {
         id: 'actions',

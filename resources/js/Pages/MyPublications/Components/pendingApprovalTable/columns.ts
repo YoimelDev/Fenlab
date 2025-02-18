@@ -3,6 +3,7 @@ import type { ColumnDef } from '@tanstack/vue-table'
 import type { PendingApproval, PostData } from '@/Pages/MyPublications/types'
 import { Badge } from '@/Components/ui/badge'
 import { PostAction } from '../PostAction'
+import { formatCurrency } from '@/lib/utils'
 
 export const columns: ColumnDef<PendingApproval>[] = [
     {
@@ -17,10 +18,26 @@ export const columns: ColumnDef<PendingApproval>[] = [
     {
         header: 'PRECIO MINIMO',
         accessorKey: 'minimumPrice',
+        cell: (row) => {
+            const price = row.getValue() as number
+
+            if (price) {
+                return h('p', { class: 'font-medium' }, formatCurrency(price))
+            }
+            return h('p', { class: 'font-medium' }, '-')
+        },
     },
     {
         header: 'PRECIO DE REFERENCIA',
         accessorKey: 'referencePrice',
+        cell: (row) => {
+            const price = row.getValue() as number
+
+            if (price) {
+                return h('p', { class: 'font-medium' }, formatCurrency(price))
+            }
+            return h('p', { class: 'font-medium' }, '-')
+        },
     },
     {
         header: 'EMPRESA',
