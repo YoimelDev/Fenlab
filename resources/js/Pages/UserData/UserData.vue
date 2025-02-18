@@ -19,6 +19,7 @@ import { EditMasterData } from '@/Pages/UserData/Components/editMasterData'
 import { PageProps } from '@/types'
 import { CompanyMasterData } from '@/types/fenlab'
 import { fenlabApi } from '@/api'
+import { formatPercentage } from '@/lib/utils'
 
 const { props } = usePage<PageProps>()
 const masterData = ref<CompanyMasterData | null>(null)
@@ -120,8 +121,8 @@ onMounted(() => {
                             <TableCell class="!bg-[#ECECEC] font-bold">
                                 Año {{ data.ano }}
                             </TableCell>
-                            <TableCell>{{ data.IPC }}</TableCell>
-                            <TableCell>{{ data.HPA }}</TableCell>
+                            <TableCell>{{ formatPercentage(data.IPC) }}</TableCell>
+                            <TableCell>{{ formatPercentage(data.HPA) }}</TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
@@ -152,7 +153,7 @@ onMounted(() => {
                             <TableCell class="!bg-[#ECECEC] font-bold">
                                 {{ data.tramo }}
                             </TableCell>
-                            <TableCell>{{ data.fee }}</TableCell>
+                            <TableCell>{{ formatPercentage(data.fee ) }}</TableCell>
                             <TableCell>{{ data.cap }}</TableCell>
                             <TableCell>{{ data.hurdle }}</TableCell>
                         </TableRow>
@@ -185,7 +186,7 @@ onMounted(() => {
                             <TableCell class="!bg-[#ECECEC] font-bold">
                                 {{ data.tramo }}
                             </TableCell>
-                            <TableCell>{{ data.fee }}</TableCell>
+                            <TableCell>{{ formatPercentage(data.fee ) }}</TableCell>
                             <TableCell>{{ data.cap }}</TableCell>
                             <TableCell>{{ data.hurdle }}</TableCell>
                         </TableRow>
