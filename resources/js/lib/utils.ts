@@ -21,17 +21,17 @@ export function getParamValue(param: string): string {
 
 /**
  * Formats a number as a percentage string with 2 decimal places using Spanish locale.
- * @param value - The number to convert to percentage (-92.31 for -92,31%)
- * @returns A localized percentage string with 2 decimal places (e.g., "-92,31%")
+ * @param value - The number to convert to percentage (1 for 1,00%)
+ * @returns A localized percentage string with 2 decimal places
  * @example
  * formatPercentage(-92.31) // returns "-92,31%"
- * formatPercentage(0.1234) // returns "12,34%"
- * formatPercentage(1) // returns "100,00%"
+ * formatPercentage(1) // returns "1,00%"
+ * formatPercentage(-1) // returns "-1,00%"
  */
 export function formatPercentage(value: number | string): string {
     const numValue = typeof value === 'string' ? parseFloat(value) : value
-    const normalizedValue = Math.abs(numValue) > 1 ? numValue / 100 : numValue
-    return normalizedValue.toLocaleString('es-ES', {
+    const multiplier = 0.01
+    return (numValue * multiplier).toLocaleString('es-ES', {
         style: 'percent',
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
