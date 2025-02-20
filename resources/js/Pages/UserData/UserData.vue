@@ -19,7 +19,7 @@ import { EditMasterData } from '@/Pages/UserData/Components/editMasterData'
 import { PageProps } from '@/types'
 import { CompanyMasterData } from '@/types/fenlab'
 import { fenlabApi } from '@/api'
-import { formatPercentage } from '@/lib/utils'
+import { formatNumber, formatPercentage } from '@/lib/utils'
 
 const { props } = usePage<PageProps>()
 const masterData = ref<CompanyMasterData | null>(null)
@@ -154,8 +154,8 @@ onMounted(() => {
                                 {{ data.tramo }}
                             </TableCell>
                             <TableCell>{{ formatPercentage(data.fee ) }}</TableCell>
-                            <TableCell>{{ data.cap }}</TableCell>
-                            <TableCell>{{ data.hurdle }}</TableCell>
+                            <TableCell>{{ formatNumber(data.cap ) }}</TableCell>
+                            <TableCell>{{ formatNumber(data.hurdle ?? 0) }}</TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
@@ -187,8 +187,8 @@ onMounted(() => {
                                 {{ data.tramo }}
                             </TableCell>
                             <TableCell>{{ formatPercentage(data.fee ) }}</TableCell>
-                            <TableCell>{{ data.cap }}</TableCell>
-                            <TableCell>{{ data.hurdle }}</TableCell>
+                            <TableCell>{{ formatNumber(data.cap ) }}</TableCell>
+                            <TableCell>{{ formatNumber(data.hurdle ?? 0) }}</TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>

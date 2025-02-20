@@ -55,3 +55,21 @@ export function formatCurrency(value: number | string): string {
         maximumFractionDigits: 2,
     })
 }
+
+/**
+ * Formats a number or string representation of a number to a localized string with fixed decimal places.
+ *
+ * @param value - The number or string to format
+ * @returns A formatted string representation of the number with exactly 2 decimal places using Spanish locale
+ *
+ * @example
+ * formatNumber(1234.5) // returns "1.234,50"
+ * formatNumber("1234.5") // returns "1.234,50"
+ */
+export function formatNumber(value: number | string): string {
+    const numValue = typeof value === 'string' ? parseFloat(value) : value
+    return numValue.toLocaleString('es-ES', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    })
+}
