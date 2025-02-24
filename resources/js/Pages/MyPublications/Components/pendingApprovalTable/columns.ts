@@ -28,6 +28,26 @@ export const columns: ColumnDef<PendingApproval>[] = [
         },
     },
     {
+        header: 'Mejor oferta',
+        accessorKey: 'maximumBid',
+        cell: (row) => {
+            const price = row.getValue() as number
+
+            if (price) {
+                return h('p', { class: 'font-medium' }, formatCurrency(price))
+            }
+            return h('p', { class: 'font-medium' }, '-')
+        },
+    },
+    {
+        header: 'Depósito',
+        accessorKey: 'deposit',
+    },
+    {
+        header: 'Ofertante',
+        accessorKey: 'offerName',
+    },
+    {
         header: 'PRECIO DE REFERENCIA',
         accessorKey: 'referencePrice',
         cell: (row) => {

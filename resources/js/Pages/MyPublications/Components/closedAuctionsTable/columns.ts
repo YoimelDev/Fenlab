@@ -21,6 +21,14 @@ export const columns: ColumnDef<ClosedAuctions>[] = [
         accessorKey: 'companyName',
     },
     {
+        header: 'Fecha operación firmada',
+        accessorKey: 'dateSignature',
+    },
+    {
+        header: 'NOTARIA',
+        accessorKey: 'notary',
+    },
+    {
         header: 'ETAPA',
         accessorKey: 'stage',
         cell: (row) => {

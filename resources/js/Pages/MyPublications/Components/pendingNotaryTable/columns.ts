@@ -4,6 +4,7 @@ import { PostData, type PendingNotary } from '@/Pages/MyPublications/types'
 import { Badge, badgeMap, type BadgeMode } from '@/Components/ui/badge'
 import { PostAction } from '../PostAction'
 import { RecordType, recordTypeLabels } from '@/constants/recordTypes'
+import { formatCurrency } from '@/lib/utils'
 
 export const columns: ColumnDef<PendingNotary>[] = [
     {
@@ -27,8 +28,24 @@ export const columns: ColumnDef<PendingNotary>[] = [
         },
     },
     {
+        header: 'PRECIO',
+        accessorKey: 'offerValue',
+        cell: (row) => {
+            const price = row.getValue() as number
+
+            if (price) {
+                return h('p', { class: 'font-medium' }, formatCurrency(price))
+            }
+            return h('p', { class: 'font-medium' }, '-')
+        },
+    },
+    {
         header: 'NOTARIA',
         accessorKey: 'notary',
+    },
+    {
+        header: 'Fecha firma',
+        accessorKey: 'scheduledDateNotary',
     },
     {
         header: 'ETAPA',

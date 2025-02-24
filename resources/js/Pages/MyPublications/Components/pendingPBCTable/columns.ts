@@ -44,7 +44,7 @@ export const columns: ColumnDef<PendingPBC>[] = [
     },
     {
         header: 'FECHA APROBACIÓN PBC',
-        accessorKey: 'approvedPBCDate',
+        accessorKey: 'submittedPBCDate',
         cell: (row) => {
             const date = row.getValue()
             return date ? date : '-'
@@ -52,7 +52,7 @@ export const columns: ColumnDef<PendingPBC>[] = [
     },
     {
         header: 'FECHA APROBACIÓN PBC2',
-        accessorKey: 'approvedPBC2Date',
+        accessorKey: 'submittedPBC2Date',
         cell: (row) => {
             const date = row.getValue()
             return date ? date : '-'
