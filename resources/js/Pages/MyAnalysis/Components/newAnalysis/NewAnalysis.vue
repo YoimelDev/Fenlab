@@ -135,7 +135,7 @@ const submitAnalysis = async () => {
             body: {
                 name: name.value,
                 description: description.value,
-                modelPosition: activeSelection.value,
+                // modelPosition: activeSelection.value,
                 modelType: modelType.value,
                 masterData: {
                     wacc: wacc.value,
