@@ -35,7 +35,7 @@ import { PlusIcon } from '@radix-icons/vue'
 
 import { fenlabApi } from '@/api/fenlab.api'
 import { CompanyMasterData, ProjectById } from '@/types/fenlab'
-import { formatPercentage } from '@/lib/utils'
+import { formatNumber, formatPercentage } from '@/lib/utils'
 
 const { toast } = useToast()
 const step = ref(1)
@@ -163,7 +163,6 @@ const submitAnalysis = async () => {
         })
     } finally {
         loader?.hide()
-        isDialogOpen.value = false
     }
 }
 
@@ -373,10 +372,10 @@ const submitAnalysis = async () => {
                                 Macro
                             </TabsTrigger>
                             <TabsTrigger value="brokerGestion">
-                                BrokerFee
+                                Broker Fee
                             </TabsTrigger>
                             <TabsTrigger value="brokerVenta">
-                                FenciaFee
+                                Fencia Fee
                             </TabsTrigger>
                         </TabsList>
                         <TabsContent value="macro">
@@ -427,8 +426,8 @@ const submitAnalysis = async () => {
                                             {{ data.tramo }}
                                         </TableCell>
                                         <TableCell>{{ formatPercentage(data.fee) }}</TableCell>
-                                        <TableCell>{{ data.cap }}</TableCell>
-                                        <TableCell>{{ data.hurdle }}</TableCell>
+                                        <TableCell>{{ formatNumber(data.cap) }}</TableCell>
+                                        <TableCell>{{ formatNumber(data.hurdle ?? 0) }}</TableCell>
                                     </TableRow>
                                 </TableBody>
                             </Table>
@@ -455,8 +454,8 @@ const submitAnalysis = async () => {
                                             {{ data.tramo }}
                                         </TableCell>
                                         <TableCell>{{ formatPercentage(data.fee) }}</TableCell>
-                                        <TableCell>{{ data.cap }}</TableCell>
-                                        <TableCell>{{ data.hurdle }}</TableCell>
+                                        <TableCell>{{ formatNumber(data.cap) }}</TableCell>
+                                        <TableCell>{{ formatNumber(data.hurdle ?? 0) }}</TableCell>
                                     </TableRow>
                                 </TableBody>
                             </Table>

@@ -146,6 +146,7 @@ const postData = async () => {
                                 class="mt-2"
                                 required
                                 autofocus
+                                disabled
                                 v-model="formData.idCliente"
                             />
                         </div>
@@ -158,6 +159,7 @@ const postData = async () => {
                                 class="mt-2"
                                 required
                                 autofocus
+                                disabled
                                 v-model="formData.idFencia"
                             />
                         </div>
@@ -170,6 +172,7 @@ const postData = async () => {
                                 class="mt-2"
                                 required
                                 autofocus
+                                disabled
                                 v-model="formData.model.referenciaCatastral"
                             />
                         </div>
@@ -182,18 +185,20 @@ const postData = async () => {
                                 class="mt-2"
                                 required
                                 v-model="formData.model.npl.credito.precioMinimo"
+                                v-currency
                             />
                         </div>
                         <div class="space-y-2">
                             <Label for="reference_value">Valor de referencia</Label>
                             <Input
                                 id="reference_value"
-                                type="number"
+                                type="text"
                                 placeholder="Valor de referencia"
                                 class="mt-2"
                                 disabled
                                 required
                                 v-model.number="formData.model.npl.precioReferencia"
+                                v-currency
                             />
                         </div>
                         <div class="space-y-2">
