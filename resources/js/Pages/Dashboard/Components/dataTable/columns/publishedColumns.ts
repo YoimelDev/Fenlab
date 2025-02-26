@@ -8,21 +8,11 @@ import { RecordType, recordTypeLabels } from '@/constants/recordTypes'
 
 export const publishedColumns: ColumnDef<Auction>[] = [
     {
-        header: () => h('div', { class: 'w-[78px]' }, 'ID'),
+        header: 'ID FENCIA',
         accessorKey: 'id',
-        meta: '!w-[78px]',
         cell: (row) => {
             const id = row.getValue() as string
             return h('p', { class: 'w-[78px] truncate' }, id)
-        },
-    },
-    {
-        header: () => h('div', { class: 'w-[78px]' }, 'DETALLE'),
-        accessorKey: 'name',
-        meta: '!w-[78px]',
-        cell: (row) => {
-            const name = row.getValue() as string
-            return h('p', { class: 'w-[78px] truncate' }, name)
         },
     },
     {
@@ -55,12 +45,7 @@ export const publishedColumns: ColumnDef<Auction>[] = [
         },
     },
     {
-        header: 'FINALIZA',
-        accessorKey: 'endDate',
-        cell: (row) => {
-            const date = row.getValue() as string
-            const formatted = useDateFormat(date, 'DD/MM/YYYY')
-            return h('p', { class: 'text-grey text-right' }, formatted.value)
-        },
+        header: 'Nº OFERTAS',
+        accessorKey: 'numberOfBids',
     },
 ]

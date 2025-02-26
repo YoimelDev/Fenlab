@@ -36,7 +36,7 @@ export const columns: ColumnDef<AssetData>[] = [
         },
     },
     {
-        header: 'Valor de referencia',
+        header: 'PRECIO DE REFERENCIA',
         accessorKey: 'model.npl.precioReferencia',
         cell: (row) => {
             const price = row.getValue() as number

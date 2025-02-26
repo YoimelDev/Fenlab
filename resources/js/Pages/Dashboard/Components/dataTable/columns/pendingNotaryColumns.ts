@@ -5,17 +5,19 @@ import { Badge } from '@/Components/ui/badge'
 
 export const pendingNotaryColumns: ColumnDef<PendingNotary>[] = [
     {
-        header: 'NOMBRE PROYECTO',
-        accessorKey: 'name',
-        meta: '!w-[200px]',
-        cell: (row) => h('div', { class: 'w-[160px] truncate font-medium' }, row.getValue() as string),
-    },
-    {
-        header: 'ID FENLAB',
+        header: 'ID FENCIA',
         accessorKey: 'fenlabId',
+        cell: (row) => {
+            const id = row.getValue() as string
+            return h('p', { class: 'w-[78px] truncate' }, id)
+        },
     },
     {
-        header: 'ETAPA',
+        header: 'FECHA FIRMA',
+        accessorKey: 'scheduledDateNotary',
+    },
+    {
+        header: 'ESTADO',
         accessorKey: 'stage',
         cell: (row) => {
             const stage = row.getValue() as string

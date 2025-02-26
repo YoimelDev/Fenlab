@@ -5,6 +5,7 @@ import { Badge, badgeMap, type BadgeMode } from '@/Components/ui/badge'
 import { PublicationActions } from '../PublicationActions'
 import { formatCurrency } from '@/lib/utils'
 
+
 export const columns: ColumnDef<PublishableProject>[] = [
     {
         header: 'ID CLIENTE',
@@ -27,6 +28,18 @@ export const columns: ColumnDef<PublishableProject>[] = [
         },
     },
     {
+        header: 'MODALIDAD',
+        accessorKey: 'model.type',
+        cell: (row) => {
+            const modelType = row.getValue() as BadgeMode
+            return h(
+                'div',
+                { class: 'font-medium' },
+                h(Badge, { variant: badgeMap[modelType] }, modelType),
+            )
+        },
+    },
+    {
         header: 'REF. CATASTRAL',
         accessorKey: 'model.referenciaCatastral',
     },
@@ -43,7 +56,7 @@ export const columns: ColumnDef<PublishableProject>[] = [
         },
     },
     {
-        header: 'VALOR DE REFERENCIA',
+        header: 'PRECIO DE REFERENCIA',
         accessorKey: 'model.npl.precioReferencia',
         cell: (row) => {
             const price = row.getValue() as number

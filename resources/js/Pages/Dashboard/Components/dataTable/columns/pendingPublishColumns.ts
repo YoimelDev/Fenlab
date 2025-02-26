@@ -7,17 +7,16 @@ import { formatCurrency } from '@/lib/utils'
 
 export const pendingPublishColumns: ColumnDef<PublishableProject>[] = [
     {
-        header: 'ID CLIENTE',
-        accessorKey: 'idCliente',
-    },
-    {
-        header: () => h('div', { class: 'w-[78px]' }, 'ID FENCIA'),
+        header: 'ID FENLAB',
         accessorKey: 'idFencia',
-        meta: '!w-[78px]',
         cell: (row) => {
             const id = row.getValue() as string
             return h('p', { class: 'w-[78px] truncate' }, id)
         },
+    },
+    {
+        header: 'ID CLIENTE',
+        accessorKey: 'idCliente',
     },
     {
         header: 'ESTADO',

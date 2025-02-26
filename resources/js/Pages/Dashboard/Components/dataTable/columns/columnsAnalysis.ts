@@ -5,6 +5,14 @@ import { Badge, badgeMap, type BadgeMode } from '@/Components/ui/badge'
 
 export const columnsAnalysis: ColumnDef<Project>[] = [
     {
+        header: 'ID FENLAB',
+        accessorKey: 'id',
+        cell: (row) => {
+            const id = row.getValue() as string
+            return h('p', { class: 'w-[78px] truncate' }, id)
+        },
+    },
+    {
         header: () => h('div', { class: 'w-[78px]' }, 'MODALIDAD'),
         accessorKey: 'modelType',
         meta: '!w-[78px]',
@@ -28,7 +36,7 @@ export const columnsAnalysis: ColumnDef<Project>[] = [
         cell: (row) => {
             const id = row.getValue() as string
             return h('p', { class: 'w-[78px] truncate' }, id)
-        },        
+        },
     },
     {
         header: 'ESTADO',

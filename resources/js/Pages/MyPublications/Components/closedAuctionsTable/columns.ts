@@ -5,6 +5,10 @@ import { Badge, badgeMap, type BadgeMode } from '@/Components/ui/badge'
 
 export const columns: ColumnDef<ClosedAuctions>[] = [
     {
+        header: 'ID FENCIA',
+        accessorKey: 'fenlabId',
+    },
+    {
         header: 'NOMBRE PROYECTO',
         accessorKey: 'name',
         cell: (row) => {
@@ -13,23 +17,15 @@ export const columns: ColumnDef<ClosedAuctions>[] = [
         },
     },
     {
-        header: 'ID FENLAB',
-        accessorKey: 'fenlabId',
-    },
-    {
-        header: 'NOMBRE COMPAÑÍA',
-        accessorKey: 'companyName',
-    },
-    {
-        header: 'Fecha operación firmada',
-        accessorKey: 'dateSignature',
-    },
-    {
         header: 'NOTARIA',
         accessorKey: 'notary',
     },
     {
-        header: 'ETAPA',
+        header: 'FECHA FIRMA',
+        accessorKey: 'dateSignature',
+    },
+    {
+        header: 'ESTADO',
         accessorKey: 'stage',
         cell: (row) => {
             const stage = row.getValue() as BadgeMode
@@ -39,9 +35,5 @@ export const columns: ColumnDef<ClosedAuctions>[] = [
                 h(Badge, { variant: badgeMap[stage] }, stage),
             )
         },
-    },
-    {
-        header: 'ID COMPAÑÍA',
-        accessorKey: 'companyId',
     },
 ]

@@ -1,14 +1,13 @@
 import { h } from 'vue'
 import type { ColumnDef } from '@tanstack/vue-table'
 import { Badge, badgeMap, type BadgeMode } from '@/Components/ui/badge'
-import { useDateFormat } from '@vueuse/core'
 import { Auction } from '@/Pages/MyPublications/types'
 import { RecordType, recordTypeLabels } from '@/constants/recordTypes'
 import { formatCurrency } from '@/lib/utils'
 
 export const columns: ColumnDef<Auction>[] = [
     {
-        header: 'ID',
+        header: 'ID FENCIA',
         accessorKey: 'id',
     },
     {
@@ -56,6 +55,14 @@ export const columns: ColumnDef<Auction>[] = [
         },
     },
     {
+        header: 'TIPO',
+        accessorKey: 'recordType',
+        cell: (row) => {
+            const type = row.getValue() as RecordType
+            return h('p', { class: 'text-grey' }, recordTypeLabels[type] || type)
+        },
+    },
+    {
         header: 'ESTADO',
         accessorKey: 'stage',
         cell: (row) => {
@@ -65,32 +72,6 @@ export const columns: ColumnDef<Auction>[] = [
                 { class: 'font-medium' },
                 h(Badge, { variant: badgeMap[stage] }, stage),
             )
-        },
-    },
-    {
-        header: () => h('div', { class: 'w-[78px]' }, 'TIPO'),
-        accessorKey: 'recordType',
-        cell: (row) => {
-            const type = row.getValue() as RecordType
-            return h('p', { class: 'text-grey' }, recordTypeLabels[type] || type)
-        },
-    },
-    {
-        header: 'PUBLICACIÓN',
-        accessorKey: 'startDate',
-        cell: (row) => {
-            const date = row.getValue() as string
-            const formatted = useDateFormat(date, 'DD/MM/YYYY')
-            return h('p', { class: 'text-grey' }, formatted.value)
-        },
-    },
-    {
-        header: 'FINALIZA',
-        accessorKey: 'endDate',
-        cell: (row) => {
-            const date = row.getValue() as string
-            const formatted = useDateFormat(date, 'DD/MM/YYYY')
-            return h('p', { class: 'text-grey' }, formatted.value)
         },
     },
 ]

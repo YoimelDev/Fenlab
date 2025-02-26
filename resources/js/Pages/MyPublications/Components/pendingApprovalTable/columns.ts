@@ -1,19 +1,19 @@
 import { h } from 'vue'
 import type { ColumnDef } from '@tanstack/vue-table'
 import type { PendingApproval, PostData } from '@/Pages/MyPublications/types'
-import { Badge } from '@/Components/ui/badge'
 import { PostAction } from '../PostAction'
 import { formatCurrency } from '@/lib/utils'
+import { Badge, badgeMap, type BadgeMode } from '@/Components/ui/badge'
 
 export const columns: ColumnDef<PendingApproval>[] = [
+    {
+        header: 'ID FENCIA',
+        accessorKey: 'fenlabId',
+    },
     {
         header: 'NOMBRE PROYECTO',
         accessorKey: 'name',
         cell: (row) => h('div', { class: 'font-bold' }, row.getValue() as string),
-    },
-    {
-        header: 'ID FENLAB',
-        accessorKey: 'fenlabId',
     },
     {
         header: 'PRECIO MINIMO',
@@ -26,6 +26,22 @@ export const columns: ColumnDef<PendingApproval>[] = [
             }
             return h('p', { class: 'font-medium' }, '-')
         },
+    },
+    {
+        header: 'PRECIO DE REFERENCIA',
+        accessorKey: 'referencePrice',
+        cell: (row) => {
+            const price = row.getValue() as number
+
+            if (price) {
+                return h('p', { class: 'font-medium' }, formatCurrency(price))
+            }
+            return h('p', { class: 'font-medium' }, '-')
+        },
+    },
+    {
+        header: 'Ofertante',
+        accessorKey: 'offerName',
     },
     {
         header: 'Mejor oferta',
@@ -44,38 +60,16 @@ export const columns: ColumnDef<PendingApproval>[] = [
         accessorKey: 'deposit',
     },
     {
-        header: 'Ofertante',
-        accessorKey: 'offerName',
-    },
-    {
-        header: 'PRECIO DE REFERENCIA',
-        accessorKey: 'referencePrice',
+        header: 'ESTADO',
+        accessorKey: 'stage',
         cell: (row) => {
-            const price = row.getValue() as number
-
-            if (price) {
-                return h('p', { class: 'font-medium' }, formatCurrency(price))
-            }
-            return h('p', { class: 'font-medium' }, '-')
-        },
-    },
-    {
-        header: 'EMPRESA',
-        accessorKey: 'companyName',
-    },
-    {
-        header: 'ETAPA',
-        accessorKey: 'PBCstatus',
-        cell: (row) => {
-            const stage = row.getValue() as string
-            return h('div', { class: 'font-medium' },
-                h(Badge, { variant: 'secondary' }, stage),
+            const stage = row.getValue() as BadgeMode
+            return h(
+                'div',
+                { class: 'font-medium' },
+                h(Badge, { variant: badgeMap[stage] }, stage),
             )
         },
-    },
-    {
-        header: 'ID EMPRESA',
-        accessorKey: 'companyId',
     },
     {
         id: 'actions',

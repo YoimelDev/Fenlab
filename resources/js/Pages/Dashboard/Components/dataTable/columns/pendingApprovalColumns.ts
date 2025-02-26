@@ -5,17 +5,21 @@ import { Badge } from '@/Components/ui/badge'
 
 export const pendingApprovalColumns: ColumnDef<PendingApproval>[] = [
     {
-        header: 'NOMBRE PROYECTO',
-        accessorKey: 'name',
+        header: 'ID FENCIA',
+        accessorKey: 'fenciaId',
+        cell: (row) => {
+            const id = row.getValue() as string
+            return h('p', { class: 'w-[78px] truncate' }, id)
+        },
+    },
+    {
+        header: 'OFERTA',
+        accessorKey: 'offerName',
         meta: '!w-[200px]',
         cell: (row) => h('div', { class: 'w-[160px] truncate font-medium' }, row.getValue() as string),
     },
     {
-        header: 'EMPRESA',
-        accessorKey: 'companyName',
-    },
-    {
-        header: 'ETAPA',
+        header: 'ESTADO',
         accessorKey: 'stage',
         cell: (row) => {
             const stage = row.getValue() as string

@@ -3,9 +3,12 @@ import type { ColumnDef } from '@tanstack/vue-table'
 import { PostData, type PendingPBC } from '@/Pages/MyPublications/types'
 import { Badge, badgeMap, type BadgeMode } from '@/Components/ui/badge'
 import { PostAction } from '../PostAction'
-import { RecordType, recordTypeLabels } from '@/constants/recordTypes'
 
 export const columns: ColumnDef<PendingPBC>[] = [
+    {
+        header: 'ID FENCIA',
+        accessorKey: 'fenlabId',
+    },
     {
         header: 'NOMBRE PROYECTO',
         accessorKey: 'name',
@@ -15,23 +18,15 @@ export const columns: ColumnDef<PendingPBC>[] = [
         },
     },
     {
-        header: 'ID FENLAB',
-        accessorKey: 'fenlabId',
+        header: 'OFERTA ACEPTADA',
+        accessorKey: 'offerValue',
     },
     {
         header: 'TIPO PBC',
         accessorKey: 'PBCtype',
     },
     {
-        header: 'MODALIDAD',
-        accessorKey: 'auctionRecordType',
-        cell: (row) => {
-            const type = row.getValue() as RecordType
-            return h('p', { class: 'text-grey' }, recordTypeLabels[type] || type)
-        },
-    },
-    {
-        header: 'ETAPA',
+        header: 'ESTADO',
         accessorKey: 'stage',
         cell: (row) => {
             const stage = row.getValue() as BadgeMode
