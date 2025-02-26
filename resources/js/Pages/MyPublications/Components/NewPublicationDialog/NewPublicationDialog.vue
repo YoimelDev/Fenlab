@@ -9,6 +9,7 @@ import {
     DialogTitle,
     Input,
     Label,
+    ScrollArea,
     Tabs,
     TabsContent,
     TabsList,
@@ -85,8 +86,6 @@ const postData = async () => {
             precioReferencia: formData.value.model.npl.precioReferencia,
             opcion: selectedModality.value,
             precioMinimo: Number(formData.value.model.npl.credito.precioMinimo),
-            documentos: docBinaries.value,
-            imagenes: imageBinaries.value,
         }
         const { data } = await fenlabApi.post<PublishData>('', {
             method: 'put',
@@ -94,6 +93,24 @@ const postData = async () => {
             body: payload,
         })
         await fenlabApi.post('/import', data)
+
+        const formDataToSend = new FormData()
+        formDataToSend.append('ajax', '1')
+        formDataToSend.append('action', 'uploadSingle')
+        imageBinaries.value.forEach((image, index) => {
+            formDataToSend.append(`iamges[${index}]`, image)
+        })
+        docBinaries.value.forEach((document, index) => {
+            formDataToSend.append(`documents[${index}]`, document)
+        })
+        formDataToSend.append('reference', formData.value.idFencia)
+
+        await fenlabApi.post('https://dev.fencia.es/module/fenciaimporter/import', formDataToSend, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+
         toast({
             variant: 'info',
             title: 'Datos guardados correctamente',
@@ -122,206 +139,201 @@ const postData = async () => {
         </DialogHeader>
 
         <div class="content mt-10">
-            <Tabs default-value="images">
-                <TabsList class="grid w-[422px] grid-cols-3">
+            <Tabs default-value="activeData">
+                <TabsList class="grid w-[422px] grid-cols-1">
                     <TabsTrigger value="activeData">
                         Datos activo
-                    </TabsTrigger>
-                    <TabsTrigger value="documents">
-                        Documentos
-                    </TabsTrigger>
-                    <TabsTrigger value="images">
-                        Imágenes
                     </TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="activeData">
-                    <div class="flex flex-col gap-4">
-                        <div class="space-y-2">
-                            <Label for="client_id">ID cliente</Label>
-                            <Input
-                                id="client_id"
-                                type="text"
-                                placeholder="ID cliente"
-                                class="mt-2"
-                                required
-                                autofocus
-                                disabled
-                                v-model="formData.idCliente"
-                            />
-                        </div>
-                        <div class="space-y-2">
-                            <Label for="fenlab_id">ID fenlab</Label>
-                            <Input
-                                id="fenlab_id"
-                                type="text"
-                                placeholder="ID fenlab"
-                                class="mt-2"
-                                required
-                                autofocus
-                                disabled
-                                v-model="formData.idFencia"
-                            />
-                        </div>
-                        <div class="space-y-2">
-                            <Label for="cadastral_reference">Referencia catastral</Label>
-                            <Input
-                                id="cadastral_reference"
-                                type="text"
-                                placeholder="Referencia catastral"
-                                class="mt-2"
-                                required
-                                autofocus
-                                disabled
-                                v-model="formData.model.referenciaCatastral"
-                            />
-                        </div>
-                        <div class="space-y-2">
-                            <Label for="min_price">Precio mínimo</Label>
-                            <Input
-                                id="min_price"
-                                type="text"
-                                placeholder="Precio mínimo"
-                                class="mt-2"
-                                required
-                                v-model="formData.model.npl.credito.precioMinimo"
-                                v-currency
-                            />
-                        </div>
-                        <div class="space-y-2">
-                            <Label for="reference_value">Valor de referencia</Label>
-                            <Input
-                                id="reference_value"
-                                type="text"
-                                placeholder="Valor de referencia"
-                                class="mt-2"
-                                disabled
-                                required
-                                v-model.number="formData.model.npl.precioReferencia"
-                                v-currency
-                            />
-                        </div>
-                        <div class="space-y-2">
-                            <Label for="transaction_modality">Modalidad de transacción</Label>
-                            <div class="flex items-center space-x-2">
-                                <input
-                                    type="radio"
-                                    id="r1"
-                                    value="subasta"
-                                    v-model="selectedModality"
-                                >
-                                <Label for="r1">Subasta</Label>
+                    <ScrollArea
+                        class="h-[50vh] space-y-4 my-4 p-4 bg-white/100 rounded-sm border border-[#E5E7EB] shadow-sm"
+                    >
+                        <div class="flex flex-col gap-4">
+                            <div class="space-y-2">
+                                <Label for="client_id">ID cliente</Label>
+                                <Input
+                                    id="client_id"
+                                    type="text"
+                                    placeholder="ID cliente"
+                                    class="mt-2"
+                                    required
+                                    autofocus
+                                    disabled
+                                    v-model="formData.idCliente"
+                                />
                             </div>
-                            <div class="flex items-center space-x-2">
-                                <input
-                                    type="radio"
-                                    id="r2"
-                                    value="crédito"
-                                    v-model="selectedModality"
-                                >
-                                <Label for="r2">Crédito</Label>
+                            <div class="space-y-2">
+                                <Label for="fenlab_id">ID fenlab</Label>
+                                <Input
+                                    id="fenlab_id"
+                                    type="text"
+                                    placeholder="ID fenlab"
+                                    class="mt-2"
+                                    required
+                                    autofocus
+                                    disabled
+                                    v-model="formData.idFencia"
+                                />
                             </div>
-                            <div class="flex items-center space-x-2">
-                                <input
-                                    type="radio"
-                                    id="r3"
-                                    value="remate"
-                                    v-model="selectedModality"
-                                >
-                                <Label for="r3">Remate</Label>
+                            <div class="space-y-2">
+                                <Label for="cadastral_reference">Referencia catastral</Label>
+                                <Input
+                                    id="cadastral_reference"
+                                    type="text"
+                                    placeholder="Referencia catastral"
+                                    class="mt-2"
+                                    required
+                                    autofocus
+                                    disabled
+                                    v-model="formData.model.referenciaCatastral"
+                                />
                             </div>
-                        </div>
-                    </div>
-                </TabsContent>
-
-                <TabsContent value="documents">
-                    <div class="my-4 p-2 bg-white">
-                        <div
-                            class="grid place-items-center p-5 border-2 border-dashed border-[#C1C1C1] rounded-sm cursor-pointer"
-                            @click="openDocFileDialog"
-                        >
-                            <template v-if="docFiles.length === 0">
-                                <Button
-                                    variant="green"
-                                    size="xs"
-                                >
-                                    <UploadIcon class="mr-2" />
-                                    Cargar documento
-                                </Button>
-                            </template>
-                            <template v-else>
-                                <div class="w-full">
-                                    <div
-                                        v-for="file in docFiles"
-                                        :key="file.name"
-                                        class="flex justify-between p-2 bg-gray-50 rounded mb-2"
+                            <div class="space-y-2">
+                                <Label for="min_price">Precio mínimo</Label>
+                                <Input
+                                    id="min_price"
+                                    type="text"
+                                    placeholder="Precio mínimo"
+                                    class="mt-2"
+                                    required
+                                    v-model="formData.model.npl.credito.precioMinimo"
+                                    v-currency
+                                />
+                            </div>
+                            <div class="space-y-2">
+                                <Label for="reference_value">Valor de referencia</Label>
+                                <Input
+                                    id="reference_value"
+                                    type="text"
+                                    placeholder="Valor de referencia"
+                                    class="mt-2"
+                                    disabled
+                                    required
+                                    v-model.number="formData.model.npl.precioReferencia"
+                                    v-currency
+                                />
+                            </div>
+                            <div class="space-y-2">
+                                <Label for="transaction_modality">Modalidad de transacción</Label>
+                                <div class="flex items-center space-x-2">
+                                    <input
+                                        type="radio"
+                                        id="r1"
+                                        value="subasta"
+                                        v-model="selectedModality"
                                     >
-                                        <div class="flex items-center gap-2">
-                                            <PdfIcon
-                                                v-if="file.name.endsWith('.pdf')"
-                                                class="w-5 h-5"
-                                            />
-                                            <XlsIcon
-                                                v-else
-                                                class="w-5 h-5"
-                                            />
+                                    <Label for="r1">Subasta</Label>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <input
+                                        type="radio"
+                                        id="r2"
+                                        value="crédito"
+                                        v-model="selectedModality"
+                                    >
+                                    <Label for="r2">Crédito</Label>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <input
+                                        type="radio"
+                                        id="r3"
+                                        value="remate"
+                                        v-model="selectedModality"
+                                    >
+                                    <Label for="r3">Remate</Label>
+                                </div>
+                            </div>
+                        </div>
 
-                                            <span class="text-sm font-medium">{{ file.name }}</span>
+                        <div class="my-4 p-2 bg-white">
+                            <div
+                                class="grid place-items-center p-5 border-2 border-dashed border-[#C1C1C1] rounded-sm cursor-pointer"
+                                @click="openDocFileDialog"
+                            >
+                                <template v-if="docFiles.length === 0">
+                                    <Button
+                                        variant="green"
+                                        size="xs"
+                                    >
+                                        <UploadIcon class="mr-2" />
+                                        Cargar documento
+                                    </Button>
+                                </template>
+                                <template v-else>
+                                    <div class="w-full">
+                                        <div
+                                            v-for="file in docFiles"
+                                            :key="file.name"
+                                            class="flex justify-between p-2 bg-gray-50 rounded mb-2"
+                                        >
+                                            <div class="flex items-center gap-2">
+                                                <PdfIcon
+                                                    v-if="file.name.endsWith('.pdf')"
+                                                    class="w-5 h-5"
+                                                />
+                                                <XlsIcon
+                                                    v-else
+                                                    class="w-5 h-5"
+                                                />
+
+                                                <span class="text-sm font-medium">{{ file.name }}</span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </template>
+                                </template>
+                            </div>
+                            <input
+                                type="file"
+                                ref="docFileInput"
+                                @change="handleDocFileChange"
+                                class="hidden"
+                                accept=".xlsx,.xls,.pdf"
+                                multiple
+                            >
                         </div>
-                        <input
-                            type="file"
-                            ref="docFileInput"
-                            @change="handleDocFileChange"
-                            class="hidden"
-                            accept=".xlsx,.xls,.pdf"
-                        >
-                    </div>
-                </TabsContent>
 
-                <TabsContent value="images">
-                    <div class="my-4 p-2 bg-white">
-                        <div
-                            class="grid place-items-center p-5 border-2 border-dashed border-[#C1C1C1] rounded-sm cursor-pointer"
-                            @click="openImageFileDialog"
-                        >
-                            <template v-if="imageFiles.length === 0">
-                                <Button
-                                    variant="green"
-                                    size="xs"
-                                >
-                                    <UploadIcon class="mr-2" />
-                                    Cargar imágenes
-                                </Button>
-                            </template>
-                            <template v-else>
-                                <div class="flex flex-wrap justify-center gap-4">
-                                    <div
-                                        v-for="file in imageFiles"
-                                        :key="file.name"
-                                        class="w-24 h-24 border rounded overflow-hidden"
+                        <div class="my-4 p-2 bg-white">
+                            <div
+                                class="grid place-items-center p-5 border-2 border-dashed border-[#C1C1C1] rounded-sm cursor-pointer"
+                                @click="openImageFileDialog"
+                            >
+                                <template v-if="imageFiles.length === 0">
+                                    <Button
+                                        variant="green"
+                                        size="xs"
                                     >
-                                        <img
-                                            :src="(file as any).preview"
-                                            alt="Preview"
-                                            class="object-cover w-full h-full"
+                                        <UploadIcon class="mr-2" />
+                                        Cargar imágenes
+                                    </Button>
+                                </template>
+                                <template v-else>
+                                    <div class="flex flex-wrap justify-center gap-4">
+                                        <div
+                                            v-for="file in imageFiles"
+                                            :key="file.name"
+                                            class="w-24 h-24 border rounded overflow-hidden"
                                         >
+                                            <img
+                                                :src="(file as any).preview"
+                                                alt="Preview"
+                                                class="object-cover w-full h-full"
+                                            >
+                                        </div>
                                     </div>
-                                </div>
-                            </template>
+                                </template>
+                            </div>
+                            <input
+                                type="file"
+                                ref="imageFileInput"
+                                @change="handleImageFileChange"
+                                class="hidden"
+                                accept="image/*"
+                                multiple
+                            >
                         </div>
-                        <input
-                            type="file"
-                            ref="imageFileInput"
-                            @change="handleImageFileChange"
-                            class="hidden"
-                            accept="image/*"
-                            multiple
-                        >
-                    </div>
+                    </ScrollArea>
                 </TabsContent>
             </Tabs>
         </div>
