@@ -112,7 +112,6 @@ class MyAnalysisController extends Controller
                 if (!file_exists($csvFilePath) || filesize($csvFilePath) === 0) {
                     throw new \Exception("CSV file was not created properly");
                 }
-
             } catch (\Exception $e) {
                 // Clean up any partial file that may have been created
                 if (isset($file) && is_resource($file)) {
@@ -172,6 +171,60 @@ class MyAnalysisController extends Controller
         } catch (\Exception $e) {
             Log::error('Asset publication failed: ' . $e->getMessage());
             return response()->json(['message' => 'Asset publication failed: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Uploads documents and images to the server
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function uploadDocuments(Request $request)
+    {
+        try {
+            $request->validate([
+                'reference' => 'required|string',
+                'images.*' => 'file|image',
+                'documents.*' => 'file',
+            ]);
+
+            $reference = $request->reference;
+            $multipartData = [
+                'ajax' => 1,
+                'action' => 'uploadSingle',
+                'reference' => $reference,
+            ];
+
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $index => $file) {
+                    $multipartData["images[$index]"] = $file;
+                }
+            }
+
+            if ($request->hasFile('documents')) {
+                foreach ($request->file('documents') as $index => $file) {
+                    $multipartData["documents[$index]"] = $file;
+                }
+            }
+
+            $response = Http::withHeaders([
+                'content-type' => 'multipart/form-data',
+            ])->post('https://dev.fencia.es/module/fenciaimporter/import', $multipartData);
+
+            Log::info('Document upload response', ['status' => $response->status(), 'body' => $response->body()]);
+
+            if ($response->successful()) {
+                return response()->json(['message' => 'Files uploaded successfully'], 200);
+            } else {
+                return response()->json([
+                    'message' => 'Error uploading files',
+                    'details' => $response->body()
+                ], $response->status());
+            }
+        } catch (\Throwable $th) {
+            Log::error('Document upload error', ['message' => $th->getMessage()]);
+            return response()->json(['message' => 'Error: ' . $th->getMessage()], 500);
         }
     }
 

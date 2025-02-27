@@ -13,6 +13,7 @@ Route::middleware([ApiKeyMiddleware::class])->group(function () {
     Route::post('/create-password', [CreatePasswordController::class, 'createPassword'])->name('create-password');
 
     Route::post('/import', [MyAnalysisController::class, 'publishAsset']);
+    Route::post('/upload-documents', [MyAnalysisController::class, 'uploadDocuments']); // New route
 
     // New Salesforce routes
     Route::get('/salesforce/token', [SalesforceController::class, 'getSfToken']);

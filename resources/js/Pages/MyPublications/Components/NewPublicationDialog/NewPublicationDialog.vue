@@ -33,24 +33,11 @@ const imageFiles = ref<File[]>([])
 const docFileInput = ref<HTMLInputElement | null>(null)
 const imageFileInput = ref<HTMLInputElement | null>(null)
 
-const docBinaries = ref<string[]>([])
-const imageBinaries = ref<string[]>([])
-
-function fileToBase64(file: File): Promise<string> {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader()
-        reader.readAsDataURL(file)
-        reader.onload = () => resolve(reader.result as string)
-        reader.onerror = error => reject(error)
-    })
-}
-
 function openDocFileDialog() { docFileInput.value?.click() }
 async function handleDocFileChange(event: Event) {
     const target = event.target as HTMLInputElement
     if (target.files && target.files.length > 0) {
         docFiles.value = Array.from(target.files)
-        docBinaries.value = await Promise.all(docFiles.value.map(file => fileToBase64(file)))
     }
 }
 function openImageFileDialog() { imageFileInput.value?.click() }
@@ -66,7 +53,6 @@ async function handleImageFileChange(event: Event) {
             (file as any).preview = URL.createObjectURL(file)
             return file
         })
-        imageBinaries.value = await Promise.all(files.map(file => fileToBase64(file)))
     }
 }
 onBeforeUnmount(() => {
@@ -92,24 +78,22 @@ const postData = async () => {
             path: `projects/${formData.value.projectId}/assets/${formData.value.id}/publish`,
             body: payload,
         })
+
         await fenlabApi.post('/import', data)
 
-        const formDataToSend = new FormData()
-        formDataToSend.append('ajax', '1')
-        formDataToSend.append('action', 'uploadSingle')
-        imageBinaries.value.forEach((image, index) => {
-            formDataToSend.append(`iamges[${index}]`, image)
-        })
-        docBinaries.value.forEach((document, index) => {
-            formDataToSend.append(`documents[${index}]`, document)
-        })
-        formDataToSend.append('reference', formData.value.idFencia)
+        if (imageFiles.value.length > 0 || docFiles.value.length > 0) {
+            const formDataToSend = new FormData()
 
-        await fenlabApi.post('https://dev.fencia.es/module/fenciaimporter/import', formDataToSend, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        })
+            imageFiles.value.forEach((image, index) => {
+                formDataToSend.append(`images[${index}]`, image)
+            })
+            docFiles.value.forEach((document, index) => {
+                formDataToSend.append(`documents[${index}]`, document)
+            })
+            formDataToSend.append('reference', formData.value.idFencia)
+
+            await fenlabApi.post('/upload-documents', formDataToSend)
+        }
 
         toast({
             variant: 'info',
