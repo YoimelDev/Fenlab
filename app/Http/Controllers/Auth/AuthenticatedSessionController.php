@@ -41,18 +41,37 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        try {
+            $request->authenticate();
 
-        $sfToken = $this->salesforceController->getSfToken()->original['token'];
-        $userResponse = $this->salesforceController->getFenlabUser($request)->original;
+            $sfToken = $this->salesforceController->getSfToken()->original['token'] ?? null;
+            if (!$sfToken) {
+                throw new \Exception("Failed to obtain Salesforce token");
+            }
 
-        $loginToken = $this->loginAws($userResponse);
+            $userResponse = $this->salesforceController->getFenlabUser($request)->original ?? null;
+            if (!$userResponse) {
+                throw new \Exception("Failed to get Salesforce user data");
+            }
 
-        $request->session()->put('salesforceUser', $userResponse);
-        $request->session()->put('loginToken', $loginToken);
-        $request->session()->regenerate();
+            $loginToken = $this->loginAws($userResponse);
+            if (!$loginToken) {
+                throw new \Exception("Failed to authenticate with AWS");
+            }
 
-        return redirect()->intended(route('dashboard', absolute: false));
+            $request->session()->put('salesforceUser', $userResponse);
+            $request->session()->put('loginToken', $loginToken);
+            $request->session()->regenerate();
+
+            return redirect()->intended(route('dashboard', absolute: false));
+        } catch (\Exception $e) {
+            Auth::guard('web')->logout();
+
+            Log::error("Authentication failed: " . $e->getMessage());
+
+            return redirect()->route('login')
+                ->withErrors(['email' => 'Authentication failed: ' . $e->getMessage()]);
+        }
     }
 
     public function loginAws($user)
@@ -78,13 +97,13 @@ class AuthenticatedSessionController extends Controller
 
         if ($response->successful()) {
             $data = $response->json(); // Intenta decodificar como JSON
-            if ($data) {
+            if ($data && isset($data['token'])) {
                 return $data['token'];
             }
+            return null;
         } else {
-            return response()->json([
-                'message' => 'Unauthorized'
-            ]);
+            Log::error("AWS login failed with status code: " . $response->status());
+            return null;
         }
     }
 
