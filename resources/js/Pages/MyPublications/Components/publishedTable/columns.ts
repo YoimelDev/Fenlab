@@ -4,8 +4,13 @@ import { Badge, badgeMap, type BadgeMode } from '@/Components/ui/badge'
 import { Auction } from '@/Pages/MyPublications/types'
 import { RecordType, recordTypeLabels } from '@/constants/recordTypes'
 import { formatCurrency } from '@/lib/utils'
+import { usePage } from '@inertiajs/vue3'
+import { PageProps } from '@/types'
 
-export const columns: ColumnDef<Auction>[] = [
+const page = usePage<PageProps>()
+const isAdmin = page.props?.auth?.salesforceUser?.rols === 'Admin'
+
+const baseColumns: ColumnDef<Auction>[] = [
     {
         header: 'ID FENCIA',
         accessorKey: 'id',
@@ -75,3 +80,12 @@ export const columns: ColumnDef<Auction>[] = [
         },
     },
 ]
+
+if (isAdmin) {
+    baseColumns.splice(1, 0, {
+        header: 'EMPRESA',
+        accessorKey: 'companyName',
+    })
+}
+
+export const columns = baseColumns

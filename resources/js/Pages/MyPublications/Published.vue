@@ -35,11 +35,11 @@ const published = ref<Auction[]>(props.published?.Auctions ?? [])
                 Mis Publicaciones | Publicadas ( {{ published?.length }} )
             </h1>
         </header>
-     
+
         <DataTable
             :columns="columns"
             :data="published"
-            column-filter="id"
+            :column-filter="['id', 'companyName']"
         />
     </AuthenticatedLayout>
 </template>
