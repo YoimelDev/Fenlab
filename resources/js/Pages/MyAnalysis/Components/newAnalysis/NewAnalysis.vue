@@ -263,7 +263,7 @@ const submitAnalysis = async () => {
 
                         <div class="text-grey">
                             <h3 class="text-lg font-bold">
-                                Sale Side
+                                Sell Side
                             </h3>
 
                             <p class="text-sm">
