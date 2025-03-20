@@ -20,7 +20,7 @@ class MyPublicationsController extends Controller
     public function pending(Request $request): Response
     {
         try {
-            $url = env('VITE_FENLAB_API_URL') . 'projects/assets/publishable';
+            $url = env('VITE_FENLAB_API_URL') . 'projects/assets/publishable?sortBy=id&reverse=true&perPage=100';
             $token = $request->session()->get('loginToken');
 
             $response = Http::withHeaders([

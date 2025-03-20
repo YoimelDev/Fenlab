@@ -44,7 +44,7 @@ class DashboardController extends Controller
     private function getAnalysis($token, $apiUrl)
     {
         try {
-            $url = env('VITE_FENLAB_API_URL') . 'projects?perPage=5';
+            $url = env('VITE_FENLAB_API_URL') . 'projects?sortBy=id&reverse=true&perPage=5';
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $token,
                 'Accept' => 'application/json',
@@ -65,7 +65,7 @@ class DashboardController extends Controller
     private function getPendingPublish($token, $apiUrl)
     {
         try {
-            $url = env('VITE_FENLAB_API_URL') . 'projects/assets/publishable?perPage=5';
+            $url = env('VITE_FENLAB_API_URL') . 'projects/assets/publishable?sortBy=id&reverse=true&perPage=5';
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $token,
                 'Accept' => 'application/json',

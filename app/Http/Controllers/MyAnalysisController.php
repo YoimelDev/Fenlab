@@ -42,7 +42,7 @@ class MyAnalysisController extends Controller
             'Accept' => 'application/json',
         ])->get($url);
 
-        $urlAssets = env('VITE_FENLAB_API_URL') . 'projects/' . $id . '/assets';
+        $urlAssets = env('VITE_FENLAB_API_URL') . 'projects/' . $id . '/assets?sortBy=id&reverse=true&perPage=100';
         $assets = Http::withHeaders([
             'Authorization' => 'Bearer ' . $token,
             'Accept' => 'application/json',
