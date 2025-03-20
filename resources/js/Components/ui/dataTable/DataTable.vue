@@ -1,6 +1,6 @@
 <script setup lang="ts" generic="TData, TValue">
 import { ref } from 'vue'
-import type { ColumnDef } from '@tanstack/vue-table'
+import type { ColumnDef, Row } from '@tanstack/vue-table'
 import {
     FlexRender,
     getCoreRowModel,
@@ -39,7 +39,7 @@ import {
 const props = withDefaults(defineProps<{
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
-  columnFilter?: string
+  columnFilter?: string | string[]
   activatePagination?: boolean
 }>(), {
     columnFilter: '',
@@ -48,6 +48,29 @@ const props = withDefaults(defineProps<{
 
 const sorting = ref<SortingState>([])
 const columnFilters = ref<ColumnFiltersState>([])
+const globalFilter = ref('')
+
+const filterTypes = {
+    multiColumnSearch: (
+        row: Row<TData>,
+        columnIds: string[],
+        filterValue: string,
+    ) => {
+        if (!filterValue || !columnIds.length) return true
+
+        const lowerFilterValue = String(filterValue).toLowerCase()
+
+        return columnIds.some((columnId) => {
+            let rowValue = row.getValue(columnId)
+            if (rowValue === undefined || rowValue === null) {
+                rowValue = row.original ? (row.original as Record<string, unknown>)[columnId] : ''
+            }
+            return rowValue !== null &&
+                rowValue !== undefined &&
+                String(rowValue).toLowerCase().includes(lowerFilterValue)
+        })
+    },
+}
 
 const table = useVueTable({
     get data() { return props.data },
@@ -64,22 +87,42 @@ const table = useVueTable({
     state: {
         get sorting() { return sorting.value },
         get columnFilters() { return columnFilters.value },
+        get globalFilter() { return globalFilter.value },
     },
+    globalFilterFn: (row, columnId, value) => {
+        if (!Array.isArray(props.columnFilter) || !value) return true
+        return filterTypes.multiColumnSearch(row, props.columnFilter, value)
+    },
+    onGlobalFilterChange: updaterOrValue => valueUpdater(updaterOrValue, globalFilter),
 })
 </script>
 
 <template>
-    <Input
+    <div
         v-if="columnFilter"
-        id="name"
-        type="text"
-        :placeholder="table.getColumn(`${columnFilter}`)?.columnDef.header as string"
-        class="mt-4 max-w-52"
-        :model-value="table.getColumn(`${columnFilter}`)?.getFilterValue() as string"
-        @update:model-value="table.getColumn(`${columnFilter}`)?.setFilterValue($event)"
-    />
+        class="flex flex-wrap gap-4 mt-4"
+    >
+        <Input
+            v-if="Array.isArray(columnFilter)"
+            id="global-search"
+            type="text"
+            placeholder="Buscar..."
+            class="max-w-72"
+            :model-value="globalFilter"
+            @update:model-value="(val) => { globalFilter = String(val); table.setGlobalFilter(String(val)); }"
+        />
+        <Input
+            v-else
+            id="name"
+            type="text"
+            :placeholder="table.getColumn(`${columnFilter}`)?.columnDef.header as string"
+            class="max-w-52"
+            :model-value="table.getColumn(`${columnFilter}`)?.getFilterValue() as string"
+            @update:model-value="table.getColumn(`${columnFilter}`)?.setFilterValue($event)"
+        />
+    </div>
 
-    <div 
+    <div
         class="w-full h-fit mt-10 py-8 px-4 bg-white rounded-sm"
         :class="{ 'mt-4': columnFilter }"
     >
@@ -151,7 +194,7 @@ const table = useVueTable({
                 @click="table.previousPage()"
                 :disabled="!table.getCanPreviousPage()"
             />
-    
+
             <template v-for="(item, index) in items">
                 <PaginationListItem
                     v-if="item.type === 'page'"
@@ -173,7 +216,7 @@ const table = useVueTable({
                     :index="index"
                 />
             </template>
-    
+
             <PaginationNext
                 @click="table.nextPage()"
                 :disabled="!table.getCanNextPage()"

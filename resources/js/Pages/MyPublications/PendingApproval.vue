@@ -1,4 +1,3 @@
-
 <script setup lang="ts">
 import { AssessmentIcon } from '@/Components/icons'
 import { DataTable } from '@/Components/ui'
@@ -25,11 +24,11 @@ defineProps<{
                 Mis Publicaciones | Pendientes de Aprobación ( {{ projects.length }} )
             </h1>
         </header>
-     
+
         <DataTable
             :columns="columns"
             :data="projects"
-            column-filter="name"
+            :column-filter="['clientId', 'fenlabId', 'fenciaId', 'salesforceId']"
         />
     </AuthenticatedLayout>
 </template>

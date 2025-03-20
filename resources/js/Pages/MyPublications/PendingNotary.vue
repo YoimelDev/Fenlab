@@ -25,11 +25,11 @@ defineProps<{
                 Mis Publicaciones | Pendientes de Firma ( {{ projects.length }} )
             </h1>
         </header>
-     
+
         <DataTable
             :columns="columns"
             :data="projects"
-            column-filter="fenlabId"
+            :column-filter="['clientId', 'fenlabId', 'fenciaId', 'salesforceId']"
         />
     </AuthenticatedLayout>
 </template>

@@ -25,11 +25,11 @@ defineProps<{
                 Mis Publicaciones | Aprobación PBC ( {{ projects.length }} )
             </h1>
         </header>
-     
+
         <DataTable
             :columns="columns"
             :data="projects"
-            column-filter="name"
+            :column-filter="['clientId', 'fenlabId', 'fenciaId', 'salesforceId']"
         />
     </AuthenticatedLayout>
 </template>
