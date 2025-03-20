@@ -3,8 +3,13 @@ import type { ColumnDef } from '@tanstack/vue-table'
 import { PostData, type PendingPBC } from '@/Pages/MyPublications/types'
 import { Badge, badgeMap, type BadgeMode } from '@/Components/ui/badge'
 import { PostAction } from '../PostAction'
+import { usePage } from '@inertiajs/vue3'
+import { PageProps } from '@/types'
 
-export const columns: ColumnDef<PendingPBC>[] = [
+const page = usePage<PageProps>()
+const isAdmin = page.props?.auth?.salesforceUser?.rols === 'Admin'
+
+const baseColumns: ColumnDef<PendingPBC>[] = [
     {
         header: 'ID FENCIA',
         accessorKey: 'fenlabId',
@@ -70,3 +75,12 @@ export const columns: ColumnDef<PendingPBC>[] = [
         },
     },
 ]
+
+if (isAdmin) {
+    baseColumns.splice(1, 0, {
+        header: 'EMPRESA',
+        accessorKey: 'titular',
+    })
+}
+
+export const columns = baseColumns

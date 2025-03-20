@@ -2,8 +2,13 @@ import { h } from 'vue'
 import type { ColumnDef } from '@tanstack/vue-table'
 import { type ClosedAuctions } from '@/Pages/MyPublications/types'
 import { Badge, badgeMap, type BadgeMode } from '@/Components/ui/badge'
+import { usePage } from '@inertiajs/vue3'
+import { PageProps } from '@/types'
 
-export const columns: ColumnDef<ClosedAuctions>[] = [
+const page = usePage<PageProps>()
+const isAdmin = page.props?.auth?.salesforceUser?.rols === 'Admin'
+
+export const baseColumns: ColumnDef<ClosedAuctions>[] = [
     {
         header: 'ID FENCIA',
         accessorKey: 'fenlabId',
@@ -37,3 +42,12 @@ export const columns: ColumnDef<ClosedAuctions>[] = [
         },
     },
 ]
+
+if (isAdmin) {
+    baseColumns.splice(1, 0, {
+        header: 'EMPRESA',
+        accessorKey: 'companyName',
+    })
+}
+
+export const columns = baseColumns

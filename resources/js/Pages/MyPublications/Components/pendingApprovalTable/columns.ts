@@ -4,8 +4,13 @@ import type { PendingApproval, PostData } from '@/Pages/MyPublications/types'
 import { PostAction } from '../PostAction'
 import { formatCurrency } from '@/lib/utils'
 import { Badge, badgeMap, type BadgeMode } from '@/Components/ui/badge'
+import { usePage } from '@inertiajs/vue3'
+import { PageProps } from '@/types'
 
-export const columns: ColumnDef<PendingApproval>[] = [
+const page = usePage<PageProps>()
+const isAdmin = page.props?.auth?.salesforceUser?.rols === 'Admin'
+
+const baseColumns: ColumnDef<PendingApproval>[] = [
     {
         header: 'ID FENCIA',
         accessorKey: 'fenlabId',
@@ -88,3 +93,12 @@ export const columns: ColumnDef<PendingApproval>[] = [
         },
     },
 ]
+
+if (isAdmin) {
+    baseColumns.splice(1, 0, {
+        header: 'EMPRESA',
+        accessorKey: 'titular',
+    })
+}
+
+export const columns = baseColumns
