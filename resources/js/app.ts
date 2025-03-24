@@ -7,7 +7,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers'
 import { ZiggyVue } from '../../vendor/tightenco/ziggy'
 import { LoadingPlugin } from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/css/index.css'
-import { currencyDirective } from '@/lib/directives'
+import { currencyDirective, percentageDirective, percentageTextDirective } from '@/lib/directives'
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel'
 
@@ -27,6 +27,8 @@ createInertiaApp({
                 loader: 'bars',
             })
             .directive('currency', currencyDirective)
+            .directive('percentage', percentageDirective)
+            .directive('percentage-text', percentageTextDirective)
             .mount(el)
     },
     progress: {

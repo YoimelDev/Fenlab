@@ -19,7 +19,7 @@ import { EditMasterData } from '@/Pages/UserData/Components/editMasterData'
 import { PageProps } from '@/types'
 import { CompanyMasterData } from '@/types/fenlab'
 import { fenlabApi } from '@/api'
-import { formatNumber, formatPercentage } from '@/lib/utils'
+import { formatCurrency, formatPercentage } from '@/lib/utils'
 
 const { props } = usePage<PageProps>()
 const masterData = ref<CompanyMasterData | null>(null)
@@ -154,8 +154,8 @@ onMounted(() => {
                                 {{ data.tramo }}
                             </TableCell>
                             <TableCell>{{ formatPercentage(data.fee ) }}</TableCell>
-                            <TableCell>{{ formatNumber(data.cap ) }}</TableCell>
-                            <TableCell>{{ formatNumber(data.hurdle ?? 0) }}</TableCell>
+                            <TableCell>{{ formatCurrency(data.cap ) }}</TableCell>
+                            <TableCell>{{ formatCurrency(data.hurdle ?? 0) }}</TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
@@ -187,8 +187,8 @@ onMounted(() => {
                                 {{ data.tramo }}
                             </TableCell>
                             <TableCell>{{ formatPercentage(data.fee ) }}</TableCell>
-                            <TableCell>{{ formatNumber(data.cap ) }}</TableCell>
-                            <TableCell>{{ formatNumber(data.hurdle ?? 0) }}</TableCell>
+                            <TableCell>{{ formatCurrency(data.cap ) }}</TableCell>
+                            <TableCell>{{ formatCurrency(data.hurdle ?? 0) }}</TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
@@ -199,7 +199,10 @@ onMounted(() => {
                     WACC - Coste de Capital
                 </h3>
 
-                <p class="text-xl">
+                <p
+                    class="text-xl"
+                    v-percentage-text="masterData?.WACC"
+                >
                     {{ masterData?.WACC }}
                 </p>
             </div>
@@ -209,7 +212,10 @@ onMounted(() => {
                     Management fee % s/ Valor inmueble
                 </h3>
 
-                <p class="text-xl">
+                <p
+                    class="text-xl"
+                    v-percentage-text="masterData?.managementFee"
+                >
                     {{ masterData?.managementFee }}
                 </p>
             </div>

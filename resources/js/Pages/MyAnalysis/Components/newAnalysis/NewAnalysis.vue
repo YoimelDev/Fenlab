@@ -35,7 +35,7 @@ import { PlusIcon } from '@radix-icons/vue'
 
 import { fenlabApi } from '@/api/fenlab.api'
 import { CompanyMasterData, ProjectById } from '@/types/fenlab'
-import { formatNumber, formatPercentage } from '@/lib/utils'
+import { formatCurrency, formatPercentage } from '@/lib/utils'
 
 const { toast } = useToast()
 const step = ref(1)
@@ -426,8 +426,8 @@ const submitAnalysis = async () => {
                                             {{ data.tramo }}
                                         </TableCell>
                                         <TableCell>{{ formatPercentage(data.fee) }}</TableCell>
-                                        <TableCell>{{ formatNumber(data.cap) }}</TableCell>
-                                        <TableCell>{{ formatNumber(data.hurdle ?? 0) }}</TableCell>
+                                        <TableCell>{{ formatCurrency(data.cap) }}</TableCell>
+                                        <TableCell>{{ formatCurrency(data.hurdle ?? 0) }}</TableCell>
                                     </TableRow>
                                 </TableBody>
                             </Table>
@@ -454,8 +454,8 @@ const submitAnalysis = async () => {
                                             {{ data.tramo }}
                                         </TableCell>
                                         <TableCell>{{ formatPercentage(data.fee) }}</TableCell>
-                                        <TableCell>{{ formatNumber(data.cap) }}</TableCell>
-                                        <TableCell>{{ formatNumber(data.hurdle ?? 0) }}</TableCell>
+                                        <TableCell>{{ formatCurrency(data.cap) }}</TableCell>
+                                        <TableCell>{{ formatCurrency(data.hurdle ?? 0) }}</TableCell>
                                     </TableRow>
                                 </TableBody>
                             </Table>
@@ -466,10 +466,11 @@ const submitAnalysis = async () => {
                         <Label for="wacc">WACC - Coste de Capital (%)</Label>
                         <Input
                             id="wacc"
-                            type="number"
+                            type="text"
                             placeholder="5"
                             class="mt-2"
-                            v-model.number="wacc"
+                            v-percentage
+                            v-model="wacc"
                             :class="{ 'border-red-500': step4Errors['masterData.wacc'] }"
                             required
                             autofocus
@@ -488,10 +489,11 @@ const submitAnalysis = async () => {
                         <Label for="managementFee">Management fee (%)</Label>
                         <Input
                             id="managementFee"
-                            type="number"
+                            type="text"
                             placeholder="5"
                             class="mt-2"
-                            v-model.number="managementFee"
+                            v-percentage
+                            v-model="managementFee"
                             :class="{ 'border-red-500': step4Errors['masterData.managementFee'] }"
                             required
                             autofocus
@@ -512,10 +514,11 @@ const submitAnalysis = async () => {
                             <Label for="costeLanzamientoAbogado">Abogado</Label>
                             <Input
                                 id="costeLanzamientoAbogado"
-                                type="number"
+                                type="text"
                                 placeholder="500"
                                 class="mt-2"
-                                v-model.number="costeLanzamientoAbogado"
+                                v-currency
+                                v-model="costeLanzamientoAbogado"
                                 :class="{ 'border-red-500': step4Errors['masterData.costeLanzamientoAbogado'] }"
                                 required
                                 autofocus
@@ -534,10 +537,11 @@ const submitAnalysis = async () => {
                             <Label for="costeLanzamientoProcurador">Procurador</Label>
                             <Input
                                 id="costeLanzamientoProcurador"
-                                type="number"
+                                type="text"
                                 placeholder="500"
                                 class="mt-2"
-                                v-model.number="costeLanzamientoProcurador"
+                                v-currency
+                                v-model="costeLanzamientoProcurador"
                                 :class="{ 'border-red-500': step4Errors['masterData.costeLanzamientoProcurador'] }"
                                 required
                                 autofocus
