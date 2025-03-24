@@ -36,10 +36,11 @@ const published = ref<Auction[]>(props.published?.Auctions ?? [])
             </h1>
         </header>
 
+        <!-- TODO FILTRO POR 4 IDS -->
         <DataTable
             :columns="columns"
             :data="published"
-            :column-filter="['id', 'companyName']"
+            :column-filter="['id', 'fenlabId', 'prestashopId', 'companyName']"
         />
     </AuthenticatedLayout>
 </template>
