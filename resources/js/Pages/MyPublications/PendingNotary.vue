@@ -29,7 +29,7 @@ defineProps<{
         <DataTable
             :columns="columns"
             :data="projects"
-            :column-filter="['clientId', 'fenlabId', 'fenciaId', 'salesforceId', 'titular']"
+            :column-filter="['clientId', 'fenlabId', 'fenciaId', 'salesforceId', 'titular', 'name']"
         />
     </AuthenticatedLayout>
 </template>
