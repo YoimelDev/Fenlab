@@ -2,6 +2,7 @@
 import { Input, Label } from '@/Components/ui'
 import type { PendingPBC } from '../../types'
 import { recordTypeLabels } from '@/constants/recordTypes'
+import { useDateFormat } from '@vueuse/core'
 
 defineProps<{
     information: PendingPBC;
@@ -96,7 +97,7 @@ defineProps<{
         >
             <Label>Fecha Aprobación PBC</Label>
             <Input
-                :default-value="information.approvedPBCDate"
+                :default-value="useDateFormat(information.approvedPBCDate, 'DD/MM/YYYY').value"
                 disabled
             />
         </div>
@@ -106,7 +107,7 @@ defineProps<{
         >
             <Label>Fecha Aprobación PBC2</Label>
             <Input
-                :default-value="information.approvedPBC2Date"
+                :default-value="useDateFormat(information.approvedPBC2Date, 'DD/MM/YYYY').value"
                 disabled
             />
         </div>

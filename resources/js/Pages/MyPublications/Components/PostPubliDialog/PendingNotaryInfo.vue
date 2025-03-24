@@ -2,6 +2,7 @@
 import { Input, Label } from '@/Components/ui'
 import type { PendingNotary } from '../../types'
 import { recordTypeLabels } from '@/constants/recordTypes'
+import { useDateFormat } from '@vueuse/core'
 
 defineProps<{
     information: PendingNotary;
@@ -66,7 +67,7 @@ defineProps<{
         >
             <Label>Fecha de Inicio</Label>
             <Input
-                :default-value="information.startDate.toString()"
+                :default-value="useDateFormat(information.startDate, 'DD/MM/YYYY').value"
                 disabled
             />
         </div>
@@ -76,7 +77,7 @@ defineProps<{
         >
             <Label>Fecha Programada Notaría</Label>
             <Input
-                :default-value="information.scheduledDateNotary"
+                :default-value="useDateFormat(information.scheduledDateNotary, 'DD/MM/YYYY').value"
                 disabled
             />
         </div>

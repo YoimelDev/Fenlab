@@ -2,6 +2,7 @@
 import { Input, Label } from '@/Components/ui'
 import type { PendingApproval } from '../../types'
 import { recordTypeLabels } from '@/constants/recordTypes'
+import { useDateFormat } from '@vueuse/core'
 
 defineProps<{
     information: PendingApproval;
@@ -96,7 +97,7 @@ defineProps<{
         >
             <Label>Fecha de Inicio</Label>
             <Input
-                :default-value="information.startDate.toString()"
+                :default-value="useDateFormat(information.startDate, 'DD/MM/YYYY').value"
                 disabled
             />
         </div>

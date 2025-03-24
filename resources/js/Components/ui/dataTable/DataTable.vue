@@ -35,6 +35,8 @@ import {
 import {
     Button,
 } from '@/Components/ui/button'
+import { PageProps } from '@/types'
+import { usePage } from '@inertiajs/vue3'
 
 const props = withDefaults(defineProps<{
   columns: ColumnDef<TData, TValue>[]
@@ -46,6 +48,8 @@ const props = withDefaults(defineProps<{
     activatePagination: true,
 })
 
+const page = usePage<PageProps>()
+const isAdmin = page.props?.auth?.salesforceUser?.rols === 'Admin'
 const sorting = ref<SortingState>([])
 const columnFilters = ref<ColumnFiltersState>([])
 const globalFilter = ref('')
@@ -106,7 +110,7 @@ const table = useVueTable({
             v-if="Array.isArray(columnFilter)"
             id="global-search"
             type="text"
-            placeholder="Buscar..."
+            :placeholder="isAdmin ? 'Buscar por id o nombre' : 'Buscar nombre'"
             class="max-w-72"
             :model-value="globalFilter"
             @update:model-value="(val) => { globalFilter = String(val); table.setGlobalFilter(String(val)); }"
