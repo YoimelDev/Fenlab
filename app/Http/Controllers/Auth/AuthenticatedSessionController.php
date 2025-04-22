@@ -76,11 +76,22 @@ class AuthenticatedSessionController extends Controller
 
     public function loginAws($user)
     {
-
         $url = env('VITE_FENLAB_API_URL') . 'auth/login';
         $apiKey = env('VITE_FENLAB_API_KEY');
 
         $user['rols'] = strtolower($user['rols']);
+
+        // Procesar tiers para fenciaFee
+        $fenciaFee = [];
+        if (isset($user['tiers'])) {
+            foreach ($user['tiers'] as $tier => $values) {
+                $tierNumber = substr($tier, -1);
+                $fenciaFee[$tierNumber] = [
+                    'fee' => (float) $values['feePercentage'] ?? 0.0,
+                    'cap' => (float) $values['amount'] ?? 0.0
+                ];
+            }
+        }
 
         $body = [
             "username" => $user['email'],
@@ -88,6 +99,7 @@ class AuthenticatedSessionController extends Controller
             "companyId" => $user['companyId'],
             "company" => $user['companyCommercialName'],
             "shortCompany" => $user['companyCommercialName'],
+            "fenciaFee" => $fenciaFee,
         ];
 
         $response = Http::withHeaders([
