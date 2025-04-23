@@ -14,24 +14,24 @@ export interface SalesforceUser {
     email: string;
     name: string;
     id: string;
-    tiers: {
-        tier_5: {
+    tiers?: {
+        tier_5?: {
             feePercentage: number;
             amount: number;
         };
-        tier_4: {
+        tier_4?: {
             feePercentage: number;
             amount: number;
         };
-        tier_3: {
+        tier_3?: {
             feePercentage: number;
             amount: number;
         };
-        tier_2: {
+        tier_2?: {
             feePercentage: number;
             amount: number;
         };
-        tier_1: {
+        tier_1?: {
             feePercentage: number;
             amount: number;
         };
