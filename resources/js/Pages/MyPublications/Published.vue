@@ -1,4 +1,3 @@
-
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import { Head } from '@inertiajs/vue3'
@@ -22,25 +21,20 @@ const published = ref<Auction[]>(props.published?.Auctions ?? [])
 </script>
 
 <template>
+
     <Head title="Mis Publicaciones" />
 
     <AuthenticatedLayout>
         <header class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-10">
             <h1 class="flex items-center gap-4 text-xl font-bold leading-5">
-                <AssessmentIcon
-                    variant="black"
-                    class="text-black w-8 h-8"
-                />
+                <AssessmentIcon variant="black" class="text-black w-8 h-8" />
 
                 Mis Publicaciones | Publicadas ( {{ published?.length }} )
             </h1>
         </header>
 
         <!-- TODO FILTRO POR 4 IDS -->
-        <DataTable
-            :columns="columns"
-            :data="published"
-            :column-filter="['id', 'fenlabId', 'prestashopId', 'companyName']"
-        />
+        <DataTable :columns="columns" :data="published"
+            :column-filter="['id', 'fenlabId', 'prestashopId', 'companyName', 'productReference']" />
     </AuthenticatedLayout>
 </template>

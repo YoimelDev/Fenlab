@@ -1,9 +1,8 @@
-import axios from 'axios'
+import axios from "axios";
 
 export const fenlabApi = axios.create({
-    baseURL: route('api'),
+    baseURL: route("api"),
     headers: {
-        API_KEY: import.meta.env.VITE_API_KEY || '',
+        API_KEY: import.meta.env.VITE_API_KEY || "",
     },
-})
-
+});

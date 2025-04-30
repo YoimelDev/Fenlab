@@ -14,33 +14,17 @@ const isDialogOpen = ref(false)
 <template>
     <div class="flex gap-2">
         <Dialog v-model:open="isDialogOpen">
-            <Button
-                variant="ghost"
-                size="xs"
-                @click="isDialogOpen = true"
-            >
+            <Button variant="ghost" size="xs" @click="isDialogOpen = true">
                 Ver Detalles
             </Button>
 
-            <Button
-                v-if="postData.data.publicLinks[0]"
-                variant="ghost"
-                size="xs"
-                as-child
-            >
-                <a
-                    :href="postData.data.publicLinks[0]"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
+            <Button v-if="postData.data?.publicLinks?.[0]" variant="ghost" size="xs" as-child>
+                <a :href="postData.data.publicLinks[0]" target="_blank" rel="noopener noreferrer">
                     Ver documentación
                 </a>
             </Button>
 
-            <PostPubliDialog
-                :post-data="postData"
-                @updated="() => isDialogOpen = false"
-            />
+            <PostPubliDialog :post-data="postData" @updated="() => isDialogOpen = false" />
         </Dialog>
     </div>
 </template>

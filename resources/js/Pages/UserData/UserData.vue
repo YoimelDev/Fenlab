@@ -46,29 +46,21 @@ onMounted(() => {
 </script>
 
 <template>
+
     <Head title="Datos Usuario" />
 
     <AuthenticatedLayout>
         <section>
             <div class="space-y-4">
-                <p
-                    v-if="props.auth.salesforceUser.name"
-                    class="text-xl font-bold"
-                >
+                <p v-if="props.auth.salesforceUser.name" class="text-xl font-bold">
                     {{ props.auth.salesforceUser.name }}
                 </p>
 
-                <p
-                    v-if="props.auth.salesforceUser.email"
-                    class="text-grey text-xl font-light"
-                >
+                <p v-if="props.auth.salesforceUser.email" class="text-grey text-xl font-light">
                     {{ props.auth.salesforceUser.email }}
                 </p>
 
-                <p
-                    v-if="props.auth.salesforceUser.companyCommercialName"
-                    class="text-grey text-xl font-light"
-                >
+                <p v-if="props.auth.salesforceUser.companyCommercialName" class="text-grey text-xl font-light">
                     {{ props.auth.salesforceUser.companyCommercialName }}
                 </p>
             </div>
@@ -83,11 +75,7 @@ onMounted(() => {
                         Master Data Financiera
                     </h2>
 
-                    <EditMasterData
-                        :key="masterData?.WACC"
-                        :master-data="masterData"
-                        @updated="getCompanyMasterData"
-                    />
+                    <EditMasterData :key="masterData?.WACC" :master-data="masterData" @updated="getCompanyMasterData" />
                 </div>
 
                 <p class="flex items-center gap-2 mt-4 text-grey">
@@ -113,11 +101,8 @@ onMounted(() => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        <TableRow
-                            class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]"
-                            v-for="data in masterData?.macro"
-                            :key="data.ano"
-                        >
+                        <TableRow class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]"
+                            v-for="data in masterData?.macro" :key="data.ano">
                             <TableCell class="!bg-[#ECECEC] font-bold">
                                 Año {{ data.ano }}
                             </TableCell>
@@ -145,16 +130,13 @@ onMounted(() => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        <TableRow
-                            class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]"
-                            v-for="data in masterData?.brokerFee.gestion"
-                            :key="data.tramo"
-                        >
+                        <TableRow class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]"
+                            v-for="data in masterData?.brokerFee" :key="data.tramo">
                             <TableCell class="!bg-[#ECECEC] font-bold">
                                 {{ data.tramo }}
                             </TableCell>
-                            <TableCell>{{ formatPercentage(data.fee ) }}</TableCell>
-                            <TableCell>{{ formatCurrency(data.cap ) }}</TableCell>
+                            <TableCell>{{ formatPercentage(data.fee) }}</TableCell>
+                            <TableCell>{{ formatCurrency(data.cap) }}</TableCell>
                             <TableCell>{{ formatCurrency(data.hurdle ?? 0) }}</TableCell>
                         </TableRow>
                     </TableBody>
@@ -178,16 +160,13 @@ onMounted(() => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        <TableRow
-                            class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]"
-                            v-for="data in masterData?.brokerFee.ventaCredito"
-                            :key="data.tramo"
-                        >
+                        <TableRow class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]"
+                            v-for="data in masterData?.fenciaFee" :key="data.tramo">
                             <TableCell class="!bg-[#ECECEC] font-bold">
                                 {{ data.tramo }}
                             </TableCell>
-                            <TableCell>{{ formatPercentage(data.fee ) }}</TableCell>
-                            <TableCell>{{ formatCurrency(data.cap ) }}</TableCell>
+                            <TableCell>{{ formatPercentage(data.fee) }}</TableCell>
+                            <TableCell>{{ formatCurrency(data.cap) }}</TableCell>
                             <TableCell>{{ formatCurrency(data.hurdle ?? 0) }}</TableCell>
                         </TableRow>
                     </TableBody>
@@ -199,10 +178,7 @@ onMounted(() => {
                     WACC - Coste de Capital
                 </h3>
 
-                <p
-                    class="text-xl"
-                    v-percentage-text="masterData?.WACC"
-                >
+                <p class="text-xl" v-percentage-text="masterData?.WACC">
                     {{ masterData?.WACC }}
                 </p>
             </div>
@@ -212,10 +188,7 @@ onMounted(() => {
                     Management fee % s/ Valor inmueble
                 </h3>
 
-                <p
-                    class="text-xl"
-                    v-percentage-text="masterData?.managementFee"
-                >
+                <p class="text-xl" v-percentage-text="masterData?.managementFee">
                     {{ masterData?.managementFee }}
                 </p>
             </div>

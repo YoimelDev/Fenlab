@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, inject } from 'vue'
+import { ref, onMounted, inject, watch } from 'vue'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
@@ -59,6 +59,13 @@ onMounted(() => {
     getCompanyMasterData()
 })
 
+// Observar cambios en el tipo de modelo para recargar los datos correspondientes
+watch(modelType, () => {
+    if (step.value >= 3) { // Solo recargar cuando el usuario ya haya seleccionado el modelo
+        getCompanyMasterData()
+    }
+})
+
 const step1Schema = z.object({
     name: z.string().nonempty({
         message: 'El nombre del proyecto es requerido',
@@ -77,27 +84,31 @@ const step4Schema = z.object({
     }),
 })
 
-const { handleSubmit: handleStep1, errors: step1Errors, defineField  } = useForm({
+const { handleSubmit: handleStep1, errors: step1Errors, defineField } = useForm({
     validationSchema: toTypedSchema(step1Schema),
 })
 
-const [ name ] = defineField('name')
-const [ description ] = defineField('description')
+const [name] = defineField('name')
+const [description] = defineField('description')
 
 const { handleSubmit: handleStep4, errors: step4Errors, defineField: fieldStep4, setFieldValue } = useForm<Step4>({
     validationSchema: toTypedSchema(step4Schema),
 })
 
-const [ wacc ] = fieldStep4('masterData.wacc')
-const [ managementFee ] = fieldStep4('masterData.managementFee')
-const [ costeLanzamientoAbogado ] = fieldStep4('masterData.costeLanzamientoAbogado')
-const [ costeLanzamientoProcurador ] = fieldStep4('masterData.costeLanzamientoProcurador')
+const [wacc] = fieldStep4('masterData.wacc')
+const [managementFee] = fieldStep4('masterData.managementFee')
+const [costeLanzamientoAbogado] = fieldStep4('masterData.costeLanzamientoAbogado')
+const [costeLanzamientoProcurador] = fieldStep4('masterData.costeLanzamientoProcurador')
 
 const handleNextStep = () => {
     const steps = {
         1: () => handleStep1(() => step.value++)(),
         2: () => step.value++,
-        3: () => step.value++,
+        3: () => {
+            step.value++
+            // Recargar los datos cuando se pasa al paso 4, después de elegir el tipo de modelo
+            getCompanyMasterData()
+        },
         4: () => handleStep4(submitAnalysis)(),
     }
 
@@ -107,12 +118,18 @@ const handleNextStep = () => {
 
 const getCompanyMasterData = async () => {
     try {
+        // Define el path basado en el tipo de modelo seleccionado
+        const path = `company-master-data/${modelType.value}`;
+
         const { data: response } = await fenlabApi.post<CompanyMasterData>('', {
             method: 'get',
-            path: 'company-master-data',
+            path: path,
         })
 
         masterData.value = response
+
+        console.log(response);
+
         setFieldValue('masterData.wacc', response.WACC)
         setFieldValue('masterData.managementFee', response.managementFee)
         setFieldValue('masterData.costeLanzamientoAbogado', response.costeLanzamientoAbogado)
@@ -129,19 +146,43 @@ const submitAnalysis = async () => {
     const loader = $loading?.show()
 
     try {
+        // Crear el objeto brokerFee en el formato requerido
+        // Definir el tipo explícitamente para permitir índices de cadena
+        const brokerFeeFormatted: Record<string, { fee: number, cap: number }> = {};
+
+        // Si masterData.value existe y tiene brokerFee, formatear los datos
+        if (masterData.value?.brokerFee) {
+            masterData.value.brokerFee.forEach((item, index) => {
+                const tramoKey = item.tramo === 'En Adelante' ? (index + 1).toString() : item.tramo;
+                brokerFeeFormatted[tramoKey] = {
+                    fee: item.fee,
+                    cap: item.cap
+                };
+            });
+        }
+
+        // Construir los datos macro desde la estructura actual
+        const macroFormatted = masterData.value?.macro || [];
+
         const { data }: { data: ProjectById } = await fenlabApi.post('', {
             method: 'post',
             path: 'projects',
             body: {
                 name: name.value,
                 description: description.value,
-                // modelPosition: activeSelection.value,
                 modelType: modelType.value,
                 masterData: {
-                    wacc: wacc.value,
+                    macro: macroFormatted,
+                    WACC: wacc.value,
                     managementFee: managementFee.value,
                     costeLanzamientoAbogado: costeLanzamientoAbogado.value,
                     costeLanzamientoProcurador: costeLanzamientoProcurador.value,
+                    costeLanzamientoOtros: masterData.value?.costeLanzamientoOtros || 0,
+                    brokerFee: brokerFeeFormatted,
+                    // Incluir successFee solo si el modelo es NPL
+                    ...(modelType.value === 'NPL' && masterData.value?.successFee ? {
+                        successFee: masterData.value.successFee
+                    } : {})
                 },
             },
         })
@@ -165,17 +206,12 @@ const submitAnalysis = async () => {
         loader?.hide()
     }
 }
-
 </script>
 
 <template>
     <Dialog v-model:open="isDialogOpen">
         <DialogTrigger as-child>
-            <Button
-                class="gap-1"
-                variant="green"
-                size="sm"
-            >
+            <Button class="gap-1" variant="green" size="sm">
                 <PlusIcon class="w-4 h-4" />
 
                 Nuevo Análisis
@@ -193,53 +229,26 @@ const submitAnalysis = async () => {
             </DialogHeader>
 
             <div class="content">
-                <div
-                    v-show="step === 1"
-                    class="flex flex-col gap-10"
-                >
+                <div v-show="step === 1" class="flex flex-col gap-10">
                     <div class="space-y-2">
                         <Label for="name">Nombre proyecto</Label>
-                        <Input
-                            id="name"
-                            type="text"
-                            placeholder="Nombre proyecto"
-                            class="mt-2"
-                            v-model="name"
-                            :class="{ 'border-red-500': step1Errors.name }"
-                            required
-                            autofocus
-                            autocomplete="name"
-                        />
-                        <span
-                            v-if="step1Errors.name"
-                            class="text-red-500 text-sm"
-                        >{{ step1Errors.name }}</span>
+                        <Input id="name" type="text" placeholder="Nombre proyecto" class="mt-2" v-model="name"
+                            :class="{ 'border-red-500': step1Errors.name }" required autofocus autocomplete="name" />
+                        <span v-if="step1Errors.name" class="text-red-500 text-sm">{{ step1Errors.name }}</span>
                     </div>
 
                     <div class="space-y-2">
                         <Label for="description">Descripción</Label>
-                        <Textarea
-                            id="description"
-                            class="resize-none h-[112px]"
-                            placeholder="Descripción"
-                            v-model="description"
-                            :class="{ 'border-red-500': step1Errors.description }"
-                        />
-                        <span
-                            v-if="step1Errors.description"
-                            class="text-red-500 text-sm"
-                        >{{ step1Errors.description }}</span>
+                        <Textarea id="description" class="resize-none h-[112px]" placeholder="Descripción"
+                            v-model="description" :class="{ 'border-red-500': step1Errors.description }" />
+                        <span v-if="step1Errors.description" class="text-red-500 text-sm">{{ step1Errors.description
+                            }}</span>
                     </div>
                 </div>
 
-                <div
-                    v-show="step === 2"
-                    class="flex flex-col gap-6"
-                >
-                    <div
-                        role="button"
-                        class="flex items-center gap-4 p-3 bg-white rounded-sm opacity-50 cursor-not-allowed"
-                    >
+                <div v-show="step === 2" class="flex flex-col gap-6">
+                    <div role="button"
+                        class="flex items-center gap-4 p-3 bg-white rounded-sm opacity-50 cursor-not-allowed">
                         <ShoppingBagIcon />
 
                         <div class="text-grey">
@@ -253,12 +262,9 @@ const submitAnalysis = async () => {
                         </div>
                     </div>
 
-                    <div
-                        role="button"
-                        class="flex items-center gap-4 p-3 bg-white rounded-sm"
+                    <div role="button" class="flex items-center gap-4 p-3 bg-white rounded-sm"
                         :class="{ 'text-electric-green [&_div]:text-electric-green bg-blue-sky border border-electric-green': activeSelection === 'sale' }"
-                        @click="activeSelection = 'sale'"
-                    >
+                        @click="activeSelection = 'sale'">
                         <SellIcon />
 
                         <div class="text-grey">
@@ -273,14 +279,9 @@ const submitAnalysis = async () => {
                     </div>
                 </div>
 
-                <div
-                    v-show="step === 3"
-                    class="flex flex-col gap-6"
-                >
-                    <div
-                        role="button"
-                        class="flex items-center gap-4 p-3 bg-white rounded-sm opacity-50 cursor-not-allowed"
-                    >
+                <div v-show="step === 3" class="flex flex-col gap-6">
+                    <div role="button"
+                        class="flex items-center gap-4 p-3 bg-white rounded-sm opacity-50 cursor-not-allowed">
                         <Badge variant="secondary">
                             PL/SPL S
                         </Badge>
@@ -296,14 +297,9 @@ const submitAnalysis = async () => {
                         </div>
                     </div>
 
-                    <div
-                        role="button"
-                        class="flex items-center gap-4 p-3 bg-white rounded-sm opacity-50 cursor-not-allowed"
-                    >
-                        <Badge
-                            class="bg-[#EBE0F1]"
-                            variant="secondary"
-                        >
+                    <div role="button"
+                        class="flex items-center gap-4 p-3 bg-white rounded-sm opacity-50 cursor-not-allowed">
+                        <Badge class="bg-[#EBE0F1]" variant="secondary">
                             PL/SPL U
                         </Badge>
 
@@ -318,12 +314,9 @@ const submitAnalysis = async () => {
                         </div>
                     </div>
 
-                    <div
-                        role="button"
-                        class="flex items-center gap-4 p-3 bg-white rounded-sm"
+                    <div role="button" class="flex items-center gap-4 p-3 bg-white rounded-sm"
                         :class="{ 'text-electric-green [&_div]:text-electric-green bg-blue-sky border border-electric-green': modelType === 'NPL' }"
-                        @click="modelType = 'NPL'"
-                    >
+                        @click="modelType = 'NPL'">
                         <Badge variant="primary">
                             NPL
                         </Badge>
@@ -339,12 +332,9 @@ const submitAnalysis = async () => {
                         </div>
                     </div>
 
-                    <div
-                        role="button"
-                        class="flex items-center gap-4 p-3 bg-white rounded-sm"
+                    <div role="button" class="flex items-center gap-4 p-3 bg-white rounded-sm"
                         :class="{ 'text-electric-green [&_div]:text-electric-green bg-blue-sky border border-electric-green': modelType === 'REO' }"
-                        @click="modelType = 'REO'"
-                    >
+                        @click="modelType = 'REO'">
                         <Badge variant="default">
                             REO
                         </Badge>
@@ -362,10 +352,7 @@ const submitAnalysis = async () => {
                     </div>
                 </div>
 
-                <div
-                    v-show="step === 4"
-                    class="flex flex-col gap-2 max-h-[600px] overflow-y-auto"
-                >
+                <div v-show="step === 4" class="flex flex-col gap-2 max-h-[600px] overflow-y-auto">
                     <Tabs default-value="macro">
                         <TabsList class="grid grid-cols-3">
                             <TabsTrigger value="macro">
@@ -374,8 +361,8 @@ const submitAnalysis = async () => {
                             <TabsTrigger value="brokerGestion">
                                 Broker Fee
                             </TabsTrigger>
-                            <TabsTrigger value="brokerVenta">
-                                Fencia Fee
+                            <TabsTrigger value="successFee" v-if="modelType === 'NPL'">
+                                Success Fee
                             </TabsTrigger>
                         </TabsList>
                         <TabsContent value="macro">
@@ -390,11 +377,8 @@ const submitAnalysis = async () => {
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    <TableRow
-                                        class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]"
-                                        v-for="data in masterData?.macro"
-                                        :key="data.ano"
-                                    >
+                                    <TableRow class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]"
+                                        v-for="data in masterData?.macro" :key="data.ano">
                                         <TableCell class="!bg-[#ECECEC] font-bold">
                                             Año {{ data.ano }}
                                         </TableCell>
@@ -417,11 +401,8 @@ const submitAnalysis = async () => {
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    <TableRow
-                                        class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]"
-                                        v-for="data in masterData?.brokerFee.gestion"
-                                        :key="data.tramo"
-                                    >
+                                    <TableRow class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]"
+                                        v-for="data in masterData?.brokerFee" :key="data.tramo">
                                         <TableCell class="!bg-[#ECECEC] font-bold">
                                             {{ data.tramo }}
                                         </TableCell>
@@ -432,78 +413,54 @@ const submitAnalysis = async () => {
                                 </TableBody>
                             </Table>
                         </TabsContent>
-                        <TabsContent value="brokerVenta">
-                            <Table class="max-w-[520px]">
-                                <TableHeader>
-                                    <TableRow class="[&_th]:px-3 [&_th]:bg-white">
-                                        <TableHead class="!bg-[#ECECEC] z-50 relative">
-                                            Tramo
-                                        </TableHead>
-                                        <TableHead>Fee (%)</TableHead>
-                                        <TableHead>Cap</TableHead>
-                                        <TableHead>Hurdle</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    <TableRow
-                                        class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]"
-                                        v-for="data in masterData?.brokerFee.ventaCredito"
-                                        :key="data.tramo"
-                                    >
-                                        <TableCell class="!bg-[#ECECEC] font-bold">
-                                            {{ data.tramo }}
-                                        </TableCell>
-                                        <TableCell>{{ formatPercentage(data.fee) }}</TableCell>
-                                        <TableCell>{{ formatCurrency(data.cap) }}</TableCell>
-                                        <TableCell>{{ formatCurrency(data.hurdle ?? 0) }}</TableCell>
-                                    </TableRow>
-                                </TableBody>
-                            </Table>
+                        <TabsContent value="successFee" v-if="modelType === 'NPL'">
+                            <div class="mt-6">
+                                <Table class="max-w-[520px]">
+                                    <TableHeader>
+                                        <TableRow class="[&_th]:px-3 [&_th]:bg-white">
+                                            <TableHead class="!bg-[#ECECEC] z-50 relative">Tipo</TableHead>
+                                            <TableHead>Fee (%)</TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody v-if="masterData?.successFee">
+                                        <TableRow class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]">
+                                            <TableCell class="!bg-[#ECECEC] font-bold">Venta Crédito</TableCell>
+                                            <TableCell>{{ formatPercentage(masterData.successFee.ventaCredito) }}
+                                            </TableCell>
+                                        </TableRow>
+                                        <TableRow class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]">
+                                            <TableCell class="!bg-[#ECECEC] font-bold">Subasta o Remate</TableCell>
+                                            <TableCell>{{ formatPercentage(masterData.successFee.subastaOrRemate) }}
+                                            </TableCell>
+                                        </TableRow>
+                                        <TableRow class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]">
+                                            <TableCell class="!bg-[#ECECEC] font-bold">Repossessed Asset</TableCell>
+                                            <TableCell>{{ formatPercentage(masterData.successFee.repossessedAsset) }}
+                                            </TableCell>
+                                        </TableRow>
+                                    </TableBody>
+                                </Table>
+                            </div>
                         </TabsContent>
                     </Tabs>
 
                     <div class="space-y-2 mt-4">
                         <Label for="wacc">WACC - Coste de Capital (%)</Label>
-                        <Input
-                            id="wacc"
-                            type="text"
-                            placeholder="5"
-                            class="mt-2"
-                            v-percentage
-                            v-model="wacc"
-                            :class="{ 'border-red-500': step4Errors['masterData.wacc'] }"
-                            required
-                            autofocus
-                            autocomplete="wacc"
-                            min="0"
-                        />
-                        <span
-                            v-if="step4Errors['masterData.wacc']"
-                            class="text-red-500 text-sm"
-                        >
+                        <Input id="wacc" type="text" placeholder="5" class="mt-2" v-percentage v-model="wacc"
+                            :class="{ 'border-red-500': step4Errors['masterData.wacc'] }" required autofocus
+                            autocomplete="wacc" min="0" />
+                        <span v-if="step4Errors['masterData.wacc']" class="text-red-500 text-sm">
                             {{ step4Errors['masterData.wacc'] }}
                         </span>
                     </div>
 
                     <div class="space-y-2">
                         <Label for="managementFee">Management fee (%)</Label>
-                        <Input
-                            id="managementFee"
-                            type="text"
-                            placeholder="5"
-                            class="mt-2"
-                            v-percentage
+                        <Input id="managementFee" type="text" placeholder="5" class="mt-2" v-percentage
                             v-model="managementFee"
-                            :class="{ 'border-red-500': step4Errors['masterData.managementFee'] }"
-                            required
-                            autofocus
-                            autocomplete="managementFee"
-                            min="0"
-                        />
-                        <span
-                            v-if="step4Errors['masterData.managementFee']"
-                            class="text-red-500 text-sm"
-                        >
+                            :class="{ 'border-red-500': step4Errors['masterData.managementFee'] }" required autofocus
+                            autocomplete="managementFee" min="0" />
+                        <span v-if="step4Errors['masterData.managementFee']" class="text-red-500 text-sm">
                             {{ step4Errors['masterData.managementFee'] }}
                         </span>
                     </div>
@@ -512,46 +469,23 @@ const submitAnalysis = async () => {
                     <div class="flex gap-6">
                         <div class="space-y-2 w-full">
                             <Label for="costeLanzamientoAbogado">Abogado</Label>
-                            <Input
-                                id="costeLanzamientoAbogado"
-                                type="text"
-                                placeholder="500"
-                                class="mt-2"
-                                v-currency
+                            <Input id="costeLanzamientoAbogado" type="text" placeholder="500" class="mt-2" v-currency
                                 v-model="costeLanzamientoAbogado"
                                 :class="{ 'border-red-500': step4Errors['masterData.costeLanzamientoAbogado'] }"
-                                required
-                                autofocus
-                                autocomplete="costeLanzamientoAbogado"
-                                min="0"
-                            />
-                            <span
-                                v-if="step4Errors['masterData.costeLanzamientoAbogado']"
-                                class="text-red-500 text-sm"
-                            >
+                                required autofocus autocomplete="costeLanzamientoAbogado" min="0" />
+                            <span v-if="step4Errors['masterData.costeLanzamientoAbogado']" class="text-red-500 text-sm">
                                 {{ step4Errors['masterData.costeLanzamientoAbogado'] }}
                             </span>
                         </div>
 
                         <div class="space-y-2 w-full">
                             <Label for="costeLanzamientoProcurador">Procurador</Label>
-                            <Input
-                                id="costeLanzamientoProcurador"
-                                type="text"
-                                placeholder="500"
-                                class="mt-2"
-                                v-currency
+                            <Input id="costeLanzamientoProcurador" type="text" placeholder="500" class="mt-2" v-currency
                                 v-model="costeLanzamientoProcurador"
                                 :class="{ 'border-red-500': step4Errors['masterData.costeLanzamientoProcurador'] }"
-                                required
-                                autofocus
-                                autocomplete="costeLanzamientoProcurador"
-                                min="0"
-                            />
-                            <span
-                                v-if="step4Errors['masterData.costeLanzamientoProcurador']"
-                                class="text-red-500 text-sm"
-                            >
+                                required autofocus autocomplete="costeLanzamientoProcurador" min="0" />
+                            <span v-if="step4Errors['masterData.costeLanzamientoProcurador']"
+                                class="text-red-500 text-sm">
                                 {{ step4Errors['masterData.costeLanzamientoProcurador'] }}
                             </span>
                         </div>
@@ -560,36 +494,19 @@ const submitAnalysis = async () => {
             </div>
 
             <DialogFooter class="flex justify-between mt-10">
-                <Button
-                    class="w-full"
-                    :class="step === 1 ? 'invisible' : ''"
-                    variant="ghost"
-                    size="sm"
-                    @click="step--"
-                >
-                    <ArrowIcon
-                        class="sm:mr-2 text-blue"
-                        variant="left"
-                    />
+                <Button class="w-full" :class="step === 1 ? 'invisible' : ''" variant="ghost" size="sm" @click="step--">
+                    <ArrowIcon class="sm:mr-2 text-blue" variant="left" />
 
                     <span class="hidden sm:inline">
                         Anterior
                     </span>
                 </Button>
 
-                <Button
-                    class="w-full"
-                    size="sm"
-                    @click="handleNextStep"
-                >
+                <Button class="w-full" size="sm" @click="handleNextStep">
                     <span class="hidden sm:inline">
                         {{ step < 4 ? 'Siguiente' : 'Finalizar' }} </span>
 
-                    <ArrowIcon
-                        v-if="step < 4"
-                        class="sm:ml-2 text-white"
-                        variant="right"
-                    />
+                            <ArrowIcon v-if="step < 4" class="sm:ml-2 text-white" variant="right" />
                 </Button>
             </DialogFooter>
         </DialogContent>

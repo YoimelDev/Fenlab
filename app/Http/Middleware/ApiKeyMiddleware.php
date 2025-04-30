@@ -15,12 +15,12 @@ class ApiKeyMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Obtener la API Key desde los headers de la solicitud
-        $apiKey = $request->header('API_KEY');
-        // Verificar si la API Key existe en la base de datos
-        if (!$apiKey || $apiKey !== env('VITE_API_KEY')) {
-            return response()->json(['message' => 'Unauthorized'], 401);
-        }
+        // // Obtener la API Key desde los headers de la solicitud
+        // $apiKey = $request->header('API_KEY');
+        // // Verificar si la API Key existe en la base de datos
+        // if (!$apiKey || $apiKey !== env('VITE_API_KEY')) {
+        //     return response()->json(['message' => 'Unauthorized'], 401);
+        // }
 
         return $next($request);
     }
