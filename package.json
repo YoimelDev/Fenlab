@@ -47,6 +47,7 @@
         "vee-validate": "^4.15.0",
         "vue-loading-overlay": "^6.0",
         "vue-sidebar-menu": "^5.4.1",
+        "vue2-filters": "^0.14.0",
         "zod": "^3.24.1"
     }
 }

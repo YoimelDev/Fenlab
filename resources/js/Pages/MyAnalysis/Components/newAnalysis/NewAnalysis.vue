@@ -77,10 +77,10 @@ const step1Schema = z.object({
 
 const step4Schema = z.object({
     masterData: z.object({
-        wacc: z.number().min(0, 'WACC debe ser mayor o igual a 0'),
-        managementFee: z.number().min(0, 'Management fee debe ser mayor o igual a 0'),
-        costeLanzamientoAbogado: z.number().min(0, 'Coste de abogado debe ser mayor o igual a 0'),
-        costeLanzamientoProcurador: z.number().min(0, 'Coste de procurador debe ser mayor o igual a 0'),
+        wacc: z.coerce.number().min(0, 'WACC debe ser mayor o igual a 0'),
+        managementFee: z.coerce.number().min(0, 'Management fee debe ser mayor o igual a 0'),
+        costeLanzamientoAbogado: z.coerce.number().min(0, 'Coste de abogado debe ser mayor o igual a 0'),
+        costeLanzamientoProcurador: z.coerce.number().min(0, 'Coste de procurador debe ser mayor o igual a 0'),
     }),
 })
 
@@ -130,16 +130,21 @@ const getCompanyMasterData = async () => {
 
         console.log(response);
 
-        setFieldValue('masterData.wacc', response.WACC)
-        setFieldValue('masterData.managementFee', response.managementFee)
-        setFieldValue('masterData.costeLanzamientoAbogado', response.costeLanzamientoAbogado)
-        setFieldValue('masterData.costeLanzamientoProcurador', response.costeLanzamientoProcurador)
+        setFormValues(response)
     } catch {
         toast({
             variant: 'danger',
             title: '¡Ups! Algo salió mal.',
         })
     }
+}
+
+// Modifica la función setFieldValue para asegurar que los valores sean numéricos
+const setFormValues = (response: CompanyMasterData) => {
+    setFieldValue('masterData.wacc', Number(response.WACC))
+    setFieldValue('masterData.managementFee', Number(response.managementFee))
+    setFieldValue('masterData.costeLanzamientoAbogado', Number(response.costeLanzamientoAbogado))
+    setFieldValue('masterData.costeLanzamientoProcurador', Number(response.costeLanzamientoProcurador))
 }
 
 const submitAnalysis = async () => {
@@ -164,6 +169,13 @@ const submitAnalysis = async () => {
         // Construir los datos macro desde la estructura actual
         const macroFormatted = masterData.value?.macro || [];
 
+        // Convertir explícitamente a número
+        const abogadoValue = parseFloat(costeLanzamientoAbogado.value) || 0;
+        const procuradorValue = parseFloat(costeLanzamientoProcurador.value) || 0;
+        const waccValue = parseFloat(wacc.value) || 0;
+        const managementFeeValue = parseFloat(managementFee.value) || 0;
+
+        // Luego usar estos valores en el objeto de datos
         const { data }: { data: ProjectById } = await fenlabApi.post('', {
             method: 'post',
             path: 'projects',
@@ -173,10 +185,10 @@ const submitAnalysis = async () => {
                 modelType: modelType.value,
                 masterData: {
                     macro: macroFormatted,
-                    WACC: wacc.value,
-                    managementFee: managementFee.value,
-                    costeLanzamientoAbogado: costeLanzamientoAbogado.value,
-                    costeLanzamientoProcurador: costeLanzamientoProcurador.value,
+                    WACC: waccValue,
+                    managementFee: managementFeeValue,
+                    costeLanzamientoAbogado: abogadoValue,
+                    costeLanzamientoProcurador: procuradorValue,
                     costeLanzamientoOtros: masterData.value?.costeLanzamientoOtros || 0,
                     brokerFee: brokerFeeFormatted,
                     // Incluir successFee solo si el modelo es NPL
@@ -242,7 +254,7 @@ const submitAnalysis = async () => {
                         <Textarea id="description" class="resize-none h-[112px]" placeholder="Descripción"
                             v-model="description" :class="{ 'border-red-500': step1Errors.description }" />
                         <span v-if="step1Errors.description" class="text-red-500 text-sm">{{ step1Errors.description
-                            }}</span>
+                        }}</span>
                     </div>
                 </div>
 
@@ -387,6 +399,26 @@ const submitAnalysis = async () => {
                                     </TableRow>
                                 </TableBody>
                             </Table>
+                            <div class="space-y-2 mt-4">
+                                <Label for="wacc">WACC - Coste de Capital (%)</Label>
+                                <Input id="wacc" type="text" placeholder="5" class="mt-2" v-percentage v-model="wacc"
+                                    :class="{ 'border-red-500': step4Errors['masterData.wacc'] }" required autofocus
+                                    autocomplete="wacc" min="0" />
+                                <span v-if="step4Errors['masterData.wacc']" class="text-red-500 text-sm">
+                                    {{ step4Errors['masterData.wacc'] }}
+                                </span>
+                            </div>
+
+                            <div class="space-y-2">
+                                <Label for="managementFee">Management fee (%)</Label>
+                                <Input id="managementFee" type="text" placeholder="5" class="mt-2" v-percentage
+                                    v-model="managementFee"
+                                    :class="{ 'border-red-500': step4Errors['masterData.managementFee'] }" required
+                                    autofocus autocomplete="managementFee" min="0" />
+                                <span v-if="step4Errors['masterData.managementFee']" class="text-red-500 text-sm">
+                                    {{ step4Errors['masterData.managementFee'] }}
+                                </span>
+                            </div>
                         </TabsContent>
                         <TabsContent value="brokerGestion">
                             <Table class="max-w-[520px]">
@@ -434,7 +466,7 @@ const submitAnalysis = async () => {
                                             </TableCell>
                                         </TableRow>
                                         <TableRow class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]">
-                                            <TableCell class="!bg-[#ECECEC] font-bold">Repossessed Asset</TableCell>
+                                            <TableCell class="!bg-[#ECECEC] font-bold">Toma de posesión</TableCell>
                                             <TableCell>{{ formatPercentage(masterData.successFee.repossessedAsset) }}
                                             </TableCell>
                                         </TableRow>
@@ -444,26 +476,7 @@ const submitAnalysis = async () => {
                         </TabsContent>
                     </Tabs>
 
-                    <div class="space-y-2 mt-4">
-                        <Label for="wacc">WACC - Coste de Capital (%)</Label>
-                        <Input id="wacc" type="text" placeholder="5" class="mt-2" v-percentage v-model="wacc"
-                            :class="{ 'border-red-500': step4Errors['masterData.wacc'] }" required autofocus
-                            autocomplete="wacc" min="0" />
-                        <span v-if="step4Errors['masterData.wacc']" class="text-red-500 text-sm">
-                            {{ step4Errors['masterData.wacc'] }}
-                        </span>
-                    </div>
 
-                    <div class="space-y-2">
-                        <Label for="managementFee">Management fee (%)</Label>
-                        <Input id="managementFee" type="text" placeholder="5" class="mt-2" v-percentage
-                            v-model="managementFee"
-                            :class="{ 'border-red-500': step4Errors['masterData.managementFee'] }" required autofocus
-                            autocomplete="managementFee" min="0" />
-                        <span v-if="step4Errors['masterData.managementFee']" class="text-red-500 text-sm">
-                            {{ step4Errors['masterData.managementFee'] }}
-                        </span>
-                    </div>
 
                     <Label>Coste de lanzamiento</Label>
                     <div class="flex gap-6">

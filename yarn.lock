@@ -2382,6 +2382,11 @@ vue-tsc@^2.0.29:
     "@vue/server-renderer" "3.5.10"
     "@vue/shared" "3.5.10"
 
+vue2-filters@^0.14.0:
+  version "0.14.0"
+  resolved "https://registry.npmjs.org/vue2-filters/-/vue2-filters-0.14.0.tgz"
+  integrity sha512-2tFWC6gx1SVIr+6VXoufkL+bZa8Gn0/P09T/bnGjOEAGH1+eVT05bPm/VF2V/nL/HMyWkLdlvxKh9JNqpfFlyw==
+
 which@^2.0.1:
   version "2.0.2"
   resolved "https://registry.npmjs.org/which/-/which-2.0.2.tgz"

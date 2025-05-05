@@ -125,8 +125,8 @@ onMounted(() => {
                                 Tramo
                             </TableHead>
                             <TableHead>Fee (%)</TableHead>
-                            <TableHead>Cap</TableHead>
-                            <TableHead>Hurdle</TableHead>
+                            <TableHead>Desde</TableHead>
+                            <TableHead>Hasta</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -136,8 +136,8 @@ onMounted(() => {
                                 {{ data.tramo }}
                             </TableCell>
                             <TableCell>{{ formatPercentage(data.fee) }}</TableCell>
-                            <TableCell>{{ formatCurrency(data.cap) }}</TableCell>
                             <TableCell>{{ formatCurrency(data.hurdle ?? 0) }}</TableCell>
+                            <TableCell>{{ formatCurrency(data.cap ?? 0) }}</TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
@@ -168,6 +168,43 @@ onMounted(() => {
                             <TableCell>{{ formatPercentage(data.fee) }}</TableCell>
                             <TableCell>{{ formatCurrency(data.cap) }}</TableCell>
                             <TableCell>{{ formatCurrency(data.hurdle ?? 0) }}</TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            </div>
+
+            <div class="mt-10">
+                <h3 class="text-grey my-4">
+                    Success Fee
+                </h3>
+
+                <Table class="max-w-[520px]">
+                    <TableHeader>
+                        <TableRow class="[&_th]:px-3 [&_th]:bg-white">
+                            <TableHead class="!bg-[#ECECEC] z-50 relative">
+                                Tipo de operación
+                            </TableHead>
+                            <TableHead>Fee (%)</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        <TableRow class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]">
+                            <TableCell class="!bg-[#ECECEC] font-bold">
+                                Venta Crédito
+                            </TableCell>
+                            <TableCell>{{ formatPercentage(masterData?.successFee?.ventaCredito ?? 0) }}</TableCell>
+                        </TableRow>
+                        <TableRow class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]">
+                            <TableCell class="!bg-[#ECECEC] font-bold">
+                                Subasta/Remate
+                            </TableCell>
+                            <TableCell>{{ formatPercentage(masterData?.successFee?.subastaOrRemate ?? 0) }}</TableCell>
+                        </TableRow>
+                        <TableRow class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]">
+                            <TableCell class="!bg-[#ECECEC] font-bold">
+                                Toma de posesión
+                            </TableCell>
+                            <TableCell>{{ formatPercentage(masterData?.successFee?.repossessedAsset ?? 0) }}</TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
