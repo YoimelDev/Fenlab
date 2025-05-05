@@ -148,8 +148,8 @@ const postData = async () => {
                                                 Tramo
                                             </TableHead>
                                             <TableHead>Fee (%)</TableHead>
-                                            <TableHead>Cap</TableHead>
-                                            <TableHead>Hurdle</TableHead>
+                                            <TableHead>Desde</TableHead>
+                                            <TableHead>Hasta</TableHead>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
