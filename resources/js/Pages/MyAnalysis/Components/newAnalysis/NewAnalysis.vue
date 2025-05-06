@@ -170,10 +170,10 @@ const submitAnalysis = async () => {
         const macroFormatted = masterData.value?.macro || [];
 
         // Convertir explícitamente a número
-        const abogadoValue = parseFloat(costeLanzamientoAbogado.value) || 0;
-        const procuradorValue = parseFloat(costeLanzamientoProcurador.value) || 0;
-        const waccValue = parseFloat(wacc.value) || 0;
-        const managementFeeValue = parseFloat(managementFee.value) || 0;
+        const abogadoValue = parseFloat(String(costeLanzamientoAbogado.value)) || 0;
+        const procuradorValue = parseFloat(String(costeLanzamientoProcurador.value)) || 0;
+        const waccValue = parseFloat(String(wacc.value)) || 0;
+        const managementFeeValue = parseFloat(String(managementFee.value)) || 0;
 
         // Luego usar estos valores en el objeto de datos
         const { data }: { data: ProjectById } = await fenlabApi.post('', {

@@ -53,7 +53,15 @@ class MyPublicationsController extends Controller
     {
         $salesforceEmail = $request->session()->get('salesforceUser.email');
         try {
-            $request->merge(['email' => $salesforceEmail]);
+            // Pasar el email del usuario
+            $params = ['email' => $salesforceEmail];
+            
+            // Añadir companyName si está presente en la solicitud
+            if ($request->has('companyName')) {
+                $params['companyName'] = $request->companyName;
+            }
+            
+            $request->merge($params);
             $response = $this->salesforceController->getPublishedOpportunities($request);
             $data = $response->getData(true);
 
@@ -79,7 +87,15 @@ class MyPublicationsController extends Controller
     {
         $salesforceEmail = $request->session()->get('salesforceUser.email');
         try {
-            $request->merge(['email' => $salesforceEmail]);
+            // Pasar el email del usuario
+            $params = ['email' => $salesforceEmail];
+            
+            // Añadir companyName si está presente en la solicitud
+            if ($request->has('companyName')) {
+                $params['companyName'] = $request->companyName;
+            }
+            
+            $request->merge($params);
             $response = $this->salesforceController->getPendingApproval($request);
             $data = $response->getData(true);
 
@@ -105,7 +121,15 @@ class MyPublicationsController extends Controller
     {
         $salesforceEmail = $request->session()->get('salesforceUser.email');
         try {
-            $request->merge(['email' => $salesforceEmail]);
+            // Pasar el email del usuario
+            $params = ['email' => $salesforceEmail];
+            
+            // Añadir companyName si está presente en la solicitud
+            if ($request->has('companyName')) {
+                $params['companyName'] = $request->companyName;
+            }
+            
+            $request->merge($params);
             $response = $this->salesforceController->getPendingPBC($request);
             $data = $response->getData(true);
 
@@ -131,7 +155,15 @@ class MyPublicationsController extends Controller
     {
         $salesforceEmail = $request->session()->get('salesforceUser.email');
         try {
-            $request->merge(['email' => $salesforceEmail]);
+            // Pasar el email del usuario
+            $params = ['email' => $salesforceEmail];
+            
+            // Añadir companyName si está presente en la solicitud
+            if ($request->has('companyName')) {
+                $params['companyName'] = $request->companyName;
+            }
+            
+            $request->merge($params);
             $response = $this->salesforceController->getPendingNotary($request);
             $data = $response->getData(true);
 
@@ -157,7 +189,17 @@ class MyPublicationsController extends Controller
     {
         $salesforceEmail = $request->session()->get('salesforceUser.email');
         try {
-            $request->merge(['email' => $salesforceEmail]);
+            // Pasar el email del usuario
+            $params = ['email' => $salesforceEmail];
+            
+            // Añadir companyName si está presente en la solicitud
+            if ($request->has('companyName')) {
+                $params['companyName'] = $request->companyName;
+            }
+            
+            $request->merge($params);
+
+            
             $response = $this->salesforceController->getClosedAuctions($request);
             $data = $response->getData(true);
 

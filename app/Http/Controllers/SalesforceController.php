@@ -110,9 +110,18 @@ class SalesforceController extends Controller
     // Auction related endpoints
     public function getPendingApproval(Request $request): JsonResponse
     {
+        $data = [
+            'email' => $request->email
+        ];
+        
+        // Añadir companyName solo si está presente en la solicitud
+        if ($request->has('companyName')) {
+            $data['companyName'] = $request->companyName;
+        }
+        
         return $this->makeApiRequest(
             '/services/apexrest/company/fenlab/pending-approval',
-            ['email' => $request->email],
+            $data,
             'get'
         );
     }
@@ -127,9 +136,18 @@ class SalesforceController extends Controller
 
     public function getClosedAuctions(Request $request): JsonResponse
     {
+        $data = [
+            'email' => $request->email
+        ];
+        
+        // Añadir companyName solo si está presente en la solicitud
+        if ($request->has('companyName')) {
+            $data['companyName'] = $request->companyName;
+        }
+        
         return $this->makeApiRequest(
             '/services/apexrest/company/fenlab/closedAuctions',
-            ['email' => $request->email],
+            $data,
             'get'
         );
     }
@@ -137,9 +155,18 @@ class SalesforceController extends Controller
     // PBC related endpoints
     public function getPendingPBC(Request $request): JsonResponse
     {
+        $data = [
+            'email' => $request->email
+        ];
+        
+        // Añadir companyName solo si está presente en la solicitud
+        if ($request->has('companyName')) {
+            $data['companyName'] = $request->companyName;
+        }
+        
         return $this->makeApiRequest(
             '/services/apexrest/company/fenlab/pendingPBC',
-            ['email' => $request->email],
+            $data,
             'get'
         );
     }
@@ -155,9 +182,18 @@ class SalesforceController extends Controller
     // Notary related endpoints
     public function getPendingNotary(Request $request): JsonResponse
     {
+        $data = [
+            'email' => $request->email
+        ];
+        
+        // Añadir companyName solo si está presente en la solicitud
+        if ($request->has('companyName')) {
+            $data['companyName'] = $request->companyName;
+        }
+        
         return $this->makeApiRequest(
             '/services/apexrest/company/fenlab/pendingNotary',
-            ['email' => $request->email],
+            $data,
             'get'
         );
     }
@@ -200,9 +236,18 @@ class SalesforceController extends Controller
 
     public function getPublishedOpportunities(Request $request): JsonResponse
     {
+        $data = [
+            'email' => $request->email
+        ];
+        
+        // Añadir companyName solo si está presente en la solicitud
+        if ($request->has('companyName')) {
+            $data['companyName'] = $request->companyName;
+        }
+        
         return $this->makeApiRequest(
             '/services/apexrest/opportunity/fenlab/opened',
-            ['email' => $request->email],
+            $data,
             'get'
         );
     }
