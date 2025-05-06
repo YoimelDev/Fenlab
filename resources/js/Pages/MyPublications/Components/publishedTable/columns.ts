@@ -10,6 +10,8 @@ import { PageProps } from "@/types";
 const page = usePage<PageProps>();
 const isAdmin = page.props?.auth?.salesforceUser?.rols === "Admin";
 
+console.log(page.props?.auth?.salesforceUser);
+
 const baseColumns: ColumnDef<Auction>[] = [
     {
         header: "ID FENCIA",

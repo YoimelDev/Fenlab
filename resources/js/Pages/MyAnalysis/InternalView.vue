@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, ref, computed } from 'vue'
+import { inject, ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { Head, Link, router, usePage } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 
@@ -43,6 +43,40 @@ const filesData = ref<{ file: File, name: string, size: number, type: string, la
 const dropZoneRef = ref<HTMLDivElement>()
 const fileInput = ref<HTMLInputElement | null>(null)
 const fileError = ref('')
+const refreshInterval = ref<number | null>(null)
+
+// Función para refrescar la página
+const refreshPage = () => {
+    // Solo refrescar si el análisis está en curso o si estamos en la pestaña de análisis
+    if (props.project.status === 'Análisis en curso' || activeTab.value === 'analysis') {
+        // El método reload() no acepta options de preserveScroll/preserveState
+        // Usar visit() en su lugar
+        router.visit(window.location.href, {
+            preserveScroll: true,
+            preserveState: false
+        })
+    }
+}
+
+// Configurar el intervalo de refresco cuando se monta el componente
+onMounted(() => {
+    // Refrescar cada 5 minutos (300000 ms)
+    refreshInterval.value = window.setInterval(refreshPage, 120000) // Cambiar a 300000 para 5 minutos
+
+    // También podríamos ajustar el intervalo según el estado
+    if (props.project.status === 'Análisis en curso') {
+        // Si el análisis está en curso, refrescar más frecuentemente (por ejemplo, cada 2 minutos)
+        clearInterval(refreshInterval.value)
+        refreshInterval.value = window.setInterval(refreshPage, 120000) // Cambiar a 120000 para 2 minutos
+    }
+})
+
+// Limpiar el intervalo cuando el componente se desmonta para evitar fugas de memoria
+onBeforeUnmount(() => {
+    if (refreshInterval.value !== null) {
+        clearInterval(refreshInterval.value)
+    }
+})
 
 const steps = [
     {

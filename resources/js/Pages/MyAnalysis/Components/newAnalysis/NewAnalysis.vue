@@ -254,7 +254,7 @@ const submitAnalysis = async () => {
                         <Textarea id="description" class="resize-none h-[112px]" placeholder="Descripción"
                             v-model="description" :class="{ 'border-red-500': step1Errors.description }" />
                         <span v-if="step1Errors.description" class="text-red-500 text-sm">{{ step1Errors.description
-                        }}</span>
+                            }}</span>
                     </div>
                 </div>
 
@@ -419,6 +419,34 @@ const submitAnalysis = async () => {
                                     {{ step4Errors['masterData.managementFee'] }}
                                 </span>
                             </div>
+
+                            <Label>Coste de lanzamiento</Label>
+                            <div class="flex gap-6">
+                                <div class="space-y-2 w-full">
+                                    <Label for="costeLanzamientoAbogado">Abogado</Label>
+                                    <Input id="costeLanzamientoAbogado" type="text" placeholder="500" class="mt-2"
+                                        v-currency v-model="costeLanzamientoAbogado"
+                                        :class="{ 'border-red-500': step4Errors['masterData.costeLanzamientoAbogado'] }"
+                                        required autofocus autocomplete="costeLanzamientoAbogado" min="0" />
+                                    <span v-if="step4Errors['masterData.costeLanzamientoAbogado']"
+                                        class="text-red-500 text-sm">
+                                        {{ step4Errors['masterData.costeLanzamientoAbogado'] }}
+                                    </span>
+                                </div>
+
+                                <div class="space-y-2 w-full">
+                                    <Label for="costeLanzamientoProcurador">Procurador</Label>
+                                    <Input id="costeLanzamientoProcurador" type="text" placeholder="500" class="mt-2"
+                                        v-currency v-model="costeLanzamientoProcurador"
+                                        :class="{ 'border-red-500': step4Errors['masterData.costeLanzamientoProcurador'] }"
+                                        required autofocus autocomplete="costeLanzamientoProcurador" min="0" />
+                                    <span v-if="step4Errors['masterData.costeLanzamientoProcurador']"
+                                        class="text-red-500 text-sm">
+                                        {{ step4Errors['masterData.costeLanzamientoProcurador'] }}
+                                    </span>
+                                </div>
+                            </div>
+
                         </TabsContent>
                         <TabsContent value="brokerGestion">
                             <Table class="max-w-[520px]">
@@ -428,8 +456,8 @@ const submitAnalysis = async () => {
                                             Tramo
                                         </TableHead>
                                         <TableHead>Fee (%)</TableHead>
-                                        <TableHead>Cap</TableHead>
-                                        <TableHead>Hurdle</TableHead>
+                                        <TableHead>Desde</TableHead>
+                                        <TableHead>Hasta</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -439,8 +467,8 @@ const submitAnalysis = async () => {
                                             {{ data.tramo }}
                                         </TableCell>
                                         <TableCell>{{ formatPercentage(data.fee) }}</TableCell>
-                                        <TableCell>{{ formatCurrency(data.cap) }}</TableCell>
-                                        <TableCell>{{ formatCurrency(data.hurdle ?? 0) }}</TableCell>
+                                        <TableCell>{{ data.hurdle ? formatCurrency(data.hurdle) : "-" }}</TableCell>
+                                        <TableCell>{{ data.cap ? formatCurrency(data.cap) : "-" }}</TableCell>
                                     </TableRow>
                                 </TableBody>
                             </Table>
@@ -475,34 +503,6 @@ const submitAnalysis = async () => {
                             </div>
                         </TabsContent>
                     </Tabs>
-
-
-
-                    <Label>Coste de lanzamiento</Label>
-                    <div class="flex gap-6">
-                        <div class="space-y-2 w-full">
-                            <Label for="costeLanzamientoAbogado">Abogado</Label>
-                            <Input id="costeLanzamientoAbogado" type="text" placeholder="500" class="mt-2" v-currency
-                                v-model="costeLanzamientoAbogado"
-                                :class="{ 'border-red-500': step4Errors['masterData.costeLanzamientoAbogado'] }"
-                                required autofocus autocomplete="costeLanzamientoAbogado" min="0" />
-                            <span v-if="step4Errors['masterData.costeLanzamientoAbogado']" class="text-red-500 text-sm">
-                                {{ step4Errors['masterData.costeLanzamientoAbogado'] }}
-                            </span>
-                        </div>
-
-                        <div class="space-y-2 w-full">
-                            <Label for="costeLanzamientoProcurador">Procurador</Label>
-                            <Input id="costeLanzamientoProcurador" type="text" placeholder="500" class="mt-2" v-currency
-                                v-model="costeLanzamientoProcurador"
-                                :class="{ 'border-red-500': step4Errors['masterData.costeLanzamientoProcurador'] }"
-                                required autofocus autocomplete="costeLanzamientoProcurador" min="0" />
-                            <span v-if="step4Errors['masterData.costeLanzamientoProcurador']"
-                                class="text-red-500 text-sm">
-                                {{ step4Errors['masterData.costeLanzamientoProcurador'] }}
-                            </span>
-                        </div>
-                    </div>
                 </div>
             </div>
 

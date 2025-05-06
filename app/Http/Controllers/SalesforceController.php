@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class SalesforceController extends Controller
 {
@@ -41,14 +42,13 @@ class SalesforceController extends Controller
         $urlWithParams = $apiUrl . "/services/oauth2/token?grant_type=password&client_id=" . $clientId . "&client_secret=" . $clientSecret . "&username=" . $apiUsername . "&password=" . $apiPassword;
 
         $response = Http::post($urlWithParams);
-
+        
         if (!$response->successful()) {
             throw new \RuntimeException('Failed to obtain Salesforce token');
         }
 
         $data = $response->json();
         $issued_at = Carbon::createFromTimestamp($data["issued_at"] / 1000);
-        
         ApiToken::updateOrCreate(
             ['type' => self::TOKEN_TYPE],
             [

@@ -75,7 +75,7 @@ const syncBrokerFeeTiersValues = () => {
     // Sincronizamos los hurdles con los caps del tramo anterior
     for (let i = 1; i < sortedTiers.length; i++) {
         // Si es el último tramo "En Adelante", no necesita hurdle
-        if (sortedTiers[i].tramo.includes('Adelante')) continue;
+        // if (sortedTiers[i].tramo.includes('Adelante')) continue;
 
         // Asignar el cap del tramo anterior como hurdle de este tramo
         sortedTiers[i].hurdle = sortedTiers[i - 1].cap;
@@ -314,13 +314,16 @@ watch(
                                             <TableCell>
                                                 <input v-currency v-model="data.hurdle"
                                                     class="w-full h-full outline-none hover:bg-gray-100"
-                                                    :disabled="index > 0 || data.tramo.includes('Adelante')"
+                                                    :disabled="index >= 0 || data.tramo.includes('Adelante')"
                                                     :title="index > 0 ? 'Este valor se sincroniza automáticamente' :
                                                         data.tramo.includes('Adelante') ? 'No aplicable para este tramo' : ''">
                                             </TableCell>
                                             <TableCell>
                                                 <input v-currency v-model="data.cap"
-                                                    class="w-full h-full outline-none hover:bg-gray-100">
+                                                    :disabled="data.tramo.includes('Adelante')"
+                                                    class="w-full h-full outline-none hover:bg-gray-100"
+                                                    :title="data.tramo.includes('Adelante') ? 'No aplicable para este tramo' : ''"
+                                                    :value="data.tramo.includes('Adelante') ? 0 : data.cap">
                                             </TableCell>
                                         </TableRow>
                                     </TableBody>

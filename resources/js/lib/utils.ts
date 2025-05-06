@@ -1,22 +1,26 @@
-import { type ClassValue, clsx } from 'clsx'
-import { twMerge } from 'tailwind-merge'
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 
-import type { Updater } from '@tanstack/vue-table'
-import type { Ref } from 'vue'
+import type { Updater } from "@tanstack/vue-table";
+import type { Ref } from "vue";
 
 export function cn(...inputs: ClassValue[]) {
-    return twMerge(clsx(inputs))
+    return twMerge(clsx(inputs));
 }
 
-export function valueUpdater<T extends Updater<unknown>>(updaterOrValue: T, ref: Ref) {
-    ref.value = typeof updaterOrValue === 'function'
-        ? updaterOrValue(ref.value)
-        : updaterOrValue
+export function valueUpdater<T extends Updater<unknown>>(
+    updaterOrValue: T,
+    ref: Ref,
+) {
+    ref.value =
+        typeof updaterOrValue === "function"
+            ? updaterOrValue(ref.value)
+            : updaterOrValue;
 }
 
 export function getParamValue(param: string): string {
-    const urlParams = new URLSearchParams(window.location.search)
-    return urlParams.get(param) || ''
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param) || "";
 }
 
 /**
@@ -29,16 +33,16 @@ export function getParamValue(param: string): string {
  * formatPercentage(-1) // returns "-1,00%"
  */
 export function formatPercentage(value: number | string): string {
-    const numValue = typeof value === 'string' ? parseFloat(value) : value
-    const multiplier = 0.01
+    const numValue = typeof value === "string" ? parseFloat(value) : value;
+    const multiplier = 0.01;
     // Solo agrupar si el valor original es de 5 cifras o más
-    const grouping = Math.abs(numValue) >= 10000
-    return (numValue * multiplier).toLocaleString('es-ES', {
-        style: 'percent',
+    const grouping = Math.abs(numValue) >= 10000;
+    return (numValue * multiplier).toLocaleString("es-ES", {
+        style: "percent",
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
         useGrouping: grouping,
-    })
+    });
 }
 
 /**
@@ -50,15 +54,15 @@ export function formatPercentage(value: number | string): string {
  * formatCurrency(1000) // returns "1.000,00 €"
  */
 export function formatCurrency(value: number | string): string {
-    const numValue = typeof value === 'string' ? parseFloat(value) : value
-    const grouping = Math.abs(numValue) >= 10000
-    return numValue.toLocaleString('es-ES', {
-        style: 'currency',
-        currency: 'EUR',
+    const numValue = typeof value === "string" ? parseFloat(value) : value;
+    const grouping = Math.abs(numValue) >= 10000;
+    return numValue.toLocaleString("es-ES", {
+        style: "currency",
+        currency: "EUR",
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
         useGrouping: grouping,
-    })
+    });
 }
 
 /**
@@ -72,11 +76,11 @@ export function formatCurrency(value: number | string): string {
  * formatNumber("1234.5") // returns "1.234,50"
  */
 export function formatNumber(value: number | string): string {
-    const numValue = typeof value === 'string' ? parseFloat(value) : value
-    const grouping = Math.abs(numValue) >= 10000
-    return numValue.toLocaleString('es-ES', {
+    const numValue = typeof value === "string" ? parseFloat(value) : value;
+    const grouping = Math.abs(numValue) >= 10000;
+    return numValue.toLocaleString("es-ES", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
         useGrouping: grouping,
-    })
+    });
 }

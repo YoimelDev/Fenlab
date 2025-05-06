@@ -136,8 +136,8 @@ onMounted(() => {
                                 {{ data.tramo }}
                             </TableCell>
                             <TableCell>{{ formatPercentage(data.fee) }}</TableCell>
-                            <TableCell>{{ formatCurrency(data.hurdle ?? 0) }}</TableCell>
-                            <TableCell>{{ formatCurrency(data.cap ?? 0) }}</TableCell>
+                            <TableCell>{{ data.hurdle ? formatCurrency(data.hurdle) : "-" }}</TableCell>
+                            <TableCell>{{ data.cap ? formatCurrency(data.cap ?? 0) : "-" }}</TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
@@ -155,8 +155,8 @@ onMounted(() => {
                                 Tramo
                             </TableHead>
                             <TableHead>Fee (%)</TableHead>
-                            <TableHead>Cap</TableHead>
-                            <TableHead>Hurdle</TableHead>
+                            <TableHead>Desde</TableHead>
+                            <TableHead>Hasta</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -166,8 +166,8 @@ onMounted(() => {
                                 {{ data.tramo }}
                             </TableCell>
                             <TableCell>{{ formatPercentage(data.fee) }}</TableCell>
-                            <TableCell>{{ formatCurrency(data.cap) }}</TableCell>
-                            <TableCell>{{ formatCurrency(data.hurdle ?? 0) }}</TableCell>
+                            <TableCell>{{ data.hurdle ? formatCurrency(data.hurdle) : "-" }}</TableCell>
+                            <TableCell>{{ data.cap ? formatCurrency(data.cap) : "-" }}</TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
