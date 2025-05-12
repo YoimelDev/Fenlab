@@ -13,7 +13,7 @@ const isAdmin = page.props?.auth?.salesforceUser?.rols === "Admin";
 const baseColumns: ColumnDef<PendingNotary>[] = [
     {
         header: "ID FENCIA",
-        accessorKey: "fenlabId",
+        accessorKey: "productReference",
     },
     {
         header: "NOMBRE PROYECTO",

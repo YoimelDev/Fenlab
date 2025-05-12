@@ -12,7 +12,7 @@ const isAdmin = page.props?.auth?.salesforceUser?.rols === "Admin";
 const baseColumns: ColumnDef<PendingPBC>[] = [
     {
         header: "ID FENCIA",
-        accessorKey: "fenlabId",
+        accessorKey: "productReference",
     },
     {
         header: "NOMBRE PROYECTO",

@@ -46,8 +46,10 @@ interface Step4 {
     masterData: {
         wacc: number
         managementFee: number
-        costeLanzamientoAbogado: number
-        costeLanzamientoProcurador: number
+        costeLanzamientoAbogado?: number
+        costeLanzamientoProcurador?: number
+        costeHipotecariaAbogado?: number
+        costeHipotecariaProcurador?: number
     }
 }
 
@@ -79,8 +81,16 @@ const step4Schema = z.object({
     masterData: z.object({
         wacc: z.coerce.number().min(0, 'WACC debe ser mayor o igual a 0'),
         managementFee: z.coerce.number().min(0, 'Management fee debe ser mayor o igual a 0'),
-        costeLanzamientoAbogado: z.coerce.number().min(0, 'Coste de abogado debe ser mayor o igual a 0'),
-        costeLanzamientoProcurador: z.coerce.number().min(0, 'Coste de procurador debe ser mayor o igual a 0'),
+        ...(modelType.value === 'REO'
+            ? {
+                costeLanzamientoAbogado: z.coerce.number().min(0, 'Coste de abogado debe ser mayor o igual a 0'),
+                costeLanzamientoProcurador: z.coerce.number().min(0, 'Coste de procurador debe ser mayor o igual a 0'),
+            }
+            : {
+                costeHipotecariaAbogado: z.coerce.number().min(0, 'Coste de abogado debe ser mayor o igual a 0'),
+                costeHipotecariaProcurador: z.coerce.number().min(0, 'Coste de procurador debe ser mayor o igual a 0'),
+            }
+        ),
     }),
 })
 
@@ -99,6 +109,8 @@ const [wacc] = fieldStep4('masterData.wacc')
 const [managementFee] = fieldStep4('masterData.managementFee')
 const [costeLanzamientoAbogado] = fieldStep4('masterData.costeLanzamientoAbogado')
 const [costeLanzamientoProcurador] = fieldStep4('masterData.costeLanzamientoProcurador')
+const [costeHipotecariaAbogado] = fieldStep4('masterData.costeHipotecariaAbogado')
+const [costeHipotecariaProcurador] = fieldStep4('masterData.costeHipotecariaProcurador')
 
 const handleNextStep = () => {
     const steps = {
@@ -143,8 +155,14 @@ const getCompanyMasterData = async () => {
 const setFormValues = (response: CompanyMasterData) => {
     setFieldValue('masterData.wacc', Number(response.WACC))
     setFieldValue('masterData.managementFee', Number(response.managementFee))
-    setFieldValue('masterData.costeLanzamientoAbogado', Number(response.costeLanzamientoAbogado))
-    setFieldValue('masterData.costeLanzamientoProcurador', Number(response.costeLanzamientoProcurador))
+
+    if (modelType.value === 'REO') {
+        setFieldValue('masterData.costeLanzamientoAbogado', Number(response.costeLanzamientoAbogado || 0))
+        setFieldValue('masterData.costeLanzamientoProcurador', Number(response.costeLanzamientoProcurador || 0))
+    } else { // NPL
+        setFieldValue('masterData.costeHipotecariaAbogado', Number(response.costeHipotecariaAbogado || 0))
+        setFieldValue('masterData.costeHipotecariaProcurador', Number(response.costeHipotecariaProcurador || 0))
+    }
 }
 
 const submitAnalysis = async () => {
@@ -187,8 +205,13 @@ const submitAnalysis = async () => {
                     macro: macroFormatted,
                     WACC: waccValue,
                     managementFee: managementFeeValue,
-                    costeLanzamientoAbogado: abogadoValue,
-                    costeLanzamientoProcurador: procuradorValue,
+                    ...(modelType.value === 'REO' ? {
+                        costeLanzamientoAbogado: parseFloat(String(costeLanzamientoAbogado.value)) || 0,
+                        costeLanzamientoProcurador: parseFloat(String(costeLanzamientoProcurador.value)) || 0,
+                    } : {
+                        costeHipotecariaAbogado: parseFloat(String(costeHipotecariaAbogado.value)) || 0,
+                        costeHipotecariaProcurador: parseFloat(String(costeHipotecariaProcurador.value)) || 0,
+                    }),
                     costeLanzamientoOtros: masterData.value?.costeLanzamientoOtros || 0,
                     brokerFee: brokerFeeFormatted,
                     // Incluir successFee solo si el modelo es NPL
@@ -420,9 +443,9 @@ const submitAnalysis = async () => {
                                 </span>
                             </div>
 
-                            <Label>Coste de lanzamiento</Label>
+                            <Label>{{ modelType === 'REO' ? 'Coste de lanzamiento' : 'Coste hipotecaria' }}</Label>
                             <div class="flex gap-6">
-                                <div class="space-y-2 w-full">
+                                <div class="space-y-2 w-full" v-if="modelType === 'REO'">
                                     <Label for="costeLanzamientoAbogado">Abogado</Label>
                                     <Input id="costeLanzamientoAbogado" type="text" placeholder="500" class="mt-2"
                                         v-currency v-model="costeLanzamientoAbogado"
@@ -434,7 +457,19 @@ const submitAnalysis = async () => {
                                     </span>
                                 </div>
 
-                                <div class="space-y-2 w-full">
+                                <div class="space-y-2 w-full" v-if="modelType === 'NPL'">
+                                    <Label for="costeHipotecariaAbogado">Abogado</Label>
+                                    <Input id="costeHipotecariaAbogado" type="text" placeholder="500" class="mt-2"
+                                        v-currency v-model="costeHipotecariaAbogado"
+                                        :class="{ 'border-red-500': step4Errors['masterData.costeHipotecariaAbogado'] }"
+                                        required autofocus autocomplete="costeHipotecariaAbogado" min="0" />
+                                    <span v-if="step4Errors['masterData.costeHipotecariaAbogado']"
+                                        class="text-red-500 text-sm">
+                                        {{ step4Errors['masterData.costeHipotecariaAbogado'] }}
+                                    </span>
+                                </div>
+
+                                <div class="space-y-2 w-full" v-if="modelType === 'REO'">
                                     <Label for="costeLanzamientoProcurador">Procurador</Label>
                                     <Input id="costeLanzamientoProcurador" type="text" placeholder="500" class="mt-2"
                                         v-currency v-model="costeLanzamientoProcurador"
@@ -443,6 +478,18 @@ const submitAnalysis = async () => {
                                     <span v-if="step4Errors['masterData.costeLanzamientoProcurador']"
                                         class="text-red-500 text-sm">
                                         {{ step4Errors['masterData.costeLanzamientoProcurador'] }}
+                                    </span>
+                                </div>
+
+                                <div class="space-y-2 w-full" v-if="modelType === 'NPL'">
+                                    <Label for="costeHipotecariaProcurador">Procurador</Label>
+                                    <Input id="costeHipotecariaProcurador" type="text" placeholder="500" class="mt-2"
+                                        v-currency v-model="costeHipotecariaProcurador"
+                                        :class="{ 'border-red-500': step4Errors['masterData.costeHipotecariaProcurador'] }"
+                                        required autofocus autocomplete="costeHipotecariaProcurador" min="0" />
+                                    <span v-if="step4Errors['masterData.costeHipotecariaProcurador']"
+                                        class="text-red-500 text-sm">
+                                        {{ step4Errors['masterData.costeHipotecariaProcurador'] }}
                                     </span>
                                 </div>
                             </div>
