@@ -175,7 +175,18 @@ const submitAnalysis = async () => {
 
         // Si masterData.value existe y tiene brokerFee, formatear los datos
         if (masterData.value?.brokerFee) {
-            masterData.value.brokerFee.forEach((item, index) => {
+            const brokerFeeData = [...masterData.value.brokerFee];
+
+            // Asegurar que el último tramo siempre tenga un cap
+            if (brokerFeeData.length > 0) {
+                const lastIndex = brokerFeeData.length - 1;
+                if (brokerFeeData[lastIndex].tramo === 'En Adelante' && !brokerFeeData[lastIndex].cap) {
+                    // Asignar un valor muy alto como cap para el último tramo si no tiene uno
+                    brokerFeeData[lastIndex].cap = 999999999999;
+                }
+            }
+
+            brokerFeeData.forEach((item, index) => {
                 const tramoKey = item.tramo === 'En Adelante' ? (index + 1).toString() : item.tramo;
                 brokerFeeFormatted[tramoKey] = {
                     fee: item.fee,
@@ -277,7 +288,7 @@ const submitAnalysis = async () => {
                         <Textarea id="description" class="resize-none h-[112px]" placeholder="Descripción"
                             v-model="description" :class="{ 'border-red-500': step1Errors.description }" />
                         <span v-if="step1Errors.description" class="text-red-500 text-sm">{{ step1Errors.description
-                            }}</span>
+                        }}</span>
                     </div>
                 </div>
 
