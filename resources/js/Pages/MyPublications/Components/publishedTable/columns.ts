@@ -28,7 +28,11 @@ const baseColumns: ColumnDef<Auction>[] = [
             const price = row.getValue() as number;
 
             if (price) {
-                return h("p", { class: "font-medium" }, formatCurrency(price));
+                return h(
+                    "p",
+                    { class: "font-medium text-right" },
+                    formatCurrency(price),
+                );
             }
             return h("p", { class: "font-medium" }, "-");
         },
@@ -40,14 +44,23 @@ const baseColumns: ColumnDef<Auction>[] = [
             const price = row.getValue() as number;
 
             if (price) {
-                return h("p", { class: "font-medium" }, formatCurrency(price));
+                return h(
+                    "p",
+                    { class: "font-medium text-right" },
+                    formatCurrency(price),
+                );
             }
             return h("p", { class: "font-medium" }, "-");
         },
     },
     {
-        header: "Ofertas ",
+        header: "Ofertas",
         accessorKey: "numberOfBids",
+        cell: (row) => {
+            const value = row.getValue() as number;
+
+            return h("p", value > 0 ? value.toString() : "-");
+        },
     },
     {
         header: "Mejor oferta",
@@ -77,11 +90,16 @@ const baseColumns: ColumnDef<Auction>[] = [
         header: "ESTADO",
         accessorKey: "stage",
         cell: (row) => {
-            const stage = row.getValue() as BadgeMode;
+            const numberOfBids = row.row.original.numberOfBids as number;
+            const hasOffers = numberOfBids > 0;
+
+            const statusLabel = hasOffers ? "CON OFERTA" : "SIN OFERTA";
+            const badgeVariant = hasOffers ? "success" : "pending"; // Ajusta según tu `badgeMap`
+
             return h(
                 "div",
                 { class: "font-medium" },
-                h(Badge, { variant: badgeMap[stage] }, stage),
+                h(Badge, { variant: badgeVariant }, statusLabel),
             );
         },
     },

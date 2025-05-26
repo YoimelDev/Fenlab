@@ -288,7 +288,7 @@ const submitAnalysis = async () => {
                         <Textarea id="description" class="resize-none h-[112px]" placeholder="Descripción"
                             v-model="description" :class="{ 'border-red-500': step1Errors.description }" />
                         <span v-if="step1Errors.description" class="text-red-500 text-sm">{{ step1Errors.description
-                        }}</span>
+                            }}</span>
                     </div>
                 </div>
 
@@ -454,7 +454,7 @@ const submitAnalysis = async () => {
                                 </span>
                             </div>
 
-                            <Label>{{ modelType === 'REO' ? 'Coste de lanzamiento' : 'Coste hipotecaria' }}</Label>
+                            <Label>{{ modelType === 'REO' ? 'Coste de lanzamiento' : "Coste proceso hipotecario + lanzamiento" }}</Label>
                             <div class="flex gap-6">
                                 <div class="space-y-2 w-full" v-if="modelType === 'REO'">
                                     <Label for="costeLanzamientoAbogado">Abogado</Label>
@@ -525,7 +525,7 @@ const submitAnalysis = async () => {
                                             {{ data.tramo }}
                                         </TableCell>
                                         <TableCell>{{ formatPercentage(data.fee) }}</TableCell>
-                                        <TableCell>{{ data.hurdle ? formatCurrency(data.hurdle) : "-" }}</TableCell>
+                                        <TableCell>{{ data.hurdle ? formatCurrency(data.hurdle) : "0" }}</TableCell>
                                         <TableCell>{{ data.cap ? formatCurrency(data.cap) : "-" }}</TableCell>
                                     </TableRow>
                                 </TableBody>

@@ -30,7 +30,11 @@ const baseColumns: ColumnDef<PendingNotary>[] = [
             const price = row.getValue() as number;
 
             if (price) {
-                return h("p", { class: "font-medium" }, formatCurrency(price));
+                return h(
+                    "p",
+                    { class: "font-medium text-right" },
+                    formatCurrency(price),
+                );
             }
             return h("p", { class: "font-medium" }, "-");
         },

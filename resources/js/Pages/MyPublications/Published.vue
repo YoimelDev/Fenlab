@@ -108,6 +108,6 @@ onMounted(() => {
         </header>
 
         <DataTable :columns="columns" :data="tableData"
-            :column-filter="['id', 'fenlabId', 'prestashopId', 'companyName', 'productReference']" />
+            :column-filter="['id', 'fenlabId', 'prestashopId', 'companyName', 'productReference', 'name']" />
     </AuthenticatedLayout>
 </template>

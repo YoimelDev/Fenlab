@@ -109,6 +109,7 @@ export interface Auction {
     endDate: Date;
     recordType: DType;
     companyName?: string;
+    numberOfBids?: number;
 }
 
 export enum CompanyID {

@@ -55,7 +55,7 @@ export function formatPercentage(value: number | string): string {
  */
 export function formatCurrency(value: number | string): string {
     const numValue = typeof value === "string" ? parseFloat(value) : value;
-    const grouping = Math.abs(numValue) >= 10000;
+    const grouping = Math.abs(numValue) >= 1000;
     return numValue.toLocaleString("es-ES", {
         style: "currency",
         currency: "EUR",

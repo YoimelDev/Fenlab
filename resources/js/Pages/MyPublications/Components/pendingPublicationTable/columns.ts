@@ -1,80 +1,87 @@
-import { h } from 'vue'
-import type { ColumnDef } from '@tanstack/vue-table'
-import { type PublishableProject } from '@/Pages/MyPublications/types'
-import { Badge, badgeMap, type BadgeMode } from '@/Components/ui/badge'
-import { PublicationActions } from '../PublicationActions'
-import { formatCurrency } from '@/lib/utils'
-
+import { h } from "vue";
+import type { ColumnDef } from "@tanstack/vue-table";
+import { type PublishableProject } from "@/Pages/MyPublications/types";
+import { Badge, badgeMap, type BadgeMode } from "@/Components/ui/badge";
+import { PublicationActions } from "../PublicationActions";
+import { formatCurrency } from "@/lib/utils";
 
 export const columns: ColumnDef<PublishableProject>[] = [
     {
-        header: 'ID CLIENTE',
-        accessorKey: 'idCliente',
+        header: "ID CLIENTE",
+        accessorKey: "idCliente",
     },
     {
-        header: 'ID FENCIA',
-        accessorKey: 'idFencia',
+        header: "ID FENCIA",
+        accessorKey: "idFencia",
     },
     {
-        header: 'ESTADO',
-        accessorKey: 'status',
+        header: "ESTADO",
+        accessorKey: "status",
         cell: (row) => {
-            const status = row.getValue() as BadgeMode
+            const status = row.getValue() as BadgeMode;
             return h(
-                'div',
-                { class: 'font-medium' },
+                "div",
+                { class: "font-medium" },
                 h(Badge, { variant: badgeMap[status] }, status),
-            )
+            );
         },
     },
     {
-        header: 'MODALIDAD',
-        accessorKey: 'model.type',
+        header: "MODALIDAD",
+        accessorKey: "model.type",
         cell: (row) => {
-            const modelType = row.getValue() as BadgeMode
+            const modelType = row.getValue() as BadgeMode;
             return h(
-                'div',
-                { class: 'font-medium' },
+                "div",
+                { class: "font-medium" },
                 h(Badge, { variant: badgeMap[modelType] }, modelType),
-            )
+            );
         },
     },
     {
-        header: 'REF. CATASTRAL',
-        accessorKey: 'model.referenciaCatastral',
+        header: "REF. CATASTRAL",
+        accessorKey: "model.referenciaCatastral",
     },
     {
-        header: 'PRECIO MÍNIMO',
-        accessorKey: 'model.npl.credito.precioMinimo',
+        header: "PRECIO MÍNIMO",
+        accessorKey: "model.npl.credito.precioMinimo",
         cell: (row) => {
-            const price = row.getValue() as number
+            const price = row.getValue() as number;
 
             if (price) {
-                return h('p', { class: 'font-medium' }, formatCurrency(price))
+                return h(
+                    "p",
+                    { class: "font-medium text-right" },
+                    formatCurrency(price),
+                );
             }
-            return h('p', { class: 'font-medium' }, '-')
+            return h("p", { class: "font-medium" }, "-");
         },
     },
     {
-        header: 'PRECIO DE REFERENCIA',
-        accessorKey: 'model.npl.precioReferencia',
+        header: "PRECIO DE REFERENCIA",
+        accessorKey: "model.npl.precioReferencia",
         cell: (row) => {
-            const price = row.getValue() as number
+            const price = row.getValue() as number;
 
             if (price) {
-                return h('p', { class: 'font-medium' }, formatCurrency(price))
+                return h(
+                    "p",
+                    { class: "font-medium text-right" },
+                    formatCurrency(price),
+                );
             }
-            return h('p', { class: 'font-medium' }, '-')
+            return h("p", { class: "font-medium" }, "-");
         },
     },
     {
-        id: 'actions',
-        header: () => '',
-        accessorKey: 'id',
+        id: "actions",
+        header: () => "",
+        accessorKey: "id",
         cell: (row) => {
             return h(PublicationActions, {
                 publication: row.row.original,
-            })
+            });
         },
     },
-]
+];

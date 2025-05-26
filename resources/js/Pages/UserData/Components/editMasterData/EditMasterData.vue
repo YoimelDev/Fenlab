@@ -323,7 +323,7 @@ watch(
                                                     :disabled="data.tramo.includes('Adelante')"
                                                     class="w-full h-full outline-none hover:bg-gray-100"
                                                     :title="data.tramo.includes('Adelante') ? 'No aplicable para este tramo' : ''"
-                                                    :value="data.tramo.includes('Adelante') ? 0 : data.cap">
+                                                    :value="data.tramo.includes('Adelante') ? '999999999' : data.cap">
                                             </TableCell>
                                         </TableRow>
                                     </TableBody>
