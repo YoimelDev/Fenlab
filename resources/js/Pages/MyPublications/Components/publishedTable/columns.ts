@@ -14,6 +14,10 @@ console.log(page.props?.auth?.salesforceUser);
 
 const baseColumns: ColumnDef<Auction>[] = [
     {
+        header: "ID CLIENTE",
+        accessorKey: "idCliente",
+    },
+    {
         header: "ID FENCIA",
         accessorKey: "productReference",
     },

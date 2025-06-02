@@ -12,6 +12,10 @@ const isAdmin = page.props?.auth?.salesforceUser?.rols === "Admin";
 
 const baseColumns: ColumnDef<PendingApproval>[] = [
     {
+        header: "ID CLIENTE",
+        accessorKey: "idCliente",
+    },
+    {
         header: "ID FENCIA",
         accessorKey: "productReference",
     },

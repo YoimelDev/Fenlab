@@ -10,6 +10,10 @@ const isAdmin = page.props?.auth?.salesforceUser?.rols === "Admin";
 
 export const baseColumns: ColumnDef<ClosedAuctions>[] = [
     {
+        header: "ID CLIENTE",
+        accessorKey: "idCliente",
+    },
+    {
         header: "ID FENCIA",
         accessorKey: "productReference",
     },
