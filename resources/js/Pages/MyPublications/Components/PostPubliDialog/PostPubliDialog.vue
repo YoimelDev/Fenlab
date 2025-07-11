@@ -26,6 +26,7 @@ type bodyData = {
     isAccepted?: boolean
     isRejected?: boolean
     changeDate?: boolean
+    requestDocs?: boolean
     comments?: string
     approverRequesterOrRejectorEmail?: string
     interactingUserEmail?: string
@@ -58,6 +59,7 @@ const postSalesforce = async () => {
             isAccepted: formData.value.status === 'approved',
             isRejected: formData.value.status === 'rejected',
             changeDate: formData.value.status === 'date_change',
+            requestDocs: formData.value.status === 'pending',
             approverRequesterOrRejectorEmail: formData.value.email,
             interactingUserEmail: formData.value.email,
         }
@@ -93,82 +95,42 @@ const postSalesforce = async () => {
             </DialogTitle>
         </DialogHeader>
 
-        <PostInformation
-            :information="postData.data"
-            :post-type="postData.postType"
-        />
+        <PostInformation :information="postData.data" :post-type="postData.postType" />
 
         <div class="space-y-4 my-4 p-4 bg-white/100 rounded-sm border border-[#E5E7EB] shadow-sm">
             <div class="space-y-2">
                 <Label>Estado de la publicación</Label>
-                <RadioGroup
-                    v-model="formData.status"
-                    class="flex flex-col space-y-2"
-                >
+                <RadioGroup v-model="formData.status" class="flex flex-col space-y-2">
                     <div class="flex items-center space-x-2">
-                        <RadioGroupItem
-                            id="approved"
-                            value="approved"
-                        />
+                        <RadioGroupItem id="approved" value="approved" />
                         <Label for="approved">Aprobar</Label>
                     </div>
 
-                    <div
-                        v-if="postData.postType === 'pendingNotary'"
-                        class="flex items-center space-x-2"
-                    >
-                        <RadioGroupItem
-                            id="date_change"
-                            value="date_change"
-                        />
+                    <div v-if="postData.postType === 'pendingNotary'" class="flex items-center space-x-2">
+                        <RadioGroupItem id="date_change" value="date_change" />
                         <Label for="date_change">Solicitar cambio de fecha</Label>
                     </div>
 
-                    <div
-                        v-if="postData.postType === 'pendingPBC'"
-                        class="flex items-center space-x-2"
-                    >
-                        <RadioGroupItem
-                            id="pending"
-                            value="pending"
-                        />
+                    <div v-if="postData.postType === 'pendingPBC'" class="flex items-center space-x-2">
+                        <RadioGroupItem id="pending" value="pending" />
                         <Label for="pending">Solicitar documentación adicional</Label>
                     </div>
 
-                    <div
-                        v-if="postData.postType !== 'pendingNotary'"
-                        class="flex items-center space-x-2"
-                    >
-                        <RadioGroupItem
-                            id="rejected"
-                            value="rejected"
-                        />
+                    <div v-if="postData.postType !== 'pendingNotary'" class="flex items-center space-x-2">
+                        <RadioGroupItem id="rejected" value="rejected" />
                         <Label for="rejected">Rechazar</Label>
                     </div>
                 </RadioGroup>
             </div>
 
-            <div
-                v-if="formData.status === 'rejected' || formData.status === 'pending'"
-                class="space-y-2"
-            >
+            <div v-if="formData.status === 'rejected' || formData.status === 'pending'" class="space-y-2">
                 <Label for="comments">Comentarios</Label>
-                <Textarea
-                    id="comments"
-                    class="h-24"
-                    v-model="formData.comments"
-                    placeholder="Añade un comentario..."
-                />
+                <Textarea id="comments" class="h-24" v-model="formData.comments" placeholder="Añade un comentario..." />
             </div>
         </div>
 
         <DialogFooter>
-            <Button
-                class="w-full"
-                variant="green"
-                size="sm"
-                @click="postSalesforce"
-            >
+            <Button class="w-full" variant="green" size="sm" @click="postSalesforce">
                 Enviar datos
             </Button>
         </DialogFooter>
