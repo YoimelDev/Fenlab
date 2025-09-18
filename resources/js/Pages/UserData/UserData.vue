@@ -122,7 +122,7 @@ onMounted(() => {
 
                 <div>
                     <h3 class="text-grey my-4">
-                        Broker Fee
+                        Broker Fee (API) para Venta Vacío
                     </h3>
 
                     <Table class="max-w-[520px]">
@@ -155,7 +155,7 @@ onMounted(() => {
             <div class="mt-8 grid grid-cols-2 gap-8">
                 <div>
                     <h3 class="text-grey my-4">
-                        Macro
+                        IPC y Crecimiento Mercado (HPA)
                     </h3>
 
                     <Table class="max-w-[420px]">
@@ -183,7 +183,7 @@ onMounted(() => {
 
                 <div>
                     <h3 class="text-grey my-4">
-                        Success Fee
+                        Success Fee – Gestión
                     </h3>
 
                     <Table class="max-w-[520px]">
@@ -219,28 +219,81 @@ onMounted(() => {
                         </TableBody>
                     </Table>
 
-                    <!-- WACC y Management Fee debajo de Success Fee -->
-                    <div class="mt-8 space-y-6">
-                        <div>
-                            <h3 class="text-grey my-2">
-                                WACC - Coste de Capital
-                            </h3>
-                            <p class="text-xl" v-percentage-text="masterData?.WACC">
-                                {{ masterData?.WACC }}
-                            </p>
-                        </div>
+                    <!-- WACC y Management Fee en formato tabla debajo de Success Fee -->
+                    <div class="mt-8">
+                        <h3 class="text-grey my-4">
+                            Costes Operacionales
+                        </h3>
 
-                        <div>
-                            <h3 class="text-grey my-2">
-                                Management fee % s/ Valor inmueble
-                            </h3>
-                            <p class="text-xl" v-percentage-text="masterData?.managementFee">
-                                {{ masterData?.managementFee }}
-                            </p>
-                        </div>
+                        <Table class="max-w-[520px]">
+                            <TableHeader>
+                                <TableRow class="[&_th]:px-3 [&_th]:bg-white">
+                                    <TableHead class="!bg-[#ECECEC] z-50 relative">
+                                        Concepto
+                                    </TableHead>
+                                    <TableHead>Valor (%)</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                <TableRow class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]">
+                                    <TableCell class="!bg-[#ECECEC] font-bold">
+                                        WACC - Coste de Capital
+                                    </TableCell>
+                                    <TableCell v-percentage-text="masterData?.WACC">
+                                        {{ masterData?.WACC }}
+                                    </TableCell>
+                                </TableRow>
+                                <TableRow class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]">
+                                    <TableCell class="!bg-[#ECECEC] font-bold">
+                                        <div class="leading-tight">
+                                            Management Fee<br>
+                                            (% s/ Mínimo entre Valor Inmueble y Deuda)<br>
+                                            – Coste de Gestión Fija
+                                        </div>
+                                    </TableCell>
+                                    <TableCell v-percentage-text="masterData?.managementFee">
+                                        {{ masterData?.managementFee }}
+                                    </TableCell>
+                                </TableRow>
+                            </TableBody>
+                        </Table>
                     </div>
                 </div>
             </div>
+
+            <!-- Tercera fila: Coste proceso hipotecario + lanzamiento -->
+            <!-- <div class="mt-8">
+                <h3 class="text-grey my-4">
+                    Coste proceso hipotecario + lanzamiento
+                </h3>
+
+                <Table class="max-w-[420px]">
+                    <TableHeader>
+                        <TableRow class="[&_th]:px-3 [&_th]:bg-white">
+                            <TableHead class="!bg-[#ECECEC] z-50 relative">
+                                Profesional
+                            </TableHead>
+                            <TableHead>Coste (€)</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        <TableRow class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]">
+                            <TableCell class="!bg-[#ECECEC] font-bold">
+                                Abogado
+                            </TableCell>
+                            <TableCell>{{ formatCurrency((masterData?.costeHipotecariaAbogado ?? 0) +
+                                (masterData?.costeLanzamientoAbogado ?? 0)) }}</TableCell>
+                        </TableRow>
+                        <TableRow class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]">
+                            <TableCell class="!bg-[#ECECEC] font-bold">
+                                Procurador
+                            </TableCell>
+                            <TableCell>{{ formatCurrency((masterData?.costeHipotecariaProcurador ?? 0) +
+                                (masterData?.costeLanzamientoProcurador ?? 0)) }}</TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            </div> -->
         </section>
     </AuthenticatedLayout>
 </template>
