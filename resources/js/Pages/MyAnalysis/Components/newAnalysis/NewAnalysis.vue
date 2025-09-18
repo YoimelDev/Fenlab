@@ -412,28 +412,7 @@ const submitAnalysis = async () => {
                             </TabsTrigger>
                         </TabsList>
                         <TabsContent value="macro">
-                            <Table>
-                                <TableHeader>
-                                    <TableRow class="[&_th]:px-3 [&_th]:bg-white">
-                                        <TableHead class="!bg-[#ECECEC] z-50 relative">
-                                            AÑO
-                                        </TableHead>
-                                        <TableHead>IPC (%)</TableHead>
-                                        <TableHead>HPA (%)</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    <TableRow class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]"
-                                        v-for="data in masterData?.macro" :key="data.ano">
-                                        <TableCell class="!bg-[#ECECEC] font-bold">
-                                            Año {{ data.ano }}
-                                        </TableCell>
-                                        <TableCell>{{ formatPercentage(data.IPC) }}</TableCell>
-                                        <TableCell>{{ formatPercentage(data.HPA) }}</TableCell>
-                                    </TableRow>
-                                </TableBody>
-                            </Table>
-                            <div class="space-y-2 mt-4">
+                            <div class="space-y-2 mb-6">
                                 <Label for="wacc">WACC - Coste de Capital (%)</Label>
                                 <Input id="wacc" type="text" placeholder="5" class="mt-2" v-percentage v-model="wacc"
                                     :class="{ 'border-red-500': step4Errors['masterData.wacc'] }" required autofocus
@@ -443,7 +422,7 @@ const submitAnalysis = async () => {
                                 </span>
                             </div>
 
-                            <div class="space-y-2">
+                            <div class="space-y-2 mb-8">
                                 <Label for="managementFee">Management fee (%)</Label>
                                 <Input id="managementFee" type="text" placeholder="5" class="mt-2" v-percentage
                                     v-model="managementFee"
@@ -454,57 +433,87 @@ const submitAnalysis = async () => {
                                 </span>
                             </div>
 
-                            <Label>{{ modelType === 'REO' ? 'Coste de lanzamiento' : "Coste proceso hipotecario + lanzamiento" }}</Label>
-                            <div class="flex gap-6">
-                                <div class="space-y-2 w-full" v-if="modelType === 'REO'">
-                                    <Label for="costeLanzamientoAbogado">Abogado</Label>
-                                    <Input id="costeLanzamientoAbogado" type="text" placeholder="500" class="mt-2"
-                                        v-currency v-model="costeLanzamientoAbogado"
-                                        :class="{ 'border-red-500': step4Errors['masterData.costeLanzamientoAbogado'] }"
-                                        required autofocus autocomplete="costeLanzamientoAbogado" min="0" />
-                                    <span v-if="step4Errors['masterData.costeLanzamientoAbogado']"
-                                        class="text-red-500 text-sm">
-                                        {{ step4Errors['masterData.costeLanzamientoAbogado'] }}
-                                    </span>
-                                </div>
+                            <!-- Sección de costes legales -->
+                            <div class="mb-6">
+                                <h3 class="text-base font-semibold mb-4 text-gray-800">
+                                    {{ modelType === 'REO' ? 'Coste de lanzamiento' : "Coste proceso hipotecario + lanzamiento" }}
+                                </h3>
+                                <div class="flex gap-6">
+                                    <div class="space-y-2 w-full" v-if="modelType === 'REO'">
+                                        <Label for="costeLanzamientoAbogado">Abogado</Label>
+                                        <Input id="costeLanzamientoAbogado" type="text" placeholder="500" class="mt-2"
+                                            v-currency v-model="costeLanzamientoAbogado"
+                                            :class="{ 'border-red-500': step4Errors['masterData.costeLanzamientoAbogado'] }"
+                                            required autofocus autocomplete="costeLanzamientoAbogado" min="0" />
+                                        <span v-if="step4Errors['masterData.costeLanzamientoAbogado']"
+                                            class="text-red-500 text-sm">
+                                            {{ step4Errors['masterData.costeLanzamientoAbogado'] }}
+                                        </span>
+                                    </div>
 
-                                <div class="space-y-2 w-full" v-if="modelType === 'NPL'">
-                                    <Label for="costeHipotecariaAbogado">Abogado</Label>
-                                    <Input id="costeHipotecariaAbogado" type="text" placeholder="500" class="mt-2"
-                                        v-currency v-model="costeHipotecariaAbogado"
-                                        :class="{ 'border-red-500': step4Errors['masterData.costeHipotecariaAbogado'] }"
-                                        required autofocus autocomplete="costeHipotecariaAbogado" min="0" />
-                                    <span v-if="step4Errors['masterData.costeHipotecariaAbogado']"
-                                        class="text-red-500 text-sm">
-                                        {{ step4Errors['masterData.costeHipotecariaAbogado'] }}
-                                    </span>
-                                </div>
+                                    <div class="space-y-2 w-full" v-if="modelType === 'NPL'">
+                                        <Label for="costeHipotecariaAbogado">Abogado</Label>
+                                        <Input id="costeHipotecariaAbogado" type="text" placeholder="500" class="mt-2"
+                                            v-currency v-model="costeHipotecariaAbogado"
+                                            :class="{ 'border-red-500': step4Errors['masterData.costeHipotecariaAbogado'] }"
+                                            required autofocus autocomplete="costeHipotecariaAbogado" min="0" />
+                                        <span v-if="step4Errors['masterData.costeHipotecariaAbogado']"
+                                            class="text-red-500 text-sm">
+                                            {{ step4Errors['masterData.costeHipotecariaAbogado'] }}
+                                        </span>
+                                    </div>
 
-                                <div class="space-y-2 w-full" v-if="modelType === 'REO'">
-                                    <Label for="costeLanzamientoProcurador">Procurador</Label>
-                                    <Input id="costeLanzamientoProcurador" type="text" placeholder="500" class="mt-2"
-                                        v-currency v-model="costeLanzamientoProcurador"
-                                        :class="{ 'border-red-500': step4Errors['masterData.costeLanzamientoProcurador'] }"
-                                        required autofocus autocomplete="costeLanzamientoProcurador" min="0" />
-                                    <span v-if="step4Errors['masterData.costeLanzamientoProcurador']"
-                                        class="text-red-500 text-sm">
-                                        {{ step4Errors['masterData.costeLanzamientoProcurador'] }}
-                                    </span>
-                                </div>
+                                    <div class="space-y-2 w-full" v-if="modelType === 'REO'">
+                                        <Label for="costeLanzamientoProcurador">Procurador</Label>
+                                        <Input id="costeLanzamientoProcurador" type="text" placeholder="500"
+                                            class="mt-2" v-currency v-model="costeLanzamientoProcurador"
+                                            :class="{ 'border-red-500': step4Errors['masterData.costeLanzamientoProcurador'] }"
+                                            required autofocus autocomplete="costeLanzamientoProcurador" min="0" />
+                                        <span v-if="step4Errors['masterData.costeLanzamientoProcurador']"
+                                            class="text-red-500 text-sm">
+                                            {{ step4Errors['masterData.costeLanzamientoProcurador'] }}
+                                        </span>
+                                    </div>
 
-                                <div class="space-y-2 w-full" v-if="modelType === 'NPL'">
-                                    <Label for="costeHipotecariaProcurador">Procurador</Label>
-                                    <Input id="costeHipotecariaProcurador" type="text" placeholder="500" class="mt-2"
-                                        v-currency v-model="costeHipotecariaProcurador"
-                                        :class="{ 'border-red-500': step4Errors['masterData.costeHipotecariaProcurador'] }"
-                                        required autofocus autocomplete="costeHipotecariaProcurador" min="0" />
-                                    <span v-if="step4Errors['masterData.costeHipotecariaProcurador']"
-                                        class="text-red-500 text-sm">
-                                        {{ step4Errors['masterData.costeHipotecariaProcurador'] }}
-                                    </span>
+                                    <div class="space-y-2 w-full" v-if="modelType === 'NPL'">
+                                        <Label for="costeHipotecariaProcurador">Procurador</Label>
+                                        <Input id="costeHipotecariaProcurador" type="text" placeholder="500"
+                                            class="mt-2" v-currency v-model="costeHipotecariaProcurador"
+                                            :class="{ 'border-red-500': step4Errors['masterData.costeHipotecariaProcurador'] }"
+                                            required autofocus autocomplete="costeHipotecariaProcurador" min="0" />
+                                        <span v-if="step4Errors['masterData.costeHipotecariaProcurador']"
+                                            class="text-red-500 text-sm">
+                                            {{ step4Errors['masterData.costeHipotecariaProcurador'] }}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
 
+                            <!-- Tabla Macro movida al final -->
+                            <div class="mt-6">
+                                <h3 class="text-lg font-semibold mb-4">Datos Macro</h3>
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow class="[&_th]:px-3 [&_th]:bg-white">
+                                            <TableHead class="!bg-[#ECECEC] z-50 relative">
+                                                AÑO
+                                            </TableHead>
+                                            <TableHead>IPC (%)</TableHead>
+                                            <TableHead>HPA (%)</TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        <TableRow class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]"
+                                            v-for="data in masterData?.macro" :key="data.ano">
+                                            <TableCell class="!bg-[#ECECEC] font-bold">
+                                                Año {{ data.ano }}
+                                            </TableCell>
+                                            <TableCell>{{ formatPercentage(data.IPC) }}</TableCell>
+                                            <TableCell>{{ formatPercentage(data.HPA) }}</TableCell>
+                                        </TableRow>
+                                    </TableBody>
+                                </Table>
+                            </div>
                         </TabsContent>
                         <TabsContent value="brokerGestion">
                             <Table class="max-w-[520px]">
@@ -553,7 +562,7 @@ const submitAnalysis = async () => {
                                         </TableRow>
                                         <TableRow class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]">
                                             <TableCell class="!bg-[#ECECEC] font-bold">Toma de posesión</TableCell>
-                                            <TableCell>{{ formatPercentage(masterData.successFee.repossessedAsset) }}
+                                            <TableCell>{{ formatCurrency(masterData.successFee.repossessedAsset) }}
                                             </TableCell>
                                         </TableRow>
                                     </TableBody>

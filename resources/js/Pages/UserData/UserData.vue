@@ -51,183 +51,195 @@ onMounted(() => {
 
     <AuthenticatedLayout>
         <section>
-            <div class="space-y-4">
-                <p v-if="props.auth.salesforceUser.name" class="text-xl font-bold">
-                    {{ props.auth.salesforceUser.name }}
-                </p>
-
-                <p v-if="props.auth.salesforceUser.email" class="text-grey text-xl font-light">
-                    {{ props.auth.salesforceUser.email }}
-                </p>
-
-                <p v-if="props.auth.salesforceUser.companyCommercialName" class="text-grey text-xl font-light">
-                    {{ props.auth.salesforceUser.companyCommercialName }}
-                </p>
-            </div>
-        </section>
-
-        <hr class="my-8">
-
-        <section>
             <header>
                 <div class="flex justify-between">
-                    <h2 class="flex items-center gap-4 text-xl font-bold leading-5">
-                        Master Data Financiera
-                    </h2>
+                    <!-- Master Data Financiera y botón de editar juntos a la derecha -->
+                    <div class="flex flex-col items-start">
+                        <div class="flex items-center gap-4 mb-2">
+                            <h2 class="text-xl font-bold leading-5">
+                                Master Data Financiera
+                            </h2>
+                            <EditMasterData :key="masterData?.WACC" :master-data="masterData"
+                                @updated="getCompanyMasterData" />
+                        </div>
 
-                    <EditMasterData :key="masterData?.WACC" :master-data="masterData" @updated="getCompanyMasterData" />
+                        <p class="flex items-center gap-2 text-grey text-sm">
+                            <InfoIcon />
+                            Editar estos datos implicará cambios para todos los miembros de tu organización
+                        </p>
+                    </div>
+                    <!-- Datos del usuario a la izquierda -->
+                    <div class="space-y-1">
+                        <p v-if="props.auth.salesforceUser.name" class="text-lg font-medium text-gray-800">
+                            {{ props.auth.salesforceUser.name }}
+                        </p>
+
+                        <p v-if="props.auth.salesforceUser.email" class="text-grey text-base">
+                            {{ props.auth.salesforceUser.email }}
+                        </p>
+
+                        <p v-if="props.auth.salesforceUser.companyCommercialName" class="text-grey text-base">
+                            {{ props.auth.salesforceUser.companyCommercialName }}
+                        </p>
+                    </div>
+
+
                 </div>
-
-                <p class="flex items-center gap-2 mt-4 text-grey">
-                    <InfoIcon />
-
-                    Editar estos datos implicará cambios para todos los miembros de tu organización
-                </p>
             </header>
 
-            <div class="mt-20">
-                <h3 class="text-grey my-4">
-                    Macro
-                </h3>
+            <!-- Tablas organizadas como solicitado -->
+            <!-- Primera fila: Fencia Fee y Broker Fee -->
+            <div class="mt-8 grid grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-grey my-4">
+                        Fencia Fee
+                    </h3>
 
-                <Table class="max-w-[420px]">
-                    <TableHeader>
-                        <TableRow class="[&_th]:px-3 [&_th]:bg-white">
-                            <TableHead class="!bg-[#ECECEC] z-50 relative">
-                                AÑO
-                            </TableHead>
-                            <TableHead>IPC (%)</TableHead>
-                            <TableHead>HPA (%)</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        <TableRow class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]"
-                            v-for="data in masterData?.macro" :key="data.ano">
-                            <TableCell class="!bg-[#ECECEC] font-bold">
-                                Año {{ data.ano }}
-                            </TableCell>
-                            <TableCell>{{ formatPercentage(data.IPC) }}</TableCell>
-                            <TableCell>{{ formatPercentage(data.HPA) }}</TableCell>
-                        </TableRow>
-                    </TableBody>
-                </Table>
+                    <Table class="max-w-[520px]">
+                        <TableHeader>
+                            <TableRow class="[&_th]:px-3 [&_th]:bg-white">
+                                <TableHead class="!bg-[#ECECEC] z-50 relative">
+                                    Tramo
+                                </TableHead>
+                                <TableHead>Fee (%)</TableHead>
+                                <TableHead>Desde</TableHead>
+                                <TableHead>Hasta</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            <TableRow class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]"
+                                v-for="data in masterData?.fenciaFee" :key="data.tramo">
+                                <TableCell class="!bg-[#ECECEC] font-bold">
+                                    {{ data.tramo }}
+                                </TableCell>
+                                <TableCell>{{ formatPercentage(data.fee) }}</TableCell>
+                                <TableCell>{{ data.hurdle ? formatCurrency(data.hurdle) : "0" }}</TableCell>
+                                <TableCell>{{ data.cap ? formatCurrency(data.cap) : "-" }}</TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                </div>
+
+                <div>
+                    <h3 class="text-grey my-4">
+                        Broker Fee
+                    </h3>
+
+                    <Table class="max-w-[520px]">
+                        <TableHeader>
+                            <TableRow class="[&_th]:px-3 [&_th]:bg-white">
+                                <TableHead class="!bg-[#ECECEC] z-50 relative">
+                                    Tramo
+                                </TableHead>
+                                <TableHead>Fee (%)</TableHead>
+                                <TableHead>Desde</TableHead>
+                                <TableHead>Hasta</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            <TableRow class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]"
+                                v-for="data in masterData?.brokerFee" :key="data.tramo">
+                                <TableCell class="!bg-[#ECECEC] font-bold">
+                                    {{ data.tramo }}
+                                </TableCell>
+                                <TableCell>{{ formatPercentage(data.fee) }}</TableCell>
+                                <TableCell>{{ data.hurdle ? formatCurrency(data.hurdle) : "0" }}</TableCell>
+                                <TableCell>{{ data.cap ? formatCurrency(data.cap ?? 0) : "-" }}</TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                </div>
             </div>
 
-            <div class="mt-10">
-                <h3 class="text-grey my-4">
-                    Broker Fee
-                </h3>
+            <!-- Segunda fila: Macro y Success Fee (con WACC y Management debajo de Success Fee) -->
+            <div class="mt-8 grid grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-grey my-4">
+                        Macro
+                    </h3>
 
-                <Table class="max-w-[520px]">
-                    <TableHeader>
-                        <TableRow class="[&_th]:px-3 [&_th]:bg-white">
-                            <TableHead class="!bg-[#ECECEC] z-50 relative">
-                                Tramo
-                            </TableHead>
-                            <TableHead>Fee (%)</TableHead>
-                            <TableHead>Desde</TableHead>
-                            <TableHead>Hasta</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        <TableRow class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]"
-                            v-for="data in masterData?.brokerFee" :key="data.tramo">
-                            <TableCell class="!bg-[#ECECEC] font-bold">
-                                {{ data.tramo }}
-                            </TableCell>
-                            <TableCell>{{ formatPercentage(data.fee) }}</TableCell>
-                            <TableCell>{{ data.hurdle ? formatCurrency(data.hurdle) : "0" }}</TableCell>
-                            <TableCell>{{ data.cap ? formatCurrency(data.cap ?? 0) : "-" }}</TableCell>
-                        </TableRow>
-                    </TableBody>
-                </Table>
-            </div>
+                    <Table class="max-w-[420px]">
+                        <TableHeader>
+                            <TableRow class="[&_th]:px-3 [&_th]:bg-white">
+                                <TableHead class="!bg-[#ECECEC] z-50 relative">
+                                    AÑO
+                                </TableHead>
+                                <TableHead>IPC (%)</TableHead>
+                                <TableHead>HPA (%)</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            <TableRow class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]"
+                                v-for="data in masterData?.macro" :key="data.ano">
+                                <TableCell class="!bg-[#ECECEC] font-bold">
+                                    Año {{ data.ano }}
+                                </TableCell>
+                                <TableCell>{{ formatPercentage(data.IPC) }}</TableCell>
+                                <TableCell>{{ formatPercentage(data.HPA) }}</TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                </div>
 
-            <div class="mt-10">
-                <h3 class="text-grey my-4">
-                    Fencia Fee
-                </h3>
+                <div>
+                    <h3 class="text-grey my-4">
+                        Success Fee
+                    </h3>
 
-                <Table class="max-w-[520px]">
-                    <TableHeader>
-                        <TableRow class="[&_th]:px-3 [&_th]:bg-white">
-                            <TableHead class="!bg-[#ECECEC] z-50 relative">
-                                Tramo
-                            </TableHead>
-                            <TableHead>Fee (%)</TableHead>
-                            <TableHead>Desde</TableHead>
-                            <TableHead>Hasta</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        <TableRow class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]"
-                            v-for="data in masterData?.fenciaFee" :key="data.tramo">
-                            <TableCell class="!bg-[#ECECEC] font-bold">
-                                {{ data.tramo }}
-                            </TableCell>
-                            <TableCell>{{ formatPercentage(data.fee) }}</TableCell>
-                            <TableCell>{{ data.hurdle ? formatCurrency(data.hurdle) : "0" }}</TableCell>
-                            <TableCell>{{ data.cap ? formatCurrency(data.cap) : "-" }}</TableCell>
-                        </TableRow>
-                    </TableBody>
-                </Table>
-            </div>
+                    <Table class="max-w-[520px]">
+                        <TableHeader>
+                            <TableRow class="[&_th]:px-3 [&_th]:bg-white">
+                                <TableHead class="!bg-[#ECECEC] z-50 relative">
+                                    Tipo de operación
+                                </TableHead>
+                                <TableHead>Fee (%)</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            <TableRow class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]">
+                                <TableCell class="!bg-[#ECECEC] font-bold">
+                                    Venta Crédito
+                                </TableCell>
+                                <TableCell>{{ formatPercentage(masterData?.successFee?.ventaCredito ?? 0) }}</TableCell>
+                            </TableRow>
+                            <TableRow class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]">
+                                <TableCell class="!bg-[#ECECEC] font-bold">
+                                    Subasta/Remate
+                                </TableCell>
+                                <TableCell>{{ formatPercentage(masterData?.successFee?.subastaOrRemate ?? 0) }}
+                                </TableCell>
+                            </TableRow>
+                            <TableRow class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]">
+                                <TableCell class="!bg-[#ECECEC] font-bold">
+                                    Toma de posesión
+                                </TableCell>
+                                <TableCell>{{ formatCurrency(masterData?.successFee?.repossessedAsset ?? 0) }}
+                                </TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
 
-            <div class="mt-10">
-                <h3 class="text-grey my-4">
-                    Success Fee
-                </h3>
+                    <!-- WACC y Management Fee debajo de Success Fee -->
+                    <div class="mt-8 space-y-6">
+                        <div>
+                            <h3 class="text-grey my-2">
+                                WACC - Coste de Capital
+                            </h3>
+                            <p class="text-xl" v-percentage-text="masterData?.WACC">
+                                {{ masterData?.WACC }}
+                            </p>
+                        </div>
 
-                <Table class="max-w-[520px]">
-                    <TableHeader>
-                        <TableRow class="[&_th]:px-3 [&_th]:bg-white">
-                            <TableHead class="!bg-[#ECECEC] z-50 relative">
-                                Tipo de operación
-                            </TableHead>
-                            <TableHead>Fee (%)</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        <TableRow class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]">
-                            <TableCell class="!bg-[#ECECEC] font-bold">
-                                Venta Crédito
-                            </TableCell>
-                            <TableCell>{{ formatPercentage(masterData?.successFee?.ventaCredito ?? 0) }}</TableCell>
-                        </TableRow>
-                        <TableRow class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]">
-                            <TableCell class="!bg-[#ECECEC] font-bold">
-                                Subasta/Remate
-                            </TableCell>
-                            <TableCell>{{ formatPercentage(masterData?.successFee?.subastaOrRemate ?? 0) }}</TableCell>
-                        </TableRow>
-                        <TableRow class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]">
-                            <TableCell class="!bg-[#ECECEC] font-bold">
-                                Toma de posesión
-                            </TableCell>
-                            <TableCell>{{ formatPercentage(masterData?.successFee?.repossessedAsset ?? 0) }}</TableCell>
-                        </TableRow>
-                    </TableBody>
-                </Table>
-            </div>
-
-            <div class="mt-10">
-                <h3 class="text-grey my-2">
-                    WACC - Coste de Capital
-                </h3>
-
-                <p class="text-xl" v-percentage-text="masterData?.WACC">
-                    {{ masterData?.WACC }}
-                </p>
-            </div>
-
-            <div class="mt-10">
-                <h3 class="text-grey my-2">
-                    Management fee % s/ Valor inmueble
-                </h3>
-
-                <p class="text-xl" v-percentage-text="masterData?.managementFee">
-                    {{ masterData?.managementFee }}
-                </p>
+                        <div>
+                            <h3 class="text-grey my-2">
+                                Management fee % s/ Valor inmueble
+                            </h3>
+                            <p class="text-xl" v-percentage-text="masterData?.managementFee">
+                                {{ masterData?.managementFee }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
     </AuthenticatedLayout>

@@ -35,9 +35,10 @@ export function getParamValue(param: string): string {
 export function formatPercentage(value: number | string): string {
     const numValue = typeof value === "string" ? parseFloat(value) : value;
     const multiplier = 0.01;
-    // Solo agrupar si el valor original es de 5 cifras o más
-    const grouping = Math.abs(numValue) >= 10000;
-    return (numValue * multiplier).toLocaleString("es-ES", {
+    const percentageValue = numValue * multiplier;
+    // Solo agrupar si el valor en porcentaje es de 100 o más (equivalente a 10000 puntos base)
+    const grouping = Math.abs(percentageValue) >= 1;
+    return percentageValue.toLocaleString("es-ES", {
         style: "percent",
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
