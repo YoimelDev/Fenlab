@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, inject, watch } from 'vue'
+import { ref, onMounted, inject, watch, computed } from 'vue'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
@@ -28,6 +28,7 @@ import {
     TabsContent,
     TabsList,
     TabsTrigger,
+    Checkbox,
 } from '@/Components/ui'
 import { PluginApi } from 'vue-loading-overlay'
 import { ArrowIcon, ShoppingBagIcon, SellIcon } from '@/Components/icons'
@@ -42,6 +43,13 @@ const step = ref(1)
 const isDialogOpen = ref(false)
 const $loading = inject<PluginApi>('$loading')
 
+const masterData = ref<CompanyMasterData>()
+const modelType = ref('NPL')
+const activeSelection = ref('buy') // Cambiar el valor por defecto a 'buy'
+
+// Variable para el checkbox de Fencia Fee (NPL_BUY)
+const noUsarFenciaFee = ref(false)
+
 interface Step4 {
     masterData: {
         wacc: number
@@ -50,19 +58,43 @@ interface Step4 {
         costeLanzamientoProcurador?: number
         costeHipotecariaAbogado?: number
         costeHipotecariaProcurador?: number
+        // Campos específicos de NPL_BUY
+        costeHipotecariaOtros?: number
+        costeLanzamientoOtros?: number
+        deducibilidadIVA?: number
+        conpraCreditoNotaria?: number
+        conpraCreditoRegistro?: number
+        conpraCreditoGestion?: number
+        adjudicacionRegistro?: number
+        adjudicacionGestion?: number
+        mesesParaCobroSubasta?: number
     }
 }
 
-const masterData = ref<CompanyMasterData>()
-const modelType = ref('NPL')
-const activeSelection = ref('sale')
+// Computed property para determinar el modelType correcto para la API
+const apiModelType = computed(() => {
+    if (modelType.value === 'NPL' && activeSelection.value === 'buy') {
+        return 'NPL_BUY'
+    }
+    return modelType.value
+})
+
+// Computed property para determinar qué datos de fee mostrar
+const displayFeeData = computed(() => {
+    if (apiModelType.value === 'NPL_BUY') {
+        // Si no usar Fencia Fee está marcado (true), mostrar brokerFee
+        // Si no usar Fencia Fee NO está marcado (false), mostrar fenciaFee cuando esté disponible
+        return noUsarFenciaFee.value ? masterData.value?.brokerFee : (masterData.value?.fenciaFee || masterData.value?.brokerFee)
+    }
+    return masterData.value?.brokerFee
+})
 
 onMounted(() => {
     getCompanyMasterData()
 })
 
-// Observar cambios en el tipo de modelo para recargar los datos correspondientes
-watch(modelType, () => {
+// Observar cambios en el tipo de modelo o selección para recargar los datos correspondientes
+watch([modelType, activeSelection], () => {
     if (step.value >= 3) { // Solo recargar cuando el usuario ya haya seleccionado el modelo
         getCompanyMasterData()
     }
@@ -79,18 +111,22 @@ const step1Schema = z.object({
 
 const step4Schema = z.object({
     masterData: z.object({
-        wacc: z.coerce.number().min(0, 'WACC debe ser mayor o igual a 0'),
-        managementFee: z.coerce.number().min(0, 'Management fee debe ser mayor o igual a 0'),
-        ...(modelType.value === 'REO'
-            ? {
-                costeLanzamientoAbogado: z.coerce.number().min(0, 'Coste de abogado debe ser mayor o igual a 0'),
-                costeLanzamientoProcurador: z.coerce.number().min(0, 'Coste de procurador debe ser mayor o igual a 0'),
-            }
-            : {
-                costeHipotecariaAbogado: z.coerce.number().min(0, 'Coste de abogado debe ser mayor o igual a 0'),
-                costeHipotecariaProcurador: z.coerce.number().min(0, 'Coste de procurador debe ser mayor o igual a 0'),
-            }
-        ),
+        wacc: z.union([z.coerce.number().min(0, 'WACC debe ser mayor o igual a 0'), z.null()]).optional(),
+        managementFee: z.union([z.coerce.number().min(0, 'Management fee debe ser mayor o igual a 0'), z.null()]).optional(),
+        costeLanzamientoAbogado: z.coerce.number().min(0, 'Coste de abogado debe ser mayor o igual a 0').optional(),
+        costeLanzamientoProcurador: z.coerce.number().min(0, 'Coste de procurador debe ser mayor o igual a 0').optional(),
+        costeHipotecariaAbogado: z.coerce.number().min(0, 'Coste de abogado debe ser mayor o igual a 0').optional(),
+        costeHipotecariaProcurador: z.coerce.number().min(0, 'Coste de procurador debe ser mayor o igual a 0').optional(),
+        // Campos específicos de NPL_BUY
+        costeHipotecariaOtros: z.union([z.coerce.number().min(0, 'Debe ser mayor o igual a 0'), z.string().transform(val => parseFloat(val))]).optional(),
+        costeLanzamientoOtros: z.coerce.number().min(0, 'Debe ser mayor o igual a 0').optional(),
+        deducibilidadIVA: z.coerce.number().min(0, 'Debe ser mayor o igual a 0').optional(),
+        conpraCreditoNotaria: z.coerce.number().min(0, 'Debe ser mayor o igual a 0').optional(),
+        conpraCreditoRegistro: z.coerce.number().min(0, 'Debe ser mayor o igual a 0').optional(),
+        conpraCreditoGestion: z.coerce.number().min(0, 'Debe ser mayor o igual a 0').optional(),
+        adjudicacionRegistro: z.coerce.number().min(0, 'Debe ser mayor o igual a 0').optional(),
+        adjudicacionGestion: z.coerce.number().min(0, 'Debe ser mayor o igual a 0').optional(),
+        mesesParaCobroSubasta: z.coerce.number().min(1, 'Debe ser mayor a 0').optional(),
     }),
 })
 
@@ -112,16 +148,91 @@ const [costeLanzamientoProcurador] = fieldStep4('masterData.costeLanzamientoProc
 const [costeHipotecariaAbogado] = fieldStep4('masterData.costeHipotecariaAbogado')
 const [costeHipotecariaProcurador] = fieldStep4('masterData.costeHipotecariaProcurador')
 
+// Campos específicos de NPL_BUY
+const [costeHipotecariaOtros] = fieldStep4('masterData.costeHipotecariaOtros')
+const [costeLanzamientoOtros] = fieldStep4('masterData.costeLanzamientoOtros')
+const [deducibilidadIVA] = fieldStep4('masterData.deducibilidadIVA')
+const [conpraCreditoNotaria] = fieldStep4('masterData.conpraCreditoNotaria')
+const [conpraCreditoRegistro] = fieldStep4('masterData.conpraCreditoRegistro')
+const [conpraCreditoGestion] = fieldStep4('masterData.conpraCreditoGestion')
+const [adjudicacionRegistro] = fieldStep4('masterData.adjudicacionRegistro')
+const [adjudicacionGestion] = fieldStep4('masterData.adjudicacionGestion')
+const [mesesParaCobroSubasta] = fieldStep4('masterData.mesesParaCobroSubasta')
+
 const handleNextStep = () => {
     const steps = {
         1: () => handleStep1(() => step.value++)(),
-        2: () => step.value++,
+        2: () => {
+            // Validar que se haya seleccionado buy o sell side
+            if (activeSelection.value) {
+                step.value++
+            } else {
+                toast({
+                    variant: 'danger',
+                    title: 'Selección requerida',
+                    description: 'Por favor, selecciona Buy Side o Sell Side antes de continuar.'
+                })
+            }
+        },
         3: () => {
+            // Validar que no se haya seleccionado REO en Buy Side
+            if (activeSelection.value === 'buy' && modelType.value === 'REO') {
+                toast({
+                    variant: 'danger',
+                    title: 'Combinación no válida',
+                    description: 'REO no está disponible para Buy Side. Por favor, selecciona NPL.'
+                })
+                return
+            }
+
             step.value++
             // Recargar los datos cuando se pasa al paso 4, después de elegir el tipo de modelo
             getCompanyMasterData()
         },
-        4: () => handleStep4(submitAnalysis)(),
+        4: () => {
+            console.log('Intentando enviar formulario...')
+            console.log('apiModelType:', apiModelType.value)
+            console.log('modelType:', modelType.value)
+            console.log('activeSelection:', activeSelection.value)
+            console.log('Errores de validación step4:', step4Errors.value)
+
+            // Para NPL_BUY, bypasear la validación de VeeValidate y llamar directamente submitAnalysis
+            if (apiModelType.value === 'NPL_BUY') {
+                console.log('NPL_BUY detectado - bypasseando validación')
+                submitAnalysis()
+                return
+            }
+
+            // Log de valores de campos para NPL_BUY
+            if (apiModelType.value === 'NPL_BUY') {
+                console.log('Valores NPL_BUY:', {
+                    costeHipotecariaAbogado: costeHipotecariaAbogado.value,
+                    costeHipotecariaProcurador: costeHipotecariaProcurador.value,
+                    costeHipotecariaOtros: costeHipotecariaOtros.value,
+                    costeLanzamientoOtros: costeLanzamientoOtros.value,
+                    deducibilidadIVA: deducibilidadIVA.value,
+                    conpraCreditoNotaria: conpraCreditoNotaria.value,
+                    conpraCreditoRegistro: conpraCreditoRegistro.value,
+                    conpraCreditoGestion: conpraCreditoGestion.value,
+                    adjudicacionRegistro: adjudicacionRegistro.value,
+                    adjudicacionGestion: adjudicacionGestion.value,
+                    mesesParaCobroSubasta: mesesParaCobroSubasta.value,
+                })
+            }
+
+            // Para otros modelos, usar validación normal
+            handleStep4(
+                // Función de éxito
+                (data) => {
+                    console.log('Validación exitosa, ejecutando submitAnalysis...', data)
+                    submitAnalysis()
+                },
+                // Función de error  
+                (errors) => {
+                    console.log('Errores de validación:', errors)
+                }
+            )()
+        },
     }
 
     const currentStepHandler = steps[step.value as keyof typeof steps]
@@ -130,8 +241,8 @@ const handleNextStep = () => {
 
 const getCompanyMasterData = async () => {
     try {
-        // Define el path basado en el tipo de modelo seleccionado
-        const path = `company-master-data/${modelType.value}`;
+        // Define el path basado en el tipo de modelo seleccionado (usa apiModelType)
+        const path = `company-master-data/${apiModelType.value}`;
 
         const { data: response } = await fenlabApi.post<CompanyMasterData>('', {
             method: 'get',
@@ -163,9 +274,24 @@ const setFormValues = (response: CompanyMasterData) => {
         setFieldValue('masterData.costeHipotecariaAbogado', Number(response.costeHipotecariaAbogado || 0))
         setFieldValue('masterData.costeHipotecariaProcurador', Number(response.costeHipotecariaProcurador || 0))
     }
+
+    // Campos específicos de NPL_BUY
+    if (apiModelType.value === 'NPL_BUY') {
+        const data = response as any // Usar any temporalmente para acceder a los nuevos campos
+        setFieldValue('masterData.costeHipotecariaOtros', Number(data.costeHipotecariaOtros || 0))
+        setFieldValue('masterData.costeLanzamientoOtros', Number(data.costeLanzamientoOtros || 0))
+        setFieldValue('masterData.deducibilidadIVA', Number(data.deducibilidadIVA || 0))
+        setFieldValue('masterData.conpraCreditoNotaria', Number(data.conpraCreditoNotaria || 0))
+        setFieldValue('masterData.conpraCreditoRegistro', Number(data.conpraCreditoRegistro || 0))
+        setFieldValue('masterData.conpraCreditoGestion', Number(data.conpraCreditoGestion || 0))
+        setFieldValue('masterData.adjudicacionRegistro', Number(data.adjudicacionRegistro || 0))
+        setFieldValue('masterData.adjudicacionGestion', Number(data.adjudicacionGestion || 0))
+        setFieldValue('masterData.mesesParaCobroSubasta', Number(data.mesesParaCobroSubasta || 3))
+    }
 }
 
 const submitAnalysis = async () => {
+    console.log('submitAnalysis ejecutándose...')
     const loader = $loading?.show()
 
     try {
@@ -173,9 +299,12 @@ const submitAnalysis = async () => {
         // Definir el tipo explícitamente para permitir índices de cadena
         const brokerFeeFormatted: Record<string, { fee: number, cap: number }> = {};
 
-        // Si masterData.value existe y tiene brokerFee, formatear los datos
-        if (masterData.value?.brokerFee) {
-            const brokerFeeData = [...masterData.value.brokerFee];
+        // Decidir si usar datos editables o master data
+        const brokerFeeSource = displayFeeData.value;
+
+        // Si existe brokerFee, formatear los datos
+        if (brokerFeeSource) {
+            const brokerFeeData = [...brokerFeeSource];
 
             // Asegurar que el último tramo siempre tenga un cap
             if (brokerFeeData.length > 0) {
@@ -190,7 +319,7 @@ const submitAnalysis = async () => {
                 const tramoKey = item.tramo === 'En Adelante' ? (index + 1).toString() : item.tramo;
                 brokerFeeFormatted[tramoKey] = {
                     fee: item.fee,
-                    cap: item.cap
+                    cap: item.cap || 999999999999
                 };
             });
         }
@@ -201,8 +330,8 @@ const submitAnalysis = async () => {
         // Convertir explícitamente a número
         const abogadoValue = parseFloat(String(costeLanzamientoAbogado.value)) || 0;
         const procuradorValue = parseFloat(String(costeLanzamientoProcurador.value)) || 0;
-        const waccValue = parseFloat(String(wacc.value)) || 0;
-        const managementFeeValue = parseFloat(String(managementFee.value)) || 0;
+        const waccValue = apiModelType.value === 'NPL_BUY' ? 0 : parseFloat(String(wacc.value)) || 0;
+        const managementFeeValue = apiModelType.value === 'NPL_BUY' ? 0 : parseFloat(String(managementFee.value)) || 0;
 
         // Luego usar estos valores en el objeto de datos
         const { data }: { data: ProjectById } = await fenlabApi.post('', {
@@ -211,11 +340,13 @@ const submitAnalysis = async () => {
             body: {
                 name: name.value,
                 description: description.value,
-                modelType: modelType.value,
+                modelType: apiModelType.value, // Usar apiModelType en lugar de modelType
                 masterData: {
                     macro: macroFormatted,
-                    WACC: waccValue,
-                    managementFee: managementFeeValue,
+                    ...(apiModelType.value !== 'NPL_BUY' ? {
+                        WACC: waccValue,
+                        managementFee: managementFeeValue,
+                    } : {}),
                     ...(modelType.value === 'REO' ? {
                         costeLanzamientoAbogado: parseFloat(String(costeLanzamientoAbogado.value)) || 0,
                         costeLanzamientoProcurador: parseFloat(String(costeLanzamientoProcurador.value)) || 0,
@@ -225,8 +356,21 @@ const submitAnalysis = async () => {
                     }),
                     costeLanzamientoOtros: masterData.value?.costeLanzamientoOtros || 0,
                     brokerFee: brokerFeeFormatted,
-                    // Incluir successFee solo si el modelo es NPL
-                    ...(modelType.value === 'NPL' && masterData.value?.successFee ? {
+
+                    // Campos específicos de NPL_BUY
+                    ...(apiModelType.value === 'NPL_BUY' ? {
+                        costeHipotecariaOtros: parseFloat(String(costeHipotecariaOtros.value)) || 0,
+                        deducibilidadIVA: parseFloat(String(deducibilidadIVA.value)) || 0,
+                        conpraCreditoNotaria: parseFloat(String(conpraCreditoNotaria.value)) || 0,
+                        conpraCreditoRegistro: parseFloat(String(conpraCreditoRegistro.value)) || 0,
+                        conpraCreditoGestion: parseFloat(String(conpraCreditoGestion.value)) || 0,
+                        adjudicacionRegistro: parseFloat(String(adjudicacionRegistro.value)) || 0,
+                        adjudicacionGestion: parseFloat(String(adjudicacionGestion.value)) || 0,
+                        mesesParaCobroSubasta: parseFloat(String(mesesParaCobroSubasta.value)) || 3,
+                    } : {}),
+
+                    // Incluir successFee solo si el modelo es NPL o NPL_BUY
+                    ...(apiModelType.value.includes('NPL') && masterData.value?.successFee ? {
                         successFee: masterData.value.successFee
                     } : {})
                 },
@@ -288,13 +432,14 @@ const submitAnalysis = async () => {
                         <Textarea id="description" class="resize-none h-[112px]" placeholder="Descripción"
                             v-model="description" :class="{ 'border-red-500': step1Errors.description }" />
                         <span v-if="step1Errors.description" class="text-red-500 text-sm">{{ step1Errors.description
-                            }}</span>
+                        }}</span>
                     </div>
                 </div>
 
                 <div v-show="step === 2" class="flex flex-col gap-6">
-                    <div role="button"
-                        class="flex items-center gap-4 p-3 bg-white rounded-sm opacity-50 cursor-not-allowed">
+                    <div role="button" class="flex items-center gap-4 p-3 bg-white rounded-sm cursor-pointer"
+                        :class="{ 'text-electric-green [&_div]:text-electric-green bg-blue-sky border border-electric-green': activeSelection === 'buy' }"
+                        @click="activeSelection = 'buy'">
                         <ShoppingBagIcon />
 
                         <div class="text-grey">
@@ -308,7 +453,7 @@ const submitAnalysis = async () => {
                         </div>
                     </div>
 
-                    <div role="button" class="flex items-center gap-4 p-3 bg-white rounded-sm"
+                    <div role="button" class="flex items-center gap-4 p-3 bg-white rounded-sm cursor-pointer"
                         :class="{ 'text-electric-green [&_div]:text-electric-green bg-blue-sky border border-electric-green': activeSelection === 'sale' }"
                         @click="activeSelection = 'sale'">
                         <SellIcon />
@@ -378,13 +523,13 @@ const submitAnalysis = async () => {
                         </div>
                     </div>
 
-                    <div role="button" class="flex items-center gap-4 p-3 bg-white rounded-sm"
-                        :class="{ 'text-electric-green [&_div]:text-electric-green bg-blue-sky border border-electric-green': modelType === 'REO' }"
-                        @click="modelType = 'REO'">
+                    <div role="button" class="flex items-center gap-4 p-3 bg-white rounded-sm" :class="[
+                        activeSelection === 'buy' ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer',
+                        { 'text-electric-green [&_div]:text-electric-green bg-blue-sky border border-electric-green': modelType === 'REO' && activeSelection !== 'buy' }
+                    ]" @click="activeSelection !== 'buy' && (modelType = 'REO')">
                         <Badge variant="default">
                             REO
                         </Badge>
-
 
                         <div class="flex-1 text-grey">
                             <h3 class="text-lg font-bold">
@@ -392,7 +537,7 @@ const submitAnalysis = async () => {
                             </h3>
 
                             <p class="text-sm">
-                                Modelo de recuperación judicial de activos inmobiliarios
+                                {{ activeSelection === 'buy' ? 'No disponible en Buy Side' : 'Modelo de recuperación judicial de activos inmobiliarios' }}
                             </p>
                         </div>
                     </div>
@@ -400,37 +545,45 @@ const submitAnalysis = async () => {
 
                 <div v-show="step === 4" class="flex flex-col gap-2 max-h-[600px] overflow-y-auto">
                     <Tabs default-value="macro">
-                        <TabsList class="grid grid-cols-3">
+                        <TabsList :class="apiModelType === 'NPL_BUY' ? 'grid grid-cols-3' : 'grid grid-cols-3'">
                             <TabsTrigger value="macro">
                                 Macro
                             </TabsTrigger>
                             <TabsTrigger value="brokerGestion">
-                                Broker Fee
+                                {{ apiModelType === 'NPL_BUY' ? 'Intermediación' : 'Broker Fee' }}
                             </TabsTrigger>
-                            <TabsTrigger value="successFee" v-if="modelType === 'NPL'">
+                            <!-- Para NPL_BUY mostramos Campos Adicionales en lugar de Success Fee -->
+                            <TabsTrigger value="successFee"
+                                v-if="apiModelType.includes('NPL') && apiModelType !== 'NPL_BUY'">
                                 Success Fee
+                            </TabsTrigger>
+                            <TabsTrigger value="additionalFields" v-if="apiModelType === 'NPL_BUY'">
+                                Campos Adicionales
                             </TabsTrigger>
                         </TabsList>
                         <TabsContent value="macro">
-                            <div class="space-y-2 mb-6">
-                                <Label for="wacc">WACC - Coste de Capital (%)</Label>
-                                <Input id="wacc" type="text" placeholder="5" class="mt-2" v-percentage v-model="wacc"
-                                    :class="{ 'border-red-500': step4Errors['masterData.wacc'] }" required autofocus
-                                    autocomplete="wacc" min="0" />
-                                <span v-if="step4Errors['masterData.wacc']" class="text-red-500 text-sm">
-                                    {{ step4Errors['masterData.wacc'] }}
-                                </span>
-                            </div>
+                            <!-- WACC y Management Fee solo para modelos que no sean NPL_BUY -->
+                            <div v-if="apiModelType !== 'NPL_BUY'">
+                                <div class="space-y-2 mb-6">
+                                    <Label for="wacc">WACC - Coste de Capital (%)</Label>
+                                    <Input id="wacc" type="text" placeholder="5" class="mt-2" v-percentage
+                                        v-model="wacc" :class="{ 'border-red-500': step4Errors['masterData.wacc'] }"
+                                        required autofocus autocomplete="wacc" min="0" />
+                                    <span v-if="step4Errors['masterData.wacc']" class="text-red-500 text-sm">
+                                        {{ step4Errors['masterData.wacc'] }}
+                                    </span>
+                                </div>
 
-                            <div class="space-y-2 mb-8">
-                                <Label for="managementFee">Management fee (%)</Label>
-                                <Input id="managementFee" type="text" placeholder="5" class="mt-2" v-percentage
-                                    v-model="managementFee"
-                                    :class="{ 'border-red-500': step4Errors['masterData.managementFee'] }" required
-                                    autofocus autocomplete="managementFee" min="0" />
-                                <span v-if="step4Errors['masterData.managementFee']" class="text-red-500 text-sm">
-                                    {{ step4Errors['masterData.managementFee'] }}
-                                </span>
+                                <div class="space-y-2 mb-8">
+                                    <Label for="managementFee">Management fee (%)</Label>
+                                    <Input id="managementFee" type="text" placeholder="5" class="mt-2" v-percentage
+                                        v-model="managementFee"
+                                        :class="{ 'border-red-500': step4Errors['masterData.managementFee'] }" required
+                                        autofocus autocomplete="managementFee" min="0" />
+                                    <span v-if="step4Errors['masterData.managementFee']" class="text-red-500 text-sm">
+                                        {{ step4Errors['masterData.managementFee'] }}
+                                    </span>
+                                </div>
                             </div>
 
                             <!-- Sección de costes legales -->
@@ -489,15 +642,13 @@ const submitAnalysis = async () => {
                                 </div>
                             </div>
 
-                            <!-- Tabla Macro movida al final -->
+                            <!-- Tabla Macro (solo lectura para todos los modelos) -->
                             <div class="mt-6">
                                 <h3 class="text-lg font-semibold mb-4">Datos Macro</h3>
                                 <Table>
                                     <TableHeader>
                                         <TableRow class="[&_th]:px-3 [&_th]:bg-white">
-                                            <TableHead class="!bg-[#ECECEC] z-50 relative">
-                                                AÑO
-                                            </TableHead>
+                                            <TableHead class="!bg-[#ECECEC] z-50 relative">AÑO</TableHead>
                                             <TableHead>IPC (%)</TableHead>
                                             <TableHead>HPA (%)</TableHead>
                                         </TableRow>
@@ -516,12 +667,11 @@ const submitAnalysis = async () => {
                             </div>
                         </TabsContent>
                         <TabsContent value="brokerGestion">
+                            <!-- Tabla de solo lectura para todos los modelos -->
                             <Table class="max-w-[520px]">
                                 <TableHeader>
                                     <TableRow class="[&_th]:px-3 [&_th]:bg-white">
-                                        <TableHead class="!bg-[#ECECEC] z-50 relative">
-                                            Tramo
-                                        </TableHead>
+                                        <TableHead class="!bg-[#ECECEC] z-50 relative">Tramo</TableHead>
                                         <TableHead>Fee (%)</TableHead>
                                         <TableHead>Desde</TableHead>
                                         <TableHead>Hasta</TableHead>
@@ -529,7 +679,7 @@ const submitAnalysis = async () => {
                                 </TableHeader>
                                 <TableBody>
                                     <TableRow class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]"
-                                        v-for="data in masterData?.brokerFee" :key="data.tramo">
+                                        v-for="data in displayFeeData" :key="data.tramo">
                                         <TableCell class="!bg-[#ECECEC] font-bold">
                                             {{ data.tramo }}
                                         </TableCell>
@@ -539,8 +689,17 @@ const submitAnalysis = async () => {
                                     </TableRow>
                                 </TableBody>
                             </Table>
+
+                            <!-- Checkbox solo para NPL_BUY -->
+                            <div v-if="apiModelType === 'NPL_BUY'" class="mt-4 flex items-center space-x-2">
+                                <Checkbox id="noUsarFenciaFee" v-model:checked="noUsarFenciaFee" />
+                                <Label for="noUsarFenciaFee"
+                                    class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                                    No usar Fencia Fee
+                                </Label>
+                            </div>
                         </TabsContent>
-                        <TabsContent value="successFee" v-if="modelType === 'NPL'">
+                        <TabsContent value="successFee" v-if="apiModelType.includes('NPL')">
                             <div class="mt-6">
                                 <Table class="max-w-[520px]">
                                     <TableHeader>
@@ -567,6 +726,128 @@ const submitAnalysis = async () => {
                                         </TableRow>
                                     </TableBody>
                                 </Table>
+                            </div>
+                        </TabsContent>
+
+                        <!-- Nuevo tab para Campos Adicionales de NPL_BUY -->
+                        <TabsContent value="additionalFields" v-if="apiModelType === 'NPL_BUY'">
+                            <div class="space-y-6 mt-4">
+                                <!-- Primera fila -->
+                                <div class="grid grid-cols-3 gap-4">
+                                    <div class="space-y-2">
+                                        <Label for="costeHipotecariaOtros">Coste Hipotecaria Otros</Label>
+                                        <Input id="costeHipotecariaOtros" type="text" placeholder="200" class="mt-2"
+                                            v-currency v-model="costeHipotecariaOtros"
+                                            :class="{ 'border-red-500': step4Errors['masterData.costeHipotecariaOtros'] }"
+                                            min="0" />
+                                        <span v-if="step4Errors['masterData.costeHipotecariaOtros']"
+                                            class="text-red-500 text-sm">
+                                            {{ step4Errors['masterData.costeHipotecariaOtros'] }}
+                                        </span>
+                                    </div>
+
+                                    <div class="space-y-2">
+                                        <Label for="costeLanzamientoOtros">Coste Lanzamiento Otros</Label>
+                                        <Input id="costeLanzamientoOtros" type="text" placeholder="100" class="mt-2"
+                                            v-currency v-model="costeLanzamientoOtros"
+                                            :class="{ 'border-red-500': step4Errors['masterData.costeLanzamientoOtros'] }"
+                                            min="0" />
+                                        <span v-if="step4Errors['masterData.costeLanzamientoOtros']"
+                                            class="text-red-500 text-sm">
+                                            {{ step4Errors['masterData.costeLanzamientoOtros'] }}
+                                        </span>
+                                    </div>
+
+                                    <div class="space-y-2">
+                                        <Label for="deducibilidadIVA">Deducibilidad IVA (%)</Label>
+                                        <Input id="deducibilidadIVA" type="text" placeholder="100" class="mt-2"
+                                            v-percentage v-model="deducibilidadIVA"
+                                            :class="{ 'border-red-500': step4Errors['masterData.deducibilidadIVA'] }"
+                                            min="0" />
+                                        <span v-if="step4Errors['masterData.deducibilidadIVA']"
+                                            class="text-red-500 text-sm">
+                                            {{ step4Errors['masterData.deducibilidadIVA'] }}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- Segunda fila -->
+                                <div class="grid grid-cols-3 gap-4">
+                                    <div class="space-y-2">
+                                        <Label for="conpraCreditoNotaria">Compra Crédito Notaría</Label>
+                                        <Input id="conpraCreditoNotaria" type="text" placeholder="600" class="mt-2"
+                                            v-currency v-model="conpraCreditoNotaria"
+                                            :class="{ 'border-red-500': step4Errors['masterData.conpraCreditoNotaria'] }"
+                                            min="0" />
+                                        <span v-if="step4Errors['masterData.conpraCreditoNotaria']"
+                                            class="text-red-500 text-sm">
+                                            {{ step4Errors['masterData.conpraCreditoNotaria'] }}
+                                        </span>
+                                    </div>
+
+                                    <div class="space-y-2">
+                                        <Label for="conpraCreditoRegistro">Compra Crédito Registro</Label>
+                                        <Input id="conpraCreditoRegistro" type="text" placeholder="500" class="mt-2"
+                                            v-currency v-model="conpraCreditoRegistro"
+                                            :class="{ 'border-red-500': step4Errors['masterData.conpraCreditoRegistro'] }"
+                                            min="0" />
+                                        <span v-if="step4Errors['masterData.conpraCreditoRegistro']"
+                                            class="text-red-500 text-sm">
+                                            {{ step4Errors['masterData.conpraCreditoRegistro'] }}
+                                        </span>
+                                    </div>
+
+                                    <div class="space-y-2">
+                                        <Label for="conpraCreditoGestion">Compra Crédito Gestión</Label>
+                                        <Input id="conpraCreditoGestion" type="text" placeholder="350" class="mt-2"
+                                            v-currency v-model="conpraCreditoGestion"
+                                            :class="{ 'border-red-500': step4Errors['masterData.conpraCreditoGestion'] }"
+                                            min="0" />
+                                        <span v-if="step4Errors['masterData.conpraCreditoGestion']"
+                                            class="text-red-500 text-sm">
+                                            {{ step4Errors['masterData.conpraCreditoGestion'] }}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- Tercera fila -->
+                                <div class="grid grid-cols-3 gap-4">
+                                    <div class="space-y-2">
+                                        <Label for="adjudicacionRegistro">Adjudicación Registro</Label>
+                                        <Input id="adjudicacionRegistro" type="text" placeholder="500" class="mt-2"
+                                            v-currency v-model="adjudicacionRegistro"
+                                            :class="{ 'border-red-500': step4Errors['masterData.adjudicacionRegistro'] }"
+                                            min="0" />
+                                        <span v-if="step4Errors['masterData.adjudicacionRegistro']"
+                                            class="text-red-500 text-sm">
+                                            {{ step4Errors['masterData.adjudicacionRegistro'] }}
+                                        </span>
+                                    </div>
+
+                                    <div class="space-y-2">
+                                        <Label for="adjudicacionGestion">Adjudicación Gestión</Label>
+                                        <Input id="adjudicacionGestion" type="text" placeholder="175" class="mt-2"
+                                            v-currency v-model="adjudicacionGestion"
+                                            :class="{ 'border-red-500': step4Errors['masterData.adjudicacionGestion'] }"
+                                            min="0" />
+                                        <span v-if="step4Errors['masterData.adjudicacionGestion']"
+                                            class="text-red-500 text-sm">
+                                            {{ step4Errors['masterData.adjudicacionGestion'] }}
+                                        </span>
+                                    </div>
+
+                                    <div class="space-y-2">
+                                        <Label for="mesesParaCobroSubasta">Meses para Cobro Subasta</Label>
+                                        <Input id="mesesParaCobroSubasta" type="number" placeholder="3" class="mt-2"
+                                            v-model="mesesParaCobroSubasta"
+                                            :class="{ 'border-red-500': step4Errors['masterData.mesesParaCobroSubasta'] }"
+                                            min="1" />
+                                        <span v-if="step4Errors['masterData.mesesParaCobroSubasta']"
+                                            class="text-red-500 text-sm">
+                                            {{ step4Errors['masterData.mesesParaCobroSubasta'] }}
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                         </TabsContent>
                     </Tabs>
