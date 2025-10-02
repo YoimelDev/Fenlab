@@ -159,7 +159,7 @@ const validateBrokerFeeTiers = () => {
 // Reemplaza tu función postData existente
 const postData = async () => {
     try {
-        // IMPORTANTE: Sincronizar los hurdles antes de validar
+        // Sincronizar los hurdles antes de validar
         syncBrokerFeeTiersValues();
 
         // Validar tramos antes de enviar
@@ -170,13 +170,17 @@ const postData = async () => {
                 title: 'Error de validación',
                 description: validation.message
             });
-            return; // No cerramos el modal si hay error de validación
+            return;
         }
 
-        // Crear una copia del objeto sin la propiedad fenciaFee
-        const dataToSend = { ...localMasterData };
+        // Forzar cap del último tramo "En Adelante" a 999999999
+        localMasterData.brokerFee.forEach(tier => {
+            if (tier.tramo.includes('Adelante')) {
+                tier.cap = 999999999;
+            }
+        });
 
-        console.log("Datos a enviar:", dataToSend);
+        const dataToSend = { ...localMasterData };
         delete dataToSend.fenciaFee;
 
         await fenlabApi.post('', {
@@ -190,11 +194,9 @@ const postData = async () => {
             title: 'Datos guardados correctamente',
         })
 
-        // Solo si el guardado fue exitoso:
         isDialogOpen.value = false;
         emits('updated');
     } catch (error) {
-        // En caso de error, mostramos el toast pero NO cerramos el modal
         console.error("Error al guardar datos:", error);
         toast({
             variant: 'danger',
