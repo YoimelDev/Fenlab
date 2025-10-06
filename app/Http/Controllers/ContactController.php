@@ -35,6 +35,8 @@ class ContactController extends Controller
     public function store(StoreContactRequest $request)
     {
         try {
+            Log::info("contact emails: " . env('CONTACT_EMAILS'));
+            Log::info("request data: " . json_encode($request->all()));
             $emails = explode(',', env('CONTACT_EMAILS'));
             Mail::to($emails)->send(new ContactEmail());
         } catch (\Exception $e) {
