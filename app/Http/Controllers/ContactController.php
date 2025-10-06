@@ -7,6 +7,7 @@ use App\Http\Requests\StoreContactRequest;
 use App\Http\Requests\UpdateContactRequest;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ContactEmail;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 
 
@@ -37,6 +38,9 @@ class ContactController extends Controller
             $emails = explode(',', env('CONTACT_EMAILS'));
             Mail::to($emails)->send(new ContactEmail());
         } catch (\Exception $e) {
+            Log::error("Failed to send contact email: " . $e->getMessage());
+            Log::error("contact emails: " . env('CONTACT_EMAILS'));
+            Log::error("request data: " . json_encode($request->all()));
             return Redirect::back()->withErrors(['error' => 'Failed to create contact: ' . $e->getMessage()])->withInput();
         }
 
