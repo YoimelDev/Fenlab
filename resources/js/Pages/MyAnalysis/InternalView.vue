@@ -276,6 +276,19 @@ async function uploadIdealistaFile() {
         router.reload()
     }
 }
+
+// Computed para determinar si la subida está bloqueada
+const isUploadBlocked = computed(() => {
+    return props.project.status === 'Análisis completo' && !props.project.outputBBDD
+})
+
+// Computed para el mensaje de bloqueo
+const blockedMessage = computed(() => {
+    if (isUploadBlocked.value) {
+        return 'Análisis completado. No se permiten más cargas para este tipo de análisis.'
+    }
+    return ''
+})
 </script>
 
 <template>
@@ -374,18 +387,36 @@ async function uploadIdealistaFile() {
                         {{ fileError }}
                     </div>
 
+                    <!-- Mensaje de bloqueo cuando análisis completo sin outputBBDD -->
+                    <div v-if="isUploadBlocked"
+                        class="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-sm text-yellow-700">
+                        {{ blockedMessage }}
+                    </div>
+
                     <div ref="dropZoneRef"
-                        class="grid place-items-center p-5 border-2 border-dashed border-[#C1C1C1] rounded-sm"
-                        :class="[isOverDropZone && 'border-electric-green', fileError && 'border-red-300']"
-                        @click="openFileDialog" role="button">
+                        class="grid place-items-center p-5 border-2 border-dashed border-[#C1C1C1] rounded-sm" :class="[
+
+                            isOverDropZone && !isUploadBlocked && 'border-electric-green',
+                            fileError && 'border-red-300',
+                            isUploadBlocked && 'border-gray-300 bg-gray-50 opacity-50 cursor-not-allowed'
+                        ]" @click="!isUploadBlocked && openFileDialog()"
+                        :role="!isUploadBlocked ? 'button' : undefined">
                         <template v-if="filesData.length === 0">
-                            <p class="flex items-center gap-2 mb-5 text-grey text-sm">
-                                Arrastra aquí tu archivo excel cumplimentado o haz clic para seleccionarlo
-                                <CircleIcon variant="help" />
+                            <p class="flex items-center gap-2 mb-5 text-grey text-sm"
+                                :class="isUploadBlocked && 'text-gray-400'">
+                                <span v-if="!isUploadBlocked">
+                                    Arrastra aquí tu archivo excel cumplimentado o haz clic para seleccionarlo
+                                </span>
+                                <span v-else>
+                                    Análisis completado - No se permiten más cargas
+                                </span>
+                                <CircleIcon variant="help" v-if="!isUploadBlocked" />
                             </p>
-                            <Button variant="green" size="xs" @click.stop="openFileDialog">
+                            <Button variant="green" size="xs" @click.stop="!isUploadBlocked && openFileDialog()"
+                                :disabled="isUploadBlocked" :class="isUploadBlocked && 'opacity-50 cursor-not-allowed'">
                                 <UploadIcon class="mr-2" />
-                                Adjuntar archivo
+                                <span v-if="!isUploadBlocked">Adjuntar archivo</span>
+                                <span v-else>Subida no disponible</span>
                             </Button>
                         </template>
                         <template v-else>
@@ -401,8 +432,8 @@ async function uploadIdealistaFile() {
                             </div>
                         </template>
 
-                        <input type="file" ref="fileInput" @change="handleFileChange" class="hidden"
-                            accept=".xlsx,.xls">
+                        <input type="file" ref="fileInput" @change="handleFileChange" class="hidden" accept=".xlsx,.xls"
+                            :disabled="isUploadBlocked">
                     </div>
                 </div>
 
