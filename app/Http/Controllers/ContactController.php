@@ -7,6 +7,8 @@ use App\Http\Requests\StoreContactRequest;
 use App\Http\Requests\UpdateContactRequest;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ContactEmail;
+use App\Mail\UserRegisteredEmail;
+use App\Mail\UserRegisteredMail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 
@@ -38,7 +40,13 @@ class ContactController extends Controller
             Log::info("contact emails: " . env('CONTACT_EMAILS'));
             Log::info("request data: " . json_encode($request->all()));
             $emails = explode(',', env('CONTACT_EMAILS'));
+            $userEmail = $request->input('email');
+
+            // Enviar a los administradores
             Mail::to($emails)->send(new ContactEmail());
+
+            // Enviar al usuario registrado
+            Mail::to($userEmail)->send(new UserRegisteredMail($request->all()));
         } catch (\Exception $e) {
             Log::error("Failed to send contact email: " . $e->getMessage());
             Log::error("contact emails: " . env('CONTACT_EMAILS'));
