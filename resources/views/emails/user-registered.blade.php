@@ -59,7 +59,8 @@
 
 <body>
     <div class="container">
-        <img src="{{ $message->embed(public_path('images/logo.png')) }}" alt="FenLAB Logo" class="logo">
+        <img src="{{ isset($message) ? $message->embed(public_path('images/logo.png')) : asset('images/logo.png') }}"
+            alt="FenLAB Logo" class="logo">
 
         <div class="subject">Asunto: Solicitud de Contacto en FenLAB</div>
 
@@ -79,7 +80,8 @@
             <p>Equipo <u>FenLAB</u></p>
         </div>
 
-        <img src="{{ $message->embed(public_path('images/logo.png')) }}" alt="FenLAB Logo" class="team-logo">
+        <img src="{{ isset($message) ? $message->embed(public_path('images/logo.png')) : asset('images/logo.png') }}"
+            alt="FenLAB Logo" class="team-logo">
     </div>
 </body>
 

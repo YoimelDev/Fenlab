@@ -29,6 +29,7 @@ class RouteServiceProvider extends ServiceProvider
   {
     $this->mapApiRoutes();
     $this->mapWebRoutes();
+    $this->mapPreviewRoutes();
   }
 
   /**
@@ -52,5 +53,17 @@ class RouteServiceProvider extends ServiceProvider
       ->middleware('api')
       ->namespace($this->namespace)
       ->group(base_path('routes/api.php'));
+  }
+
+  /**
+   * Define the preview routes for email templates.
+   * Only available in local environment.
+   */
+  protected function mapPreviewRoutes()
+  {
+    if (app()->environment('local')) {
+      Route::middleware('web')
+        ->group(base_path('routes/preview.php'));
+    }
   }
 }
