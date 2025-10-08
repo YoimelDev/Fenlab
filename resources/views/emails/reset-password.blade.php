@@ -75,6 +75,16 @@
             margin: 20px auto 0 auto;
             max-width: 80px;
         }
+
+        .note {
+            font-size: 12px;
+            color: #9ca3af;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9fafb;
+            border-radius: 6px;
+            border-left: 4px solid #d1d5db;
+        }
     </style>
 </head>
 
@@ -82,29 +92,34 @@
     <div class="container">
         <img src="{{ $message->embed(public_path('images/logo.png')) }}" alt="FenLAB Logo" class="logo">
 
-        <div class="subject">Asunto: Creación de Contraseña en FenLAB</div>
+        <div class="subject">Asunto: Restablecimiento de Contraseña en FenLAB</div>
 
-        <p>Hola {{ $user['name'] ?? '[Nombre]' }},</p>
+        <p>Hola,</p>
 
-        <p>Gracias por ponerte en contacto con nosotros. Hemos recibido tu solicitud para crear tu cuenta en
-            <u>FenLAB</u> y nos alegra saber de tu interés en formar parte de nuestra comunidad.
-        </p>
-
-        <p>Para poder completar tu registro, necesitamos que establezcas tu contraseña. Haz clic en el siguiente botón
-            para crear tu nueva contraseña:</p>
+        <p>Hemos recibido una solicitud para restablecer la contraseña de tu cuenta en <u>FenLAB</u>. Si solicitaste
+            este cambio, haz clic en el siguiente botón para crear una nueva contraseña:</p>
 
         <div class="button-container">
-            <a href="{{ $resetUrl }}" class="button">Crear Nueva Contraseña</a>
+            <a href="{{ $actionUrl }}" class="button">Restablecer Contraseña</a>
         </div>
 
-        <p>Una vez que hayas establecido tu contraseña, podrás acceder completamente a todos nuestros servicios.
-            Apreciamos tu paciencia mientras completamos este proceso.</p>
+        <p>Este enlace de restablecimiento expirará en {{ $count }} minutos por motivos de seguridad.</p>
 
-        <p>Si tienes alguna pregunta o necesitas más información, no dudes en responder a este correo.</p>
+        <p>Si no solicitaste el restablecimiento de tu contraseña, puedes ignorar este correo de forma segura. Tu
+            contraseña actual permanecerá sin cambios.</p>
+
+        <p>Si tienes alguna pregunta o necesitas asistencia adicional, no dudes en ponerte en contacto con nuestro
+            equipo de soporte.</p>
 
         <div class="signature">
             <p>¡Saludos cordiales!</p>
             <p>Equipo <u>FenLAB</u></p>
+        </div>
+
+        <div class="note">
+            <p><strong>Nota de seguridad:</strong> Si no puedes hacer clic en el botón, copia y pega el siguiente enlace
+                en tu navegador:</p>
+            <p style="word-break: break-all; color: #6b7280;">{{ $actionUrl }}</p>
         </div>
 
         <img src="{{ $message->embed(public_path('images/logo.png')) }}" alt="FenLAB Logo" class="team-logo">
