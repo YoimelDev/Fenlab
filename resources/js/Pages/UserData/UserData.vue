@@ -88,13 +88,12 @@ onMounted(() => {
             </header>
 
             <!-- Tablas organizadas como solicitado -->
-            <!-- Primera fila: Fencia Fee y Broker Fee -->
-            <div class="mt-8 grid grid-cols-2 gap-8">
+            <!-- Primera fila: Fencia Fee, Broker Fee y Buy Fencia Fee -->
+            <div class="mt-8 grid grid-cols-3 gap-8">
                 <div>
                     <h3 class="text-grey my-4">
                         Fencia Fee
                     </h3>
-
                     <Table class="max-w-[520px]">
                         <TableHeader>
                             <TableRow class="[&_th]:px-3 [&_th]:bg-white">
@@ -119,12 +118,10 @@ onMounted(() => {
                         </TableBody>
                     </Table>
                 </div>
-
                 <div>
                     <h3 class="text-grey my-4">
                         Broker Fee (API) para Venta Vacío
                     </h3>
-
                     <Table class="max-w-[520px]">
                         <TableHeader>
                             <TableRow class="[&_th]:px-3 [&_th]:bg-white">
@@ -145,6 +142,34 @@ onMounted(() => {
                                 <TableCell>{{ formatPercentage(data.fee) }}</TableCell>
                                 <TableCell>{{ data.hurdle ? formatCurrency(data.hurdle) : "0" }}</TableCell>
                                 <TableCell>{{ data.cap ? formatCurrency(data.cap ?? 0) : "-" }}</TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                </div>
+                <div>
+                    <h3 class="text-grey my-4">
+                        Buy Fencia Fee
+                    </h3>
+                    <Table class="max-w-[520px]">
+                        <TableHeader>
+                            <TableRow class="[&_th]:px-3 [&_th]:bg-white">
+                                <TableHead class="!bg-[#ECECEC] z-50 relative">
+                                    Tramo
+                                </TableHead>
+                                <TableHead>Fee (%)</TableHead>
+                                <TableHead>Desde</TableHead>
+                                <TableHead>Hasta</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            <TableRow class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]"
+                                v-for="data in masterData?.buyFenciaFee" :key="data.tramo">
+                                <TableCell class="!bg-[#ECECEC] font-bold">
+                                    {{ data.tramo }}
+                                </TableCell>
+                                <TableCell>{{ formatPercentage(data.fee) }}</TableCell>
+                                <TableCell>{{ data.hurdle ? formatCurrency(data.hurdle) : "0" }}</TableCell>
+                                <TableCell>{{ data.cap ? formatCurrency(data.cap) : "-" }}</TableCell>
                             </TableRow>
                         </TableBody>
                     </Table>

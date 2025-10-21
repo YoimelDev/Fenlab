@@ -53,39 +53,28 @@ const localMasterData = reactive({
 
 const emits = defineEmits(['updated'])
 
-// Función para sincronizar hurdles con caps del tramo anterior
-const syncBrokerFeeTiersValues = () => {
+// Función para sincronizar hurdles con caps del tramo anterior para cualquier fee
+const syncFeeTiersValues = (feeArray) => {
     // Primero, ordenamos los tramos según su nombre
-    const sortedTiers = [...localMasterData.brokerFee].sort((a, b) => {
-        // Caso especial para "En Adelante" que siempre debe ir al final
+    const sortedTiers = [...feeArray].sort((a, b) => {
         if (a.tramo.includes('Adelante')) return 1;
         if (b.tramo.includes('Adelante')) return -1;
-
         const numA = parseInt(a.tramo.replace(/\D/g, ''), 10) || 0;
         const numB = parseInt(b.tramo.replace(/\D/g, ''), 10) || 0;
         return numA - numB;
     });
-
     // Convertir todos los caps a números
     sortedTiers.forEach(tier => {
-        // Asegurar que cap es un número
         tier.cap = typeof tier.cap === 'string' ? parseFloat(tier.cap) : tier.cap;
     });
-
     // Sincronizamos los hurdles con los caps del tramo anterior
     for (let i = 1; i < sortedTiers.length; i++) {
-        // Si es el último tramo "En Adelante", no necesita hurdle
-        // if (sortedTiers[i].tramo.includes('Adelante')) continue;
-
-        // Asignar el cap del tramo anterior como hurdle de este tramo
         sortedTiers[i].hurdle = sortedTiers[i - 1].cap;
     }
-
-    // IMPORTANTE: Actualizamos los datos originales con los valores sincronizados
-    // Esto es lo que faltaba en tu implementación original
+    // Actualizamos los datos originales con los valores sincronizados
     for (let i = 0; i < sortedTiers.length; i++) {
         const tier = sortedTiers[i];
-        const originalTier = localMasterData.brokerFee.find(t => t.tramo === tier.tramo);
+        const originalTier = feeArray.find(t => t.tramo === tier.tramo);
         if (originalTier) {
             originalTier.hurdle = tier.hurdle;
             originalTier.cap = tier.cap;
@@ -93,42 +82,27 @@ const syncBrokerFeeTiersValues = () => {
     }
 }
 
-// Validar la configuración de tramos antes de enviar
-const validateBrokerFeeTiers = () => {
-    const tiers = localMasterData.brokerFee;
-
-    // Ordenamos los tramos según su nombre
+// Validar la configuración de tramos antes de enviar para cualquier fee
+const validateFeeTiers = (feeArray) => {
+    const tiers = feeArray;
     const sortedTiers = [...tiers].sort((a, b) => {
-        // Caso especial para "En Adelante" que siempre debe ir al final
         if (a.tramo.includes('Adelante')) return 1;
         if (b.tramo.includes('Adelante')) return -1;
-
         const numA = parseInt(a.tramo.replace(/\D/g, ''), 10) || 0;
         const numB = parseInt(b.tramo.replace(/\D/g, ''), 10) || 0;
         return numA - numB;
     });
-
-    // Convertir todos los valores a números para comparaciones consistentes
     sortedTiers.forEach(tier => {
-        // Asegurar que cap es un número
         tier.cap = typeof tier.cap === 'string' ? parseFloat(tier.cap) : tier.cap;
-
-        // Asegurar que hurdle es un número si existe
         if (tier.hurdle !== undefined) {
             tier.hurdle = typeof tier.hurdle === 'string' ? parseFloat(tier.hurdle) : tier.hurdle;
         } else if (!tier.tramo.includes('Adelante')) {
-            // Si no es "En Adelante" y falta hurdle, asignar un valor predeterminado
             tier.hurdle = 0;
         }
     });
-
-    // Verificamos que cada tramo tenga hurdle ≤ cap (excepto el último "En Adelante")
     for (let i = 0; i < sortedTiers.length; i++) {
         const tier = sortedTiers[i];
-
-        // Saltamos la validación para el tramo "En Adelante"
         if (tier.tramo.includes('Adelante')) continue;
-
         if ((tier.hurdle || 0) > (tier.cap || 0)) {
             return {
                 valid: false,
@@ -136,15 +110,10 @@ const validateBrokerFeeTiers = () => {
             };
         }
     }
-
-    // Verificamos que cada hurdle sea igual al cap del tramo anterior
     for (let i = 1; i < sortedTiers.length; i++) {
-        // Saltamos la validación para el tramo "En Adelante"
         if (sortedTiers[i].tramo.includes('Adelante')) continue;
-
         const prevCap = sortedTiers[i - 1].cap;
         const currentHurdle = sortedTiers[i].hurdle || 0;
-
         if (currentHurdle !== prevCap) {
             return {
                 valid: false,
@@ -152,7 +121,6 @@ const validateBrokerFeeTiers = () => {
             };
         }
     }
-
     return { valid: true };
 }
 
@@ -160,21 +128,36 @@ const validateBrokerFeeTiers = () => {
 const postData = async () => {
     try {
         // Sincronizar los hurdles antes de validar
-        syncBrokerFeeTiersValues();
+        syncFeeTiersValues(localMasterData.brokerFee);
+        syncFeeTiersValues(localMasterData.buyFenciaFee);
 
         // Validar tramos antes de enviar
-        const validation = validateBrokerFeeTiers();
-        if (!validation.valid) {
+        const validationBroker = validateFeeTiers(localMasterData.brokerFee);
+        if (!validationBroker.valid) {
             toast({
                 variant: 'danger',
                 title: 'Error de validación',
-                description: validation.message
+                description: validationBroker.message
+            });
+            return;
+        }
+        const validationBuyFencia = validateFeeTiers(localMasterData.buyFenciaFee);
+        if (!validationBuyFencia.valid) {
+            toast({
+                variant: 'danger',
+                title: 'Error de validación',
+                description: validationBuyFencia.message
             });
             return;
         }
 
-        // Forzar cap del último tramo "En Adelante" a 999999999
+        // Forzar cap del último tramo "En Adelante" a 999999999 en ambos fees
         localMasterData.brokerFee.forEach(tier => {
+            if (tier.tramo.includes('Adelante')) {
+                tier.cap = 999999999;
+            }
+        });
+        localMasterData.buyFenciaFee.forEach(tier => {
             if (tier.tramo.includes('Adelante')) {
                 tier.cap = 999999999;
             }
@@ -208,10 +191,16 @@ const postData = async () => {
 
 // Observar cambios en los caps para sincronizar hurdles automáticamente
 watch(
-    () => localMasterData.brokerFee?.map(tier => tier.cap),
+    () => [
+        localMasterData.brokerFee?.map(tier => tier.cap),
+        localMasterData.buyFenciaFee?.map(tier => tier.cap)
+    ],
     () => {
         if (localMasterData.brokerFee?.length > 0) {
-            syncBrokerFeeTiersValues();
+            syncFeeTiersValues(localMasterData.brokerFee);
+        }
+        if (localMasterData.buyFenciaFee?.length > 0) {
+            syncFeeTiersValues(localMasterData.buyFenciaFee);
         }
     },
     { deep: true }
@@ -236,14 +225,16 @@ watch(
             <div class="content">
                 <div class="flex flex-col gap-4 max-h-[600px] overflow-y-auto">
                     <Tabs default-value="macro">
-                        <TabsList class="grid grid-cols-2">
+                        <TabsList class="grid grid-cols-3">
                             <TabsTrigger value="macro">
                                 Macro
                             </TabsTrigger>
                             <TabsTrigger value="brokerFee">
                                 Broker Fee
                             </TabsTrigger>
-
+                            <TabsTrigger value="buyFenciaFee">
+                                Buy Fencia Fee
+                            </TabsTrigger>
                         </TabsList>
 
                         <TabsContent value="macro">
@@ -306,6 +297,49 @@ watch(
                                     <TableBody>
                                         <TableRow class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]"
                                             v-for="(data, index) in localMasterData.brokerFee" :key="data.tramo">
+                                            <TableCell class="!bg-[#ECECEC] font-bold">
+                                                {{ data.tramo }}
+                                            </TableCell>
+                                            <TableCell>
+                                                <input type="text" v-percentage v-model="data.fee"
+                                                    class="w-full h-full outline-none hover:bg-gray-100">
+                                            </TableCell>
+                                            <TableCell>
+                                                <input v-currency v-model="data.hurdle"
+                                                    class="w-full h-full outline-none hover:bg-gray-100"
+                                                    :disabled="index >= 0 || data.tramo.includes('Adelante')"
+                                                    :title="index > 0 ? 'Este valor se sincroniza automáticamente' :
+                                                        data.tramo.includes('Adelante') ? 'No aplicable para este tramo' : ''">
+                                            </TableCell>
+                                            <TableCell>
+                                                <input v-currency v-model="data.cap"
+                                                    :disabled="data.tramo.includes('Adelante')"
+                                                    class="w-full h-full outline-none hover:bg-gray-100"
+                                                    :title="data.tramo.includes('Adelante') ? 'No aplicable para este tramo' : ''"
+                                                    :value="data.tramo.includes('Adelante') ? '999999999' : data.cap">
+                                            </TableCell>
+                                        </TableRow>
+                                    </TableBody>
+                                </Table>
+                            </div>
+                        </TabsContent>
+
+                        <TabsContent value="buyFenciaFee">
+                            <div class="mt-6">
+                                <Table class="mt-2">
+                                    <TableHeader>
+                                        <TableRow class="[&_th]:px-3 [&_th]:bg-white">
+                                            <TableHead class="!bg-[#ECECEC] z-50 relative">
+                                                Tramo
+                                            </TableHead>
+                                            <TableHead>Fee (%)</TableHead>
+                                            <TableHead>Desde (€)</TableHead>
+                                            <TableHead>Hasta (€)</TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        <TableRow class="[&_td]:px-3 [&_td]:bg-white !border-t border-[#ECECEC]"
+                                            v-for="(data, index) in localMasterData.buyFenciaFee" :key="data.tramo">
                                             <TableCell class="!bg-[#ECECEC] font-bold">
                                                 {{ data.tramo }}
                                             </TableCell>

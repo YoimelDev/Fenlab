@@ -82,9 +82,8 @@ const apiModelType = computed(() => {
 // Computed property para determinar qué datos de fee mostrar
 const displayFeeData = computed(() => {
     if (apiModelType.value === 'NPL_BUY') {
-        // Si no usar Fencia Fee está marcado (true), mostrar brokerFee
-        // Si no usar Fencia Fee NO está marcado (false), mostrar fenciaFee cuando esté disponible
-        return noUsarFenciaFee.value ? masterData.value?.brokerFee : (masterData.value?.fenciaFee || masterData.value?.brokerFee)
+        // Usar buyFenciaFee para NPL_BUY
+        return masterData.value?.buyFenciaFee
     }
     return masterData.value?.brokerFee
 })
@@ -295,29 +294,24 @@ const submitAnalysis = async () => {
     const loader = $loading?.show()
 
     try {
-        // Crear el objeto brokerFee en el formato requerido
-        // Definir el tipo explícitamente para permitir índices de cadena
-        const brokerFeeFormatted: Record<string, { fee: number, cap: number }> = {};
+        // Crear el objeto de fee en el formato requerido
+        // Usar buyFenciaFee para NPL_BUY, brokerFee para otros
+        const feeFormatted: Record<string, { fee: number, cap: number }> = {};
 
-        // Decidir si usar datos editables o master data
-        const brokerFeeSource = displayFeeData.value;
+        const feeSource = displayFeeData.value;
 
-        // Si existe brokerFee, formatear los datos
-        if (brokerFeeSource) {
-            const brokerFeeData = [...brokerFeeSource];
-
+        if (feeSource) {
+            const feeData = [...feeSource];
             // Asegurar que el último tramo siempre tenga un cap
-            if (brokerFeeData.length > 0) {
-                const lastIndex = brokerFeeData.length - 1;
-                if (brokerFeeData[lastIndex].tramo === 'En Adelante' && !brokerFeeData[lastIndex].cap) {
-                    // Asignar un valor muy alto como cap para el último tramo si no tiene uno
-                    brokerFeeData[lastIndex].cap = 999999999999;
+            if (feeData.length > 0) {
+                const lastIndex = feeData.length - 1;
+                if (feeData[lastIndex].tramo === 'En Adelante' && !feeData[lastIndex].cap) {
+                    feeData[lastIndex].cap = 999999999999;
                 }
             }
-
-            brokerFeeData.forEach((item, index) => {
+            feeData.forEach((item, index) => {
                 const tramoKey = item.tramo === 'En Adelante' ? (index + 1).toString() : item.tramo;
-                brokerFeeFormatted[tramoKey] = {
+                feeFormatted[tramoKey] = {
                     fee: item.fee,
                     cap: item.cap || 999999999999
                 };
@@ -355,7 +349,11 @@ const submitAnalysis = async () => {
                         costeHipotecariaProcurador: parseFloat(String(costeHipotecariaProcurador.value)) || 0,
                     }),
                     costeLanzamientoOtros: masterData.value?.costeLanzamientoOtros || 0,
-                    brokerFee: brokerFeeFormatted,
+                    ...(apiModelType.value === 'NPL_BUY' ? {
+                        buyFenciaFee: feeFormatted,
+                    } : {
+                        brokerFee: feeFormatted,
+                    }),
 
                     // Campos específicos de NPL_BUY
                     ...(apiModelType.value === 'NPL_BUY' ? {
@@ -432,7 +430,7 @@ const submitAnalysis = async () => {
                         <Textarea id="description" class="resize-none h-[112px]" placeholder="Descripción"
                             v-model="description" :class="{ 'border-red-500': step1Errors.description }" />
                         <span v-if="step1Errors.description" class="text-red-500 text-sm">{{ step1Errors.description
-                        }}</span>
+                            }}</span>
                     </div>
                 </div>
 

@@ -501,7 +501,6 @@ const blockedMessage = computed(() => {
 
                     <div v-if="project.assetsZip" class="relative flex items-center gap-4 w-full p-4">
                         <ZipIcon />
-
                         <div>
                             <p class="text-black text-lg font-bold">
                                 {{ project.assetsZip.title }}
@@ -510,9 +509,26 @@ const blockedMessage = computed(() => {
                                 {{ project.assetsZip.description }}
                             </p>
                         </div>
-
                         <Button v-if="project.assetsZip.url" variant="ghost" size="xs" as-child>
                             <a class="absolute top-4 right-4" :href="project.assetsZip.url" target="_blank"
+                                rel="noopener noreferrer">
+                                <DownloadIcon />
+                            </a>
+                        </Button>
+                    </div>
+
+                    <div v-if="project.assetsPowerpointsZip" class="relative flex items-center gap-4 w-full p-4">
+                        <ZipIcon />
+                        <div>
+                            <p class="text-black text-lg font-bold">
+                                {{ project.assetsPowerpointsZip.title }}
+                            </p>
+                            <p class="text-grey text-sm">
+                                {{ project.assetsPowerpointsZip.description }}
+                            </p>
+                        </div>
+                        <Button v-if="project.assetsPowerpointsZip.url" variant="ghost" size="xs" as-child>
+                            <a class="absolute top-4 right-4" :href="project.assetsPowerpointsZip.url" target="_blank"
                                 rel="noopener noreferrer">
                                 <DownloadIcon />
                             </a>

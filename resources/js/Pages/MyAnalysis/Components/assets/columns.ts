@@ -1,85 +1,86 @@
-import { h } from 'vue'
-import type { ColumnDef } from '@tanstack/vue-table'
-import { AssetData } from '@/Pages/MyAnalysis/types'
-import { Badge, badgeMap, type BadgeMode } from '@/Components/ui/badge'
-import { AssetActions } from '@/Pages/MyAnalysis/Components/assets/'
-import { formatCurrency } from '@/lib/utils'
+import { h } from "vue";
+import type { ColumnDef } from "@tanstack/vue-table";
+import { AssetData } from "@/Pages/MyAnalysis/types";
+import { Badge, badgeMap, type BadgeMode } from "@/Components/ui/badge";
+import { AssetActions } from "@/Pages/MyAnalysis/Components/assets/";
+import { formatCurrency } from "@/lib/utils";
 
 export const columns: ColumnDef<AssetData>[] = [
     {
-        header: 'ID cliente',
-        accessorKey: 'idCliente',
-        meta: '!w-[78px]',
+        header: "ID cliente",
+        accessorKey: "idCliente",
+        meta: "!w-[78px]",
         cell: (row) => {
-            const client_id = row.getValue() as string
-            return h('p', { class: 'w-[224px] truncate' }, client_id)
+            const client_id = row.getValue() as string;
+            return h("p", { class: "w-[224px] truncate" }, client_id);
         },
     },
     {
-        header: 'ID fenlab',
-        accessorKey: 'idFencia',
+        header: "ID fenlab",
+        accessorKey: "idFencia",
     },
     {
-        header: () => 'Referencia catastral',
-        accessorKey: 'model.referenciaCatastral',
+        header: () => "Referencia catastral",
+        accessorKey: "model.referenciaCatastral",
     },
     {
-        header: 'Precio mínimo',
-        accessorKey: 'model.npl.credito.precioMinimo',
+        header: "Precio mínimo",
+        accessorKey: "model.npl.credito.precioMinimo",
         cell: (row) => {
-            const price = row.getValue() as number
+            const price = row.getValue() as number;
 
             if (price) {
-                return h('p', { class: 'font-medium' }, formatCurrency(price))
+                return h("p", { class: "font-medium" }, formatCurrency(price));
             }
-            return h('p', { class: 'font-medium' }, '-')
+            return h("p", { class: "font-medium" }, "-");
         },
     },
     {
-        header: 'PRECIO DE REFERENCIA',
-        accessorKey: 'model.npl.precioReferencia',
+        header: "PRECIO DE REFERENCIA",
+        accessorKey: "model.npl.precioReferencia",
         cell: (row) => {
-            const price = row.getValue() as number
+            const price = row.getValue() as number;
 
             if (price) {
-                return h('p', { class: 'font-medium' }, formatCurrency(price))
+                return h("p", { class: "font-medium" }, formatCurrency(price));
             }
-            return h('p', { class: 'font-medium' }, '-')
+            return h("p", { class: "font-medium" }, "-");
         },
     },
     {
-        header: 'Modalidad de transacción',
-        accessorKey: 'model.type',
+        header: "Modalidad de transacción",
+        accessorKey: "model.type",
         cell: (row) => {
-            const npl = row.row.original.model.npl
-            if (npl.subasta?.isPublishable) return 'Subasta'
-            if (npl.credito?.isPublishable) return 'Crédito'
-            if (npl.remate?.isPublishable) return 'Remate'
-            return '-'
+            const npl = row?.row?.original?.model?.npl;
+            if (npl?.subasta?.isPublishable) return "Subasta";
+            if (npl?.credito?.isPublishable) return "Crédito";
+            if (npl?.remate?.isPublishable) return "Remate";
+            return "-";
         },
     },
     {
-        header: 'ESTADO',
-        accessorKey: 'status',
+        header: "ESTADO",
+        accessorKey: "status",
         cell: (row) => {
-            const status = row.getValue() as BadgeMode
+            const status = row.getValue() as BadgeMode;
             return h(
-                'div',
-                { class: 'font-medium' },
-                h(Badge, { variant: badgeMap[status] }, status || '-'),
-            )
+                "div",
+                { class: "font-medium" },
+                h(Badge, { variant: badgeMap[status] }, status || "-"),
+            );
         },
     },
     {
-        id: 'actions',
-        header: () => '',
-        accessorKey: 'id',
+        id: "actions",
+        header: () => "",
+        accessorKey: "id",
         cell: (row) => {
-            if (row.row.original.model.npl.credito.isPublishable === true) return
+            if (row.row.original.model.npl?.credito.isPublishable === true)
+                return;
 
             return h(AssetActions, {
                 asset: row.row.original,
-            })
+            });
         },
     },
-]
+];

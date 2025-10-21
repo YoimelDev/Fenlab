@@ -5,6 +5,7 @@ export interface CompanyMasterData {
     // brokerFeeMinimo: number;
     brokerFee: FeeTramo[];
     fenciaFee: FeeTramo[];
+    buyFenciaFee: FeeTramo[];
     // seguridad: Seguridad;
     // mesesVentaEstadoActual: number;
     // marketingAnualSobreValorInmueble: number;
