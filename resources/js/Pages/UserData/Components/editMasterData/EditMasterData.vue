@@ -54,7 +54,7 @@ const localMasterData = reactive({
 const emits = defineEmits(['updated'])
 
 // Función para sincronizar hurdles con caps del tramo anterior para cualquier fee
-const syncFeeTiersValues = (feeArray) => {
+const syncFeeTiersValues = (feeArray: any) => {
     // Primero, ordenamos los tramos según su nombre
     const sortedTiers = [...feeArray].sort((a, b) => {
         if (a.tramo.includes('Adelante')) return 1;
@@ -74,7 +74,7 @@ const syncFeeTiersValues = (feeArray) => {
     // Actualizamos los datos originales con los valores sincronizados
     for (let i = 0; i < sortedTiers.length; i++) {
         const tier = sortedTiers[i];
-        const originalTier = feeArray.find(t => t.tramo === tier.tramo);
+        const originalTier = feeArray.find((t: any) => t.tramo === tier.tramo);
         if (originalTier) {
             originalTier.hurdle = tier.hurdle;
             originalTier.cap = tier.cap;
@@ -83,7 +83,7 @@ const syncFeeTiersValues = (feeArray) => {
 }
 
 // Validar la configuración de tramos antes de enviar para cualquier fee
-const validateFeeTiers = (feeArray) => {
+const validateFeeTiers = (feeArray: any) => {
     const tiers = feeArray;
     const sortedTiers = [...tiers].sort((a, b) => {
         if (a.tramo.includes('Adelante')) return 1;
@@ -157,11 +157,14 @@ const postData = async () => {
                 tier.cap = 999999999;
             }
         });
-        localMasterData.buyFenciaFee.forEach(tier => {
-            if (tier.tramo.includes('Adelante')) {
-                tier.cap = 999999999;
-            }
-        });
+        if (localMasterData?.buyFenciaFee) {
+            localMasterData.buyFenciaFee.forEach(tier => {
+                if (tier.tramo.includes('Adelante')) {
+                    tier.cap = 999999999;
+                }
+            });
+        }
+
 
         const dataToSend = { ...localMasterData };
         delete dataToSend.fenciaFee;
@@ -196,10 +199,10 @@ watch(
         localMasterData.buyFenciaFee?.map(tier => tier.cap)
     ],
     () => {
-        if (localMasterData.brokerFee?.length > 0) {
+        if (localMasterData?.brokerFee?.length > 0) {
             syncFeeTiersValues(localMasterData.brokerFee);
         }
-        if (localMasterData.buyFenciaFee?.length > 0) {
+        if (localMasterData?.buyFenciaFee?.length && localMasterData?.buyFenciaFee?.length > 0) {
             syncFeeTiersValues(localMasterData.buyFenciaFee);
         }
     },

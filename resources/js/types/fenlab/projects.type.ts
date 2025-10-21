@@ -44,6 +44,7 @@ export interface ProjectById {
     status: Status;
     modelType: ModelType;
     timeToValidateFirstExcelInSeconds: number;
+    assetsPowerpointsZip: FirstExcel;
     timeToValidateSecondExcelInSeconds: null;
     timeToValidateIdealistaExcelInSeconds: number;
     timeToRunModelInSeconds: number;
