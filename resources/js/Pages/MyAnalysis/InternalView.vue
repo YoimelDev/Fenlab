@@ -629,7 +629,7 @@ const blockedMessage = computed(() => {
                 </div>
             </TabsContent>
             <TabsContent value="assets">
-                <Assets :assets="assets.data" />
+                <Assets :assets="assets.data" :model-type="project.modelType" />
             </TabsContent>
         </Tabs>
     </AuthenticatedLayout>

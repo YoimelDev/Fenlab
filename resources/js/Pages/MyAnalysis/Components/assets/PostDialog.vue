@@ -41,9 +41,9 @@ const postData = async () => {
             method: 'put',
             path: `projects/${formData.value.projectId}/assets/${formData.value.id}/publish`,
             body: {
-                precioReferencia: formData.value.model.npl.precioReferencia,
+                precioReferencia: formData.value.npl?.precioReferencia || formData.value.precioReferencia,
                 opcion: selectedModality.value,
-                precioMinimo: Number(formData.value.model.npl.credito.precioMinimo),
+                precioMinimo: Number(formData.value.npl?.credito?.precioMinimo || formData.value.precioPropuesto),
             },
         })
 
@@ -90,7 +90,7 @@ const postData = async () => {
                         class="mt-2"
                         disabled
                         required
-                        v-model="formData.idCliente"
+                        v-model="formData.clientId"
                     />
                 </div>
 
@@ -103,7 +103,7 @@ const postData = async () => {
                         class="mt-2"
                         disabled
                         required
-                        v-model="formData.idFencia"
+                        :model-value="formData.fenciaId ?? ''"
                     />
                 </div>
 
@@ -116,7 +116,7 @@ const postData = async () => {
                         disabled
                         class="mt-2"
                         required
-                        v-model="formData.model.referenciaCatastral"
+                        :model-value="'N/A'"
                     />
                 </div>
 
@@ -128,7 +128,8 @@ const postData = async () => {
                         placeholder="Precio mínimo"
                         class="mt-2"
                         required
-                        v-model="formData.model.npl.credito.precioMinimo"
+                        :model-value="String(formData.precioPropuesto ?? '')"
+                        @update:model-value="(val) => formData.precioPropuesto = Number(val)"
                     />
                 </div>
 
@@ -141,7 +142,7 @@ const postData = async () => {
                         disabled
                         class="mt-2"
                         required
-                        v-model.number="formData.model.npl.precioReferencia"
+                        :model-value="formData.precioReferencia ?? 0"
                     />
                 </div>
 

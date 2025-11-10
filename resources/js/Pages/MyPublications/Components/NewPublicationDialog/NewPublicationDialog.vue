@@ -69,9 +69,9 @@ const postData = async () => {
     const loader = $loading?.show()
     try {
         const payload = {
-            precioReferencia: formData.value.model.npl.precioReferencia,
+            precioReferencia: formData.value.npl?.precioReferencia || formData.value.precioReferencia,
             opcion: selectedModality.value,
-            precioMinimo: Number(formData.value.model.npl.credito.precioMinimo),
+            precioMinimo: Number(formData.value.npl?.credito?.precioMinimo || formData.value.precioPropuesto),
         }
         const { data } = await fenlabApi.post<PublishData>('', {
             method: 'put',
@@ -90,7 +90,7 @@ const postData = async () => {
             docFiles.value.forEach((document, index) => {
                 formDataToSend.append(`documents[${index}]`, document)
             })
-            formDataToSend.append('reference', formData.value.idFencia)
+            formDataToSend.append('reference', formData.value.fenciaId || '')
 
             await fenlabApi.post('/upload-documents', formDataToSend)
         }
@@ -145,7 +145,7 @@ const postData = async () => {
                                     required
                                     autofocus
                                     disabled
-                                    v-model="formData.idCliente"
+                                    v-model="formData.clientId"
                                 />
                             </div>
                             <div class="space-y-2">
@@ -158,7 +158,7 @@ const postData = async () => {
                                     required
                                     autofocus
                                     disabled
-                                    v-model="formData.idFencia"
+                                    :model-value="formData.fenciaId ?? ''"
                                 />
                             </div>
                             <div class="space-y-2">
@@ -171,7 +171,7 @@ const postData = async () => {
                                     required
                                     autofocus
                                     disabled
-                                    v-model="formData.model.referenciaCatastral"
+                                    :model-value="'N/A'"
                                 />
                             </div>
                             <div class="space-y-2">
@@ -182,7 +182,8 @@ const postData = async () => {
                                     placeholder="Precio mínimo"
                                     class="mt-2"
                                     required
-                                    v-model="formData.model.npl.credito.precioMinimo"
+                                    :model-value="String(formData.precioPropuesto ?? '')"
+                                    @update:model-value="(val) => formData.precioPropuesto = Number(val)"
                                     v-currency
                                 />
                             </div>
@@ -195,7 +196,7 @@ const postData = async () => {
                                     class="mt-2"
                                     disabled
                                     required
-                                    v-model.number="formData.model.npl.precioReferencia"
+                                    :model-value="formData.precioReferencia ?? 0"
                                     v-currency
                                 />
                             </div>
