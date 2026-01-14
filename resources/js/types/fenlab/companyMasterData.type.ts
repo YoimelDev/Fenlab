@@ -18,6 +18,11 @@ export interface CompanyMasterData {
     // deducibilidadIVA: number;
     // incentivoPorDefecto: number;
     // ajusteProindivisoTiempoVenta: number;
+    // conpraCreditoNotaria: number; // Campo eliminado de la API
+    // conpraCreditoRegistro: number; // Campo eliminado de la API
+    // conpraCreditoGestion: number; // Campo eliminado de la API
+    // adjudicacionRegistro: number; // Campo eliminado de la API
+    // adjudicacionGestion: number; // Campo eliminado de la API
     successFee: SuccessFee;
 }
 

@@ -62,11 +62,6 @@ interface Step4 {
         costeHipotecariaOtros?: number
         costeLanzamientoOtros?: number
         deducibilidadIVA?: number
-        conpraCreditoNotaria?: number
-        conpraCreditoRegistro?: number
-        conpraCreditoGestion?: number
-        adjudicacionRegistro?: number
-        adjudicacionGestion?: number
         mesesParaCobroSubasta?: number
     }
 }
@@ -120,11 +115,6 @@ const step4Schema = z.object({
         costeHipotecariaOtros: z.union([z.coerce.number().min(0, 'Debe ser mayor o igual a 0'), z.string().transform(val => parseFloat(val))]).optional(),
         costeLanzamientoOtros: z.coerce.number().min(0, 'Debe ser mayor o igual a 0').optional(),
         deducibilidadIVA: z.coerce.number().min(0, 'Debe ser mayor o igual a 0').optional(),
-        conpraCreditoNotaria: z.coerce.number().min(0, 'Debe ser mayor o igual a 0').optional(),
-        conpraCreditoRegistro: z.coerce.number().min(0, 'Debe ser mayor o igual a 0').optional(),
-        conpraCreditoGestion: z.coerce.number().min(0, 'Debe ser mayor o igual a 0').optional(),
-        adjudicacionRegistro: z.coerce.number().min(0, 'Debe ser mayor o igual a 0').optional(),
-        adjudicacionGestion: z.coerce.number().min(0, 'Debe ser mayor o igual a 0').optional(),
         mesesParaCobroSubasta: z.coerce.number().min(1, 'Debe ser mayor a 0').optional(),
     }),
 })
@@ -151,11 +141,6 @@ const [costeHipotecariaProcurador] = fieldStep4('masterData.costeHipotecariaProc
 const [costeHipotecariaOtros] = fieldStep4('masterData.costeHipotecariaOtros')
 const [costeLanzamientoOtros] = fieldStep4('masterData.costeLanzamientoOtros')
 const [deducibilidadIVA] = fieldStep4('masterData.deducibilidadIVA')
-const [conpraCreditoNotaria] = fieldStep4('masterData.conpraCreditoNotaria')
-const [conpraCreditoRegistro] = fieldStep4('masterData.conpraCreditoRegistro')
-const [conpraCreditoGestion] = fieldStep4('masterData.conpraCreditoGestion')
-const [adjudicacionRegistro] = fieldStep4('masterData.adjudicacionRegistro')
-const [adjudicacionGestion] = fieldStep4('masterData.adjudicacionGestion')
 const [mesesParaCobroSubasta] = fieldStep4('masterData.mesesParaCobroSubasta')
 
 const handleNextStep = () => {
@@ -210,11 +195,6 @@ const handleNextStep = () => {
                     costeHipotecariaOtros: costeHipotecariaOtros.value,
                     costeLanzamientoOtros: costeLanzamientoOtros.value,
                     deducibilidadIVA: deducibilidadIVA.value,
-                    conpraCreditoNotaria: conpraCreditoNotaria.value,
-                    conpraCreditoRegistro: conpraCreditoRegistro.value,
-                    conpraCreditoGestion: conpraCreditoGestion.value,
-                    adjudicacionRegistro: adjudicacionRegistro.value,
-                    adjudicacionGestion: adjudicacionGestion.value,
                     mesesParaCobroSubasta: mesesParaCobroSubasta.value,
                 })
             }
@@ -280,11 +260,6 @@ const setFormValues = (response: CompanyMasterData) => {
         setFieldValue('masterData.costeHipotecariaOtros', Number(data.costeHipotecariaOtros || 0))
         setFieldValue('masterData.costeLanzamientoOtros', Number(data.costeLanzamientoOtros || 0))
         setFieldValue('masterData.deducibilidadIVA', Number(data.deducibilidadIVA || 0))
-        setFieldValue('masterData.conpraCreditoNotaria', Number(data.conpraCreditoNotaria || 0))
-        setFieldValue('masterData.conpraCreditoRegistro', Number(data.conpraCreditoRegistro || 0))
-        setFieldValue('masterData.conpraCreditoGestion', Number(data.conpraCreditoGestion || 0))
-        setFieldValue('masterData.adjudicacionRegistro', Number(data.adjudicacionRegistro || 0))
-        setFieldValue('masterData.adjudicacionGestion', Number(data.adjudicacionGestion || 0))
         setFieldValue('masterData.mesesParaCobroSubasta', Number(data.mesesParaCobroSubasta || 3))
     }
 }
@@ -359,11 +334,6 @@ const submitAnalysis = async () => {
                     ...(apiModelType.value === 'NPL_BUY' ? {
                         costeHipotecariaOtros: parseFloat(String(costeHipotecariaOtros.value)) || 0,
                         deducibilidadIVA: parseFloat(String(deducibilidadIVA.value)) || 0,
-                        conpraCreditoNotaria: parseFloat(String(conpraCreditoNotaria.value)) || 0,
-                        conpraCreditoRegistro: parseFloat(String(conpraCreditoRegistro.value)) || 0,
-                        conpraCreditoGestion: parseFloat(String(conpraCreditoGestion.value)) || 0,
-                        adjudicacionRegistro: parseFloat(String(adjudicacionRegistro.value)) || 0,
-                        adjudicacionGestion: parseFloat(String(adjudicacionGestion.value)) || 0,
                         mesesParaCobroSubasta: parseFloat(String(mesesParaCobroSubasta.value)) || 3,
                     } : {}),
 
@@ -765,72 +735,6 @@ const submitAnalysis = async () => {
                                         <span v-if="step4Errors['masterData.deducibilidadIVA']"
                                             class="text-red-500 text-sm">
                                             {{ step4Errors['masterData.deducibilidadIVA'] }}
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <!-- Segunda fila -->
-                                <div class="grid grid-cols-3 gap-4">
-                                    <div class="space-y-2">
-                                        <Label for="conpraCreditoNotaria">Compra Crédito Notaría</Label>
-                                        <Input id="conpraCreditoNotaria" type="text" placeholder="600" class="mt-2"
-                                            v-currency v-model="conpraCreditoNotaria"
-                                            :class="{ 'border-red-500': step4Errors['masterData.conpraCreditoNotaria'] }"
-                                            min="0" />
-                                        <span v-if="step4Errors['masterData.conpraCreditoNotaria']"
-                                            class="text-red-500 text-sm">
-                                            {{ step4Errors['masterData.conpraCreditoNotaria'] }}
-                                        </span>
-                                    </div>
-
-                                    <div class="space-y-2">
-                                        <Label for="conpraCreditoRegistro">Compra Crédito Registro</Label>
-                                        <Input id="conpraCreditoRegistro" type="text" placeholder="500" class="mt-2"
-                                            v-currency v-model="conpraCreditoRegistro"
-                                            :class="{ 'border-red-500': step4Errors['masterData.conpraCreditoRegistro'] }"
-                                            min="0" />
-                                        <span v-if="step4Errors['masterData.conpraCreditoRegistro']"
-                                            class="text-red-500 text-sm">
-                                            {{ step4Errors['masterData.conpraCreditoRegistro'] }}
-                                        </span>
-                                    </div>
-
-                                    <div class="space-y-2">
-                                        <Label for="conpraCreditoGestion">Compra Crédito Gestión</Label>
-                                        <Input id="conpraCreditoGestion" type="text" placeholder="350" class="mt-2"
-                                            v-currency v-model="conpraCreditoGestion"
-                                            :class="{ 'border-red-500': step4Errors['masterData.conpraCreditoGestion'] }"
-                                            min="0" />
-                                        <span v-if="step4Errors['masterData.conpraCreditoGestion']"
-                                            class="text-red-500 text-sm">
-                                            {{ step4Errors['masterData.conpraCreditoGestion'] }}
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <!-- Tercera fila -->
-                                <div class="grid grid-cols-3 gap-4">
-                                    <div class="space-y-2">
-                                        <Label for="adjudicacionRegistro">Adjudicación Registro</Label>
-                                        <Input id="adjudicacionRegistro" type="text" placeholder="500" class="mt-2"
-                                            v-currency v-model="adjudicacionRegistro"
-                                            :class="{ 'border-red-500': step4Errors['masterData.adjudicacionRegistro'] }"
-                                            min="0" />
-                                        <span v-if="step4Errors['masterData.adjudicacionRegistro']"
-                                            class="text-red-500 text-sm">
-                                            {{ step4Errors['masterData.adjudicacionRegistro'] }}
-                                        </span>
-                                    </div>
-
-                                    <div class="space-y-2">
-                                        <Label for="adjudicacionGestion">Adjudicación Gestión</Label>
-                                        <Input id="adjudicacionGestion" type="text" placeholder="175" class="mt-2"
-                                            v-currency v-model="adjudicacionGestion"
-                                            :class="{ 'border-red-500': step4Errors['masterData.adjudicacionGestion'] }"
-                                            min="0" />
-                                        <span v-if="step4Errors['masterData.adjudicacionGestion']"
-                                            class="text-red-500 text-sm">
-                                            {{ step4Errors['masterData.adjudicacionGestion'] }}
                                         </span>
                                     </div>
 
